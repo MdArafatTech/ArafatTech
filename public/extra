@@ -1,0 +1,157 @@
+// import React, { useState } from "react";
+// import { FaGoogle } from "react-icons/fa";
+// import loginGif from "../assets/login.gif";
+// import { useAuth } from "../provider/AuthProvider";
+// import { useNavigate } from "react-router-dom";
+
+// const Login = () => {
+//   const { login, loginWithGoogle } = useAuth();
+//   const navigate = useNavigate();
+
+//   const [formData, setFormData] = useState({ email: "", password: "" });
+//   const [popup, setPopup] = useState({ message: "", type: "" }); // success or error
+//   const [wrongPass, setWrongPass] = useState(false);
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.id]: e.target.value });
+//     setWrongPass(false);
+//     setPopup({ message: "", type: "" });
+//   };
+
+//   const showPopup = (message, type = "success") => {
+//     setPopup({ message, type });
+//     setTimeout(() => setPopup({ message: "", type: "" }), 2500); // auto-hide
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       await login(formData.email, formData.password);
+//       showPopup("Login successful!", "success");
+//       setTimeout(() => navigate("/account"), 1000);
+//     } catch (err) {
+//       showPopup("Email not registered or wrong password! Please register.", "error");
+//       setWrongPass(true);
+//     }
+//   };
+
+//   const handleGoogle = async () => {
+//     try {
+//       await loginWithGoogle();
+//       showPopup("Login successful!", "success");
+//       setTimeout(() => navigate("/account"), 1000);
+//     } catch (err) {
+//       showPopup(err.message, "error");
+//     }
+//   };
+
+//   const goToRegister = () => navigate("/register");
+//   const goToForgot = () => navigate("/forgotpassword");
+
+//   return (
+//     <div className="flex flex-col gap-6 max-w-3xl mx-auto px-4 sm:px-6 mt-5 relative">
+
+//       {/* Centered popup like Register */}
+//       {popup.message && (
+//         <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+//           px-6 py-3 rounded-xl shadow-lg text-white z-50
+//           ${popup.type === "success" ? "bg-green-500" : "bg-red-500"} text-center`}>
+//           {popup.message}
+//         </div>
+//       )}
+
+//       <div className="overflow-hidden border rounded-lg shadow-lg">
+//         <div className="grid md:grid-cols-2 gap-0">
+
+//           {/* Form */}
+//           <form onSubmit={handleSubmit} className="p-6 md:p-8 flex flex-col gap-6">
+//             <div className="flex flex-col items-center gap-2 text-center">
+//               <h1 className="text-2xl sm:text-3xl font-bold">Welcome Back</h1>
+//               <p className="text-gray-500">Login to your account</p>
+//             </div>
+
+//             {/* Email */}
+//             <div className="flex flex-col gap-1">
+//               <label htmlFor="email" className="font-semibold">Email</label>
+//               <input
+//                 id="email"
+//                 type="email"
+//                 value={formData.email}
+//                 onChange={handleChange}
+//                 placeholder="you@example.com"
+//                 required
+//                 className={`border rounded px-3 py-2 focus:outline-none focus:ring-2 ${
+//                   wrongPass ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+//                 }`}
+//               />
+//             </div>
+
+//             {/* Password */}
+//             <div className="flex flex-col gap-1">
+//               <div className="flex justify-between items-center">
+//                 <label htmlFor="password" className="font-semibold">Password</label>
+//                 <span
+//                   onClick={goToForgot}
+//                   className="text-blue-500 font-bold text-sm hover:underline cursor-pointer"
+//                 >
+//                   Forgot password?
+//                 </span>
+//               </div>
+//               <input
+//                 id="password"
+//                 type="password"
+//                 value={formData.password}
+//                 onChange={handleChange}
+//                 placeholder="Enter your password"
+//                 required
+//                 className={`border rounded px-3 py-2 focus:outline-none focus:ring-2 ${
+//                   wrongPass ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+//                 }`}
+//               />
+//             </div>
+
+//             <button
+//               type="submit"
+//               className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 cursor-pointer transition"
+//             >
+//               Login
+//             </button>
+
+//             <div className="text-center text-gray-400 my-2">Or continue with</div>
+
+//             <button
+//               type="button"
+//               onClick={handleGoogle}
+//               className="flex items-center justify-center border rounded-xl p-2 gap-2 cursor-pointer hover:bg-blue-500 hover:text-white transition"
+//             >
+//               <FaGoogle className="text-red-500 w-5 h-5" />
+//               <span>Login with Google</span>
+//             </button>
+
+//             <p className="text-center text-gray-500 text-sm cursor-pointer">
+//               Don't have an account?{" "}
+//               <span
+//                 onClick={goToRegister}
+//                 className="font-bold hover:text-blue-500 cursor-pointer"
+//               >
+//                 Sign up
+//               </span>
+//             </p>
+//           </form>
+
+//           {/* GIF */}
+//           <div className="bg-gray-100 relative w-full h-64 md:h-auto flex md:block">
+//             <img
+//               src={loginGif}
+//               alt="Login Animation"
+//               className="w-full h-full object-contain"
+//             />
+//           </div>
+
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Login;
