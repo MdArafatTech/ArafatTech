@@ -72,10 +72,7 @@ const Routes = createBrowserRouter([
         path:"Contact",
         element:<Contact></Contact>
       },
-      {
-        path:"multilinkpage",
-        element:<MultiLinkPage></MultiLinkPage>
-      },
+      
     ]
   }
 ]);

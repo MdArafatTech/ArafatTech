@@ -57,25 +57,20 @@ export default function ProfessionalIDCardPDF() {
 
   const styles = StyleSheet.create({
     page: { padding: 10, fontFamily: "Helvetica" },
-    cardContainer: { flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap", marginBottom: 5 },
-  card: {
-  width: 180,
-  minHeight: 220,
-  borderRadius: 12,
-  overflow: "hidden",
-  marginBottom: 10,
-  backgroundColor: "#f9fafb",
-  borderTopWidth: 3,       // full width top border
-  borderBottomWidth: 3,    // full width bottom border
-  borderTopColor: "red",   // top border color
-  borderBottomColor: "red",// bottom border color
-  borderLeftWidth: 0,      // no full left border
-  borderRightWidth: 0,     // no full right border
-  padding: 6,
-},
-
-
-
+    cardContainer: { flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap", marginBottom: 10 },
+    card: {
+      width: 180,
+      minHeight: 220,
+      borderRadius: 12,
+      overflow: "hidden",
+      marginBottom: 10,
+      backgroundColor: "#f9fafb",
+      borderTopWidth: 3,
+      borderBottomWidth: 3,
+      borderTopColor: "red",
+      borderBottomColor: "red",
+      padding: 6,
+    },
     frontHeader: { height: 25, backgroundColor: "#1f2937", flexDirection: "row", alignItems: "center", justifyContent: "center" },
     profileImage: { width: 70, height: 70, borderRadius: 35, marginTop: -15, borderWidth: 2, borderColor: "#fff" },
     infoBox: { padding: 4, alignItems: "flex-start", borderLeftWidth: 3, borderLeftColor: "red", marginLeft: 0 },
@@ -133,16 +128,13 @@ export default function ProfessionalIDCardPDF() {
                   <Text style={styles.qrText}>Scan to Email</Text>
                 </View>
 
-                {/* Note */}
                 <View style={styles.noteBox}>
-                  <Text style={styles.noteText}>"This ID card is property of personal. Please carry it at all times. If you find kindly contact me."</Text>
+                  <Text style={styles.noteText}>"This ID card is property of personal. Please carry it at all times. If found, kindly contact me."</Text>
                 </View>
 
-                {/* Signature input */}
                 {card.signatureImage && <Image style={styles.signatureImage} src={card.signatureImage} />}
                 <Text style={{ fontSize: 7, textAlign: "center", marginTop: 2 }}>Authorized Signature</Text>
 
-                {/* Address */}
                 <Text style={styles.addressText}>
                   Village: {card.village}{"\n"}
                   Thana: {card.thana}{"\n"}
@@ -163,7 +155,7 @@ export default function ProfessionalIDCardPDF() {
         <h2 className="text-2xl font-bold text-center text-orange-600">Professional ID Card Generator</h2>
 
         {cards.map((card, idx) => (
-          <motion.div key={idx} className="border border-gray-300 rounded-xl p-4 bg-yellow-50 space-y-2 relative">
+          <motion.div key={idx} className="border border-gray-300 rounded-xl p-4 bg-orange-50 text-black space-y-2 relative">
             {cards.length > 1 && (
               <button
                 onClick={() => removeCard(idx)}

@@ -20,8 +20,11 @@ const Footer = () => {
         <a className="hover:text-amber-300" href="/identity">
           Identity
         </a>
+        <a className="hover:text-amber-300" href="/idcard">
+          Portal
+        </a>
         <a className="hover:text-amber-300" href="/pdf">
-          Pdf
+          IdCard
         </a>
         <a className="hover:text-amber-300" href="/contact">
          Contact

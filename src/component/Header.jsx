@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import navimg from "../assets/iconpng.gif";
 import { useAuth } from "../provider/AuthProvider";
@@ -43,10 +43,15 @@ const Header = () => {
             </li>
 
             <li>
-              <Link to="/idcard" className="hover:text-yellow-400 transition">
+            <Link to="/idcard" className="hover:text-yellow-400 transition" onClick={() => setOpen(false)}>
               Portal
-              </Link>
-            </li>
+            </Link>
+          </li>
+          <li>
+            <Link to="/pdf" className="hover:text-yellow-400 transition" onClick={() => setOpen(false)}>
+             IdCard
+            </Link>
+          </li>
 
             {/* Show only Account when logged in */}
             {currentUser && (
@@ -93,7 +98,7 @@ const Header = () => {
         }`}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
-          <img src={navimg} alt="Logo" className="h-20 w-auto" />
+          <Link to="/"><img src={navimg} alt="Logo" className="h-20 w-auto" /></Link>
           <FaTimes
             className="text-2xl cursor-pointer"
             onClick={() => setOpen(false)}
@@ -120,8 +125,13 @@ const Header = () => {
           </li>
 
           <li>
+            <Link to="/idcard" onClick={() => setOpen(false)}>
+              Portal
+            </Link>
+          </li>
+          <li>
             <Link to="/pdf" onClick={() => setOpen(false)}>
-              PDF
+             IdCard
             </Link>
           </li>
 
