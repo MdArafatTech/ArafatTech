@@ -7,36 +7,43 @@ import service2 from "../assets/iconpng.gif";
 import service3 from "../assets/iconpng.gif";
 
 const HomePage = () => {
+  // Services with links
   const services = [
     {
       title: "Identity Management",
       desc: "Create digital identity forms with QR codes, images, and detailed info.",
       img: service1,
+      link: "/identity",
     },
     {
       title: "PDF Generation",
       desc: "Generate dynamic PDFs for students, billing, and identity forms.",
       img: service2,
+      link: "/pdf",
     },
     {
       title: "Billing System",
       desc: "Automated billing with discounts, VAT, warranty, and PDF export.",
       img: service3,
+      link: "/billing",
     },
     {
       title: "Student Portal",
       desc: "Manage student info, view profiles, and generate reports easily.",
       img: service1,
+      link: "/idcard",
     },
     {
       title: "Secure Authentication",
       desc: "Google sign-in, email/password registration, and secure login.",
       img: service2,
+      link: "/",
     },
     {
       title: "Custom Solutions",
       desc: "Tailored software solutions for educational and tech-based needs.",
       img: service3,
+      link: "/",
     },
   ];
 
@@ -97,21 +104,22 @@ const HomePage = () => {
         className="w-full max-w-6xl p-6 md:p-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
       >
         {services.map((service, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center text-center"
-          >
-            <img
-              src={service.img}
-              alt={service.title}
-              className="w-15 h-15 mb-4 object-cover rounded-full"
-            />
-            <h3 className="text-xl font-bold text-orange-600 mb-2">{service.title}</h3>
-            <p className="text-gray-700 dark:text-gray-300">{service.desc}</p>
-          </motion.div>
+          <Link key={index} to={service.link} className="block">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center text-center h-full"
+            >
+              <img
+                src={service.img}
+                alt={service.title}
+                className="w-15 h-15 mb-4 object-cover rounded-full"
+              />
+              <h3 className="text-xl font-bold text-orange-600 mb-2">{service.title}</h3>
+              <p className="text-gray-700 dark:text-gray-300">{service.desc}</p>
+            </motion.div>
+          </Link>
         ))}
       </motion.section>
 
@@ -143,4 +151,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

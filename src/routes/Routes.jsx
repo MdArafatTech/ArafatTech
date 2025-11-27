@@ -14,6 +14,8 @@ import Billing from '../component/Billing';
 import Identity from '../component/Identity';
 import ContactForm from '../component/ContactFrom';
 import Contact from '../pages/Contact';
+import IDCard from '../pages/IdCard';
+import MultiLinkPage from '../component/MultiLinkPage';
 
 
 const Routes = createBrowserRouter([
@@ -51,6 +53,10 @@ const Routes = createBrowserRouter([
         element:<PDFGenerator></PDFGenerator>
       },
       {
+        path:"idcard",
+        element:<IDCard></IDCard>
+      },
+      {
         path:"billing",
         element:<Billing></Billing>
       },
@@ -65,6 +71,10 @@ const Routes = createBrowserRouter([
       {
         path:"Contact",
         element:<Contact></Contact>
+      },
+      {
+        path:"multilinkpage",
+        element:<MultiLinkPage></MultiLinkPage>
       },
     ]
   }

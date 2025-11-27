@@ -43,8 +43,8 @@ const Header = () => {
             </li>
 
             <li>
-              <Link to="/pdf" className="hover:text-yellow-400 transition">
-                PDF
+              <Link to="/idcard" className="hover:text-yellow-400 transition">
+              Portal
               </Link>
             </li>
 
