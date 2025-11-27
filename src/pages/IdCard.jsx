@@ -213,7 +213,7 @@ export default function IDCard() {
         </h2>
 
         {/* HEADER FORM */}
-        <div className="border border-gray-400 rounded-xl p-4 bg-yellow-50 space-y-3">
+        <div className="border border-gray-400 rounded-xl p-4 bg-orange-50 text-black space-y-3">
           <h3 className="font-bold text-lg text-orange-700">
             College Header Settings
           </h3>
