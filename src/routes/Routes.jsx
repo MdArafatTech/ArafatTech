@@ -16,6 +16,8 @@ import ContactForm from '../component/ContactFrom';
 import Contact from '../pages/Contact';
 import IDCard from '../pages/IdCard';
 import MultiLinkPage from '../component/MultiLinkPage';
+import Id from '../pages/Id';
+import IDCardPage from '../pages/IdCardPage';
 
 
 const Routes = createBrowserRouter([
@@ -71,6 +73,15 @@ const Routes = createBrowserRouter([
       {
         path:"Contact",
         element:<Contact></Contact>
+      },
+      {
+        path:"id",
+        element:<Id></Id>
+      },
+      
+      {
+        path:"idcardpage",
+        element:<IDCardPage></IDCardPage>
       },
       
     ]

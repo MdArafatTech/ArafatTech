@@ -48,7 +48,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/pdf" className="hover:text-yellow-400 transition" onClick={() => setOpen(false)}>
+            <Link to="/idcardpage" className="hover:text-yellow-400 transition" onClick={() => setOpen(false)}>
              IdCard
             </Link>
           </li>
@@ -130,7 +130,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/pdf" onClick={() => setOpen(false)}>
+            <Link to="/idcardpage" onClick={() => setOpen(false)}>
              IdCard
             </Link>
           </li>

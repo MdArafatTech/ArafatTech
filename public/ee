@@ -1,0 +1,258 @@
+// src/pages/IDCardGenerator.jsx
+import React, { useState, useRef } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import Barcode from "react-barcode";
+import * as htmlToImage from "html-to-image";
+
+export default function IDCardGenerator() {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    blood: "",
+    role: "",
+    village: "",
+    thana: "",
+    district: "",
+    issue: "",
+    expiry: "",
+    signature: null,
+    profile: null,
+  });
+
+  const [showPreview, setShowPreview] = useState(false);
+  const cardRef = useRef();
+
+  const handleInput = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData({ ...formData, [name]: URL.createObjectURL(files[0]) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const barcodeValue = JSON.stringify({
+    name: formData.name,
+    phone: formData.phone,
+    email: formData.email,
+    blood: formData.blood,
+    role: formData.role,
+    village: formData.village,
+    thana: formData.thana,
+    district: formData.district,
+  });
+
+  // Wait for images to load before generating PNG
+  const downloadImage = () => {
+    if (!cardRef.current) return;
+
+    const images = cardRef.current.querySelectorAll("img");
+    const loadPromises = Array.from(images).map(
+      (img) =>
+        new Promise((resolve) => {
+          if (!img.src) return resolve();
+          const image = new Image();
+          image.crossOrigin = "anonymous";
+          image.src = img.src;
+          image.onload = () => resolve();
+          image.onerror = () => resolve();
+        })
+    );
+
+    Promise.all(loadPromises).then(() => {
+      htmlToImage
+        .toPng(cardRef.current, { cacheBust: true, backgroundColor: "#e7ffe7" })
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = "IDCard.png";
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((err) => {
+          console.error("Error generating image:", err);
+        });
+    });
+  };
+
+  return (
+    <div className="p-6 min-h-screen bg-[#e7ffe7] flex flex-col md:flex-row gap-6">
+      {/* Form */}
+      <div className="w-full md:w-1/3 bg-gray-500 p-4 rounded-lg shadow-md space-y-2">
+        <h2 className="font-bold text-lg mb-2">ID Card Details</h2>
+        {["name", "phone", "email", "blood", "role", "village", "thana", "district"].map(
+          (field) => (
+            <input
+              key={field}
+              name={field}
+              onChange={handleInput}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              className="w-full p-2 border rounded"
+            />
+          )
+        )}
+        <input
+          name="issue"
+          type="date"
+          onChange={handleInput}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          name="expiry"
+          type="date"
+          onChange={handleInput}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="file"
+          name="signature"
+          onChange={handleInput}
+          accept="image/*"
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="file"
+          name="profile"
+          onChange={handleInput}
+          accept="image/*"
+          className="w-full p-2 border rounded"
+        />
+        <button
+          onClick={() => setShowPreview(true)}
+          className="bg-green-600 text-white w-full p-2 rounded mt-2"
+        >
+          Preview & Download Image
+        </button>
+      </div>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-10 z-50 overflow-auto">
+          <div className="bg-white rounded-xl p-4 max-w-xl w-full">
+            <button
+              onClick={() => setShowPreview(false)}
+              className="text-red-600 font-bold mb-2 hover:text-red-800"
+            >
+              Close ✖
+            </button>
+
+            <div
+              ref={cardRef}
+              className="space-y-6 flex flex-col items-center bg-[#e7ffe7] p-4"
+            >
+              {/* FRONT CARD */}
+              <div className="relative w-[250px] h-[400px] bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="absolute -top-16 -left-16 w-[400px] h-[220px] bg-gradient-to-r from-green-700 to-green-500 rotate-[-15deg] origin-top-left"></div>
+                <div className="absolute top-[140px] -left-10 w-[400px] h-[7px] bg-gradient-to-r from-yellow-300 to-yellow-500 rotate-[-15deg] origin-left"></div>
+                <div className="absolute top-[158px] -left-10 w-[400px] h-[7px] bg-gradient-to-r from-yellow-300 to-yellow-500 rotate-[-15deg] origin-left"></div>
+                <div className="absolute top-[45%] -left-12 w-[420px] h-[320px] bg-white rotate-[-13deg] origin-top-left"></div>
+
+                <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20">
+                  <img
+                    src={formData.profile || ""}
+                    alt=""
+                    className="w-28 h-32 border-4 border-white rounded-xl object-cover shadow-md"
+                    crossOrigin="anonymous"
+                  />
+                </div>
+
+                <div className="absolute top-[200px] w-full z-20 px-6 text-center">
+                  <div className="text-blue-700 font-bold text-lg">
+                    {formData.name || "John Doe"}
+                  </div>
+                  <div className="text-left text-xs space-y-1">
+                    <div>
+                      <span className="text-green-600 font-semibold">Phone:</span>{" "}
+                      {formData.phone}
+                    </div>
+                    <div>
+                      <span className="text-green-600 font-semibold">Email:</span>{" "}
+                      {formData.email}
+                    </div>
+                    <div>
+                      <span className="text-green-600 font-semibold">Blood:</span>{" "}
+                      {formData.blood}
+                    </div>
+                    <div>
+                      <span className="text-green-600 font-semibold">Role:</span>{" "}
+                      {formData.role}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white p-1 rounded">
+                  <Barcode value={barcodeValue} height={40} width={1} fontSize={10} />
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-5 bg-gradient-to-r from-yellow-500 to-yellow-500 rounded-b-xl"></div>
+              </div>
+
+              {/* BACK CARD */}
+              <div className="relative w-[250px] h-[400px] bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-5 bg-gradient-to-r from-yellow-500 to-yellow-500 rounded-t-xl"></div>
+                <div className="absolute -bottom-23 -left-6 w-[500px] h-[150px] bg-gradient-to-r from-green-700 to-green-500 rotate-[-13deg] origin-bottom-left"></div>
+
+                <div className="absolute top-[40px] left-4 w-[calc(100%-16px)] text-xs space-y-1 text-center">
+                  <div>
+                    <span className="text-green-600 font-semibold">Village:</span>{" "}
+                    {formData.village}
+                  </div>
+                  <div>
+                    <span className="text-green-600 font-semibold">Thana:</span>{" "}
+                    {formData.thana}
+                  </div>
+                  <div>
+                    <span className="text-green-600 font-semibold">District:</span>{" "}
+                    {formData.district}
+                  </div>
+                </div>
+
+                {/* QR Code */}
+                <div className="absolute top-[120px] left-1/2 -translate-x-1/2">
+                  <QRCodeCanvas
+                    value={formData.email || "john@example.com"}
+                    size={64}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                </div>
+
+                <div className="absolute top-[190px] left-4 right-4 text-gray-500 text-xs text-center">
+                  This ID card is property of the company. Carry at all times.
+                </div>
+
+                <div className="absolute top-[230px] left-4 flex flex-col items-start">
+                  {formData.signature && (
+                    <img
+                      src={formData.signature}
+                      alt="signature"
+                      className="w-24 h-8 object-contain"
+                      crossOrigin="anonymous"
+                    />
+                  )}
+                  {!formData.signature && (
+                    <div className="w-24 h-8 border-b-2 border-gray-400"></div>
+                  )}
+                  <div className="text-gray-500 text-xs mt-1">Signature</div>
+                </div>
+
+                <div className="absolute bottom-14 right-4 text-black text-[10px] bg-white px-1 rounded">
+                  Issue: {formData.issue || "01/01/2025"}
+                </div>
+                <div className="absolute bottom-8 right-4 text-black text-[10px] bg-white px-1 rounded">
+                  Expiry: {formData.expiry || "01/01/2030"}
+                </div>
+              </div>
+
+              <button
+                onClick={downloadImage}
+                className="mt-4 bg-green-600 text-white w-48 p-2 rounded hover:bg-green-700"
+              >
+                Download Image
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

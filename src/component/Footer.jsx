@@ -23,7 +23,7 @@ const Footer = () => {
         <a className="hover:text-amber-300" href="/idcard">
           Portal
         </a>
-        <a className="hover:text-amber-300" href="/pdf">
+        <a className="hover:text-amber-300" href="/idcardpage">
           IdCard
         </a>
         <a className="hover:text-amber-300" href="/contact">

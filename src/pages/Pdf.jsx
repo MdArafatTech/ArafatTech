@@ -36,6 +36,13 @@ export default function ProfessionalIDCardPDF() {
 
   const addCard = () => setCards((prev) => [...prev, { ...prev[0] }]);
   const removeCard = (index) => setCards((prev) => prev.filter((_, i) => i !== index));
+  const resetCard = (index) => {
+    setCards((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...prev[0] };
+      return updated;
+    });
+  };
   const updateCard = (index, field, value) => {
     setCards((prev) => {
       const updated = [...prev];
@@ -111,7 +118,6 @@ export default function ProfessionalIDCardPDF() {
                 <Text style={styles.label}>Blood:</Text>
                 <Text style={styles.value}>{card.blood}</Text>
               </View>
-              {/* Barcode */}
               <View style={{ marginTop: 5, alignItems: "center" }}>
                 <Image style={{ width: 120, height: 25 }} src={generateBarcodeBase64(card)} />
                 <Text style={{ fontSize: 5, textAlign: "center", marginTop: 2 }}>Scan to get all info</Text>
@@ -156,14 +162,23 @@ export default function ProfessionalIDCardPDF() {
 
         {cards.map((card, idx) => (
           <motion.div key={idx} className="border border-gray-300 rounded-xl p-4 bg-orange-50 text-black space-y-2 relative">
-            {cards.length > 1 && (
+            {/* Card Top Buttons */}
+            <div className="absolute top-2 right-2 flex gap-1">
               <button
-                onClick={() => removeCard(idx)}
-                className="absolute cursor-pointer top-2 right-2 px-2 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700"
+                onClick={() => resetCard(idx)}
+                className="px-2 py-1 text-sm rounded bg-yellow-500 text-white hover:bg-yellow-600"
               >
-                ✖ Remove
+                ↻
               </button>
-            )}
+              {cards.length > 1 && (
+                <button
+                  onClick={() => removeCard(idx)}
+                  className="px-2 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700"
+                >
+                  ✖
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <input placeholder="Name" value={card.name} onChange={(e) => updateCard(idx, "name", e.target.value)} className="border p-2 rounded"/>

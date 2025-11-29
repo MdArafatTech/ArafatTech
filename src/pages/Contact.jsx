@@ -39,7 +39,7 @@ const Contact = () => {
         </div>
 
         <h2 className="font-bold text-xl lg:text-4xl tracking-wide uppercase mb-8">
-          Rakesh Datta
+          Arafat Tech
         </h2>
 
         {!showForm && (

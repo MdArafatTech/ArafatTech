@@ -16,10 +16,10 @@ const HomePage = () => {
       link: "/identity",
     },
     {
-      title: "PDF Generation",
-      desc: "Generate dynamic PDFs for students, billing, and identity forms.",
+      title: "Id Card Genaration",
+      desc: "Generate dynamic PDFs for students,  and idcard .",
       img: service2,
-      link: "/pdf",
+      link: "/idcardpage",
     },
     {
       title: "Billing System",
