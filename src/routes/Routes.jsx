@@ -15,9 +15,11 @@ import Identity from '../component/Identity';
 import ContactForm from '../component/ContactFrom';
 import Contact from '../pages/Contact';
 import IDCard from '../pages/IdCard';
-import MultiLinkPage from '../component/MultiLinkPage';
+
 import Id from '../pages/Id';
 import IDCardPage from '../pages/IdCardPage';
+import CustomizeCard from '../component/CustomizeCard';
+
 
 
 const Routes = createBrowserRouter([
@@ -84,6 +86,11 @@ const Routes = createBrowserRouter([
         element:<IDCardPage></IDCardPage>
       },
       
+   {
+  path: "customizecard",   // correct spelling
+  element: <CustomizeCard />
+}
+
     ]
   }
 ]);

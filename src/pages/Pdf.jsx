@@ -156,12 +156,12 @@ export default function ProfessionalIDCardPDF() {
   );
 
   return (
-    <div className="min-h-screen p-4 bg-gray-50">
-      <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl p-6 space-y-6">
+    <div className="min-h-screen p-1 md:p-3 lg:p-4 bg-gray-50">
+      <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl p-2 md:p-4 lg:p-6 space-y-6">
         <h2 className="text-2xl font-bold text-center text-orange-600">Professional ID Card Generator</h2>
 
         {cards.map((card, idx) => (
-          <motion.div key={idx} className="border border-gray-300 rounded-xl p-4 bg-orange-50 text-black space-y-2 relative">
+          <motion.div key={idx} className="border border-gray-300 rounded-xl p-3 bg-orange-50 text-black space-y-2 relative">
             {/* Card Top Buttons */}
             <div className="absolute top-2 right-2 flex gap-1">
               <button

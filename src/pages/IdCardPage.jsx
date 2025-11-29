@@ -60,7 +60,7 @@ export default function IDCardPage() {
                   onClick={() => setShowCustom(true)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-green-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-green-600 w-full lg:w-auto"
+                  className="bg-green-500 text-white cursor-pointer px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-green-600 w-full lg:w-auto"
                 >
                   Simple Id Card
                 </motion.button>
@@ -69,7 +69,7 @@ export default function IDCardPage() {
                   onClick={() => setShowCustom2(true)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-purple-600 w-full lg:w-auto"
+                  className="bg-purple-500   text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-purple-600 w-full lg:w-auto"
                 >
                   Custom ID Card 
                 </motion.button>
