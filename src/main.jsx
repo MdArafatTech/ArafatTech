@@ -9,6 +9,10 @@ import './index.css';
 import { RouterProvider } from 'react-router-dom';
 import Routes from './routes/Routes.jsx';
 import { AuthProvider } from './provider/AuthProvider';
+import { Buffer } from "buffer";
+
+window.Buffer = Buffer; // <-- Add this line
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

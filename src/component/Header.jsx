@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Links } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import navimg from "../assets/iconpng.gif";
+import navimg from "../assets/arafattech.png";
 import { useAuth } from "../provider/AuthProvider";
 
 const Header = () => {

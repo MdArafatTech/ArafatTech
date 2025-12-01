@@ -1,7 +1,7 @@
 import React from "react";
 import { FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import fimg from "../assets/iconpng.gif";
+import fimg from "../assets/arafattech.png";
 import { FaGithub } from 'react-icons/fa';
 
 import { Link } from "react-router";
@@ -55,7 +55,7 @@ const Footer = () => {
 
       {/* Logo */}
       <div className="flex justify-center mt-4 md:mt-0">
-       <a href="/"> <img className="h-40 cursor-pointer" src={fimg} alt="Footer Logo" /></a>
+       <a href="/"> <img className="h-30 cursor-pointer" src={fimg} alt="Footer Logo" /></a>
       </div>
 
       <Link

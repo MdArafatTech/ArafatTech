@@ -1,32 +1,32 @@
 // src/routes/Routes.jsx
-import { createBrowserRouter } from 'react-router-dom';
-import Root from '../layout/Root';
-import ErrorPage from '../pages/ErrorPage';
-import HomePage from '../pages/HomePage';
-import Register from '../pages/Register';
-import Login from '../pages/Login';
-import { AuthProvider } from '../provider/AuthProvider';
+import { createBrowserRouter } from "react-router-dom";
+import Root from "../layout/Root";
+import ErrorPage from "../pages/ErrorPage";
+import HomePage from "../pages/HomePage";
+import Register from "../pages/Register";
+import Login from "../pages/Login";
+import { AuthProvider } from "../provider/AuthProvider";
 
-import ForgotPass from '../component/ForgotPass';
-import Account from '../component/Account';
-import PDFGenerator from '../pages/Pdf';
-import Billing from '../component/Billing';
-import Identity from '../component/Identity';
-import ContactForm from '../component/ContactFrom';
-import Contact from '../pages/Contact';
-import IDCard from '../pages/IdCard';
+import ForgotPass from "../component/ForgotPass";
+import Account from "../component/Account";
+import PDFGenerator from "../pages/Pdf";
+import Billing from "../component/Billing";
+import Identity from "../component/Identity";
+import ContactForm from "../component/ContactFrom";
+import Contact from "../pages/Contact";
+import IDCard from "../pages/IdCard";
 
-import Id from '../pages/Id';
-import IDCardPage from '../pages/IdCardPage';
-import CustomizeCard from '../component/CustomizeCard';
-
+import Id from "../pages/Id";
+import IDCardPage from "../pages/IdCardPage";
+import CustomizeCard from "../component/CustomizeCard";
+import SmartId from "../pages/SmartId";
 
 
 const Routes = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AuthProvider>  
+      <AuthProvider>
         <Root />
       </AuthProvider>
     ),
@@ -34,65 +34,69 @@ const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomePage />
+        element: <HomePage />,
       },
       {
         path: "register",
-        element: <Register />
+        element: <Register />,
       },
       {
         path: "login",
-        element: <Login />
+        element: <Login />,
       },
       {
         path: "forgotpass",
-        element: <ForgotPass></ForgotPass>
+        element: <ForgotPass></ForgotPass>,
       },
       {
-        path:"account",
-        element:<Account></Account>
+        path: "account",
+        element: <Account></Account>,
       },
       {
-        path:"pdf",
-        element:<PDFGenerator></PDFGenerator>
+        path: "pdf",
+        element: <PDFGenerator></PDFGenerator>,
       },
       {
-        path:"idcard",
-        element:<IDCard></IDCard>
+        path: "idcard",
+        element: <IDCard></IDCard>,
       },
       {
-        path:"billing",
-        element:<Billing></Billing>
+        path: "billing",
+        element: <Billing></Billing>,
       },
       {
-        path:"identity",
-        element:<Identity></Identity>
+        path: "identity",
+        element: <Identity></Identity>,
       },
       {
-        path:"contactfrom",
-        element:<ContactForm></ContactForm>
+        path: "contactfrom",
+        element: <ContactForm></ContactForm>,
       },
       {
-        path:"Contact",
-        element:<Contact></Contact>
+        path: "Contact",
+        element: <Contact></Contact>,
       },
       {
-        path:"id",
-        element:<Id></Id>
+        path: "id",
+        element: <Id></Id>,
       },
-      
-      {
-        path:"idcardpage",
-        element:<IDCardPage></IDCardPage>
-      },
-      
-   {
-  path: "customizecard",   // correct spelling
-  element: <CustomizeCard />
-}
 
-    ]
-  }
+    
+      {
+        path: "idcardpage",
+        element: <IDCardPage></IDCardPage>,
+      },
+
+      {
+        path: "customizecard", // correct spelling
+        element: <CustomizeCard />,
+      },
+      {
+        path: "smartid",
+        element:<SmartId></SmartId>,
+      },
+    ],
+  },
 ]);
 
 export default Routes;

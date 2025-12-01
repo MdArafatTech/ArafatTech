@@ -62,7 +62,7 @@ export default function IDCardPage() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-green-500 text-white cursor-pointer px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-green-600 w-full lg:w-auto"
                 >
-                  Simple Id Card
+                 Professional Id Card
                 </motion.button>
 
                 <motion.button
@@ -71,7 +71,7 @@ export default function IDCardPage() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-purple-500   text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-purple-600 w-full lg:w-auto"
                 >
-                  Custom ID Card 
+                  Personal ID Card 
                 </motion.button>
 
               
