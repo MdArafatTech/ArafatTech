@@ -279,7 +279,7 @@ export default function ProfessionalIDCardPDF() {
 
   return (
     <div className="min-h-screen md:p-4 lg:p-6 bg-gray-50">
-      <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl md:p-3 lg:p-4 space-y-6">
+      <motion.div className="max-w-5xl mx-auto  rounded-xl shadow-xl md:p-3 lg:p-4 space-y-6">
         <h2 className="text-2xl font-bold text-center text-orange-600">Professional ID Card Generator</h2>
 
         {/* Color Pickers */}
@@ -313,28 +313,108 @@ export default function ProfessionalIDCardPDF() {
           />
         </div>
 
-        {/* Card Forms */}
-        {cards.map((card, idx) => (
-          <div key={idx} className="border border-gray-300 rounded-lg p-3 space-y-2 bg-gray-50">
-            <h3 className="font-bold text-lg">Card {idx + 1}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {["name", "role", "profession", "phone", "dob", "email", "id", "blood", "village", "post", "postCode", "thana", "district"].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                  value={card[field]}
-                  onChange={(e) => updateCard(idx, field, e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              ))}
-            </div>
-            <div className="flex gap-2 mt-2">
-              <button onClick={() => removeCard(idx)} className="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
-              <button onClick={() => resetCard(idx)} className="bg-yellow-400 text-white px-2 py-1 rounded">Reset</button>
-            </div>
+        
+{/* Card Forms */}
+{cards.map((card, idx) => (
+  <div
+    key={idx}
+    className="
+      border border-gray-300 dark:border-gray-700 
+      rounded-lg p-4 space-y-4 
+      bg-white dark:bg-gray-900
+      shadow-md transition-all
+    "
+  >
+    {/* Form Title */}
+    <h3 className="font-bold text-xl text-blue-600 dark:text-blue-400 underline">
+      ID Card Form – {idx + 1}
+    </h3>
+
+    {/* Form Background Box */}
+    <div
+      className="
+        bg-gray-100 dark:bg-gray-300 
+        p-4 rounded-lg shadow-inner
+      "
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+        {/* FORM INPUT FIELDS */}
+        {[
+          "name",
+          "role",
+          "profession",
+          "phone",
+          "dob",
+          "email",
+          "id",
+          "blood",
+          "village",
+          "post",
+          "postCode",
+          "thana",
+          "district",
+        ].map((field) => (
+          <div key={field} className="flex flex-col">
+            
+            {/* Label */}
+            <label className="text-sm font-semibold 
+              text-gray-700 dark:text-black mb-1"
+            >
+              {field.charAt(0).toUpperCase() + field.slice(1)}
+            </label>
+
+            {/* Input Box */}
+            <input
+              type="text"
+              placeholder={`Enter ${field}`}
+              value={card[field]}
+              onChange={(e) => updateCard(idx, field, e.target.value)}
+              className="
+                w-full p-2 rounded-md
+                bg-white dark:bg-gray-700
+                text-gray-900 dark:text-gray-100
+
+                border-2 border-gray-400 dark:border-gray-600 
+                focus:border-blue-500 dark:focus:border-blue-400
+                focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900
+
+                placeholder-gray-400 dark:placeholder-gray-300
+                
+                transition-all duration-200
+              "
+            />
           </div>
         ))}
+      </div>
+    </div>
+
+    {/* Buttons */}
+    <div className="flex gap-3">
+      <button
+        onClick={() => removeCard(idx)}
+        className="
+          bg-red-500 hover:bg-red-600 
+          text-white px-3 py-1 rounded-lg shadow
+        "
+      >
+        Remove
+      </button>
+
+      <button
+        onClick={() => resetCard(idx)}
+        className="
+          bg-yellow-500 hover:bg-yellow-600
+          text-white px-3 py-1 rounded-lg shadow
+        "
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+))}
+
+
 
         <div className="flex gap-2 justify-center mt-4">
           <button

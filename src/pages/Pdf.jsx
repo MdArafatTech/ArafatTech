@@ -6,8 +6,6 @@ import mailimg from "../assets/email.png";
 import { FaRegHandPointDown, FaChevronDown, FaVoicemail } from "react-icons/fa";
 import { pdf } from "@react-pdf/renderer"; // <-- MUST BE HERE
 
-
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -157,7 +155,7 @@ export default function ProfessionalIDCardPDF() {
       email: "",
       id: "",
       session: "",
-       bloodGroup: "",  
+      bloodGroup: "",
       village: "",
       post: "",
       postCode: "",
@@ -226,7 +224,7 @@ export default function ProfessionalIDCardPDF() {
         regNo: "", // ✅ add this if missing
         session: "",
         id: "",
-        bloodGroup: "",  
+        bloodGroup: "",
         village: "",
         post: "",
         postCode: "",
@@ -544,34 +542,29 @@ export default function ProfessionalIDCardPDF() {
     },
 
     signatureImage: {
-      width:85,
-      height:26,
+      width: 85,
+      height: 26,
       marginTop: 6,
       marginBottom: 2,
       alignSelf: "center", // ✅ centers image horizontally
     },
 
-backIssueExpiryContainer: {
-  
-  borderRadius: 2,
-  paddingVertical: 2,
-  paddingHorizontal: 4,
-  justifyContent: "center",
-  alignItems: "flex-end",
-  width: 65,
-  height: 22,          // ✅ fixed height to prevent wrapping
- 
-},
+    backIssueExpiryContainer: {
+      borderRadius: 2,
+      paddingVertical: 2,
+      paddingHorizontal: 4,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      width: 65,
+      height: 22, // ✅ fixed height to prevent wrapping
+    },
 
-backIssueExpiryText: {
-  fontSize:5,
-  color: labelColor,
-  fontWeight: "bold",
-  textAlign: "right",
- 
-},
-
-
+    backIssueExpiryText: {
+      fontSize: 5,
+      color: labelColor,
+      fontWeight: "bold",
+      textAlign: "right",
+    },
   });
 
   const MyDocument = ({ cards }) => (
@@ -704,133 +697,130 @@ backIssueExpiryText: {
             </View>
 
             {/* Back */}
-         <View style={styles.backCard}>
+            <View style={styles.backCard}>
+              {/* Top: Organization Name + Address */}
+              <View style={{ padding: 10 }}>
+                {card.organizationName && (
+                  <View style={{ marginTop: 4, marginBottom: -3 }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        color: "#000000",
+                        textAlign: "center",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {card.organizationName}
+                    </Text>
 
-  {/* Top: Organization Name + Address */}
-  <View style={{ padding: 10 }}>
-    {card.organizationName && (
-      <View style={{ marginTop: 4, marginBottom: -3 }}>
-        <Text
-          style={{
-            fontSize: 12,
-            fontWeight: "bold",
-            color: "#000000",
-            textAlign: "center",
-            marginBottom:4,
-          }}
-        >
-          {card.organizationName}
-        </Text>
+                    <Text style={styles.backAddressText}>
+                      {[card.village?.trim(), card.post?.trim()]
+                        .filter(Boolean)
+                        .join(", ")}
+                      {card.postCode && ` – ${card.postCode.trim()}`}
+                    </Text>
 
-        <Text style={styles.backAddressText}>
-          {[card.village?.trim(), card.post?.trim()].filter(Boolean).join(", ")}
-          {card.postCode && ` – ${card.postCode.trim()}`}
-        </Text>
+                    <Text style={styles.backAddressText}>
+                      {[card.thana?.trim(), card.district?.trim()]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </Text>
+                  </View>
+                )}
+              </View>
 
-        <Text style={styles.backAddressText}>
-          {[card.thana?.trim(), card.district?.trim()].filter(Boolean).join(", ")}
-        </Text>
-      </View>
-    )}
-  </View>
+              {/* Strips */}
+              <View style={styles.backTopStrip}></View>
+              <View style={styles.backYellowStrip2} />
+              <View style={styles.backYellowStrip3} />
+              <View style={styles.backGreenBottom}></View>
 
-  {/* Strips */}
-  <View style={styles.backTopStrip}></View>
-  <View style={styles.backYellowStrip2} />
-  <View style={styles.backYellowStrip3} />
-  <View style={styles.backGreenBottom}></View>
+              {/* CARD MAIN CONTENT */}
+              <View style={styles.backContent}>
+                {/* QR */}
+                <View style={styles.qrBox}>
+                  <Image
+                    style={{ width: 60, height: 60 }}
+                    src={generateEmailQR(card.email)}
+                  />
+                  <Text style={styles.qrText}>Scan to Email</Text>
+                </View>
 
-  {/* CARD MAIN CONTENT */}
-  <View style={styles.backContent}>
+                {/* Note */}
+                <View style={styles.noteBox}>
+                  <Text style={styles.noteText}>
+                    "This ID card is property of personal. Please carry it at
+                    all times. If found, kindly contact me."
+                  </Text>
+                </View>
 
-    {/* QR */}
-    <View style={styles.qrBox}>
-      <Image
-        style={{ width: 60, height: 60 }}
-        src={generateEmailQR(card.email)}
-      />
-      <Text style={styles.qrText}>Scan to Email</Text>
-    </View>
+                {/* ------------------------------ */}
+                {/*   ORGANIZATION CONTACT BOX     */}
+                {/* ------------------------------ */}
+                {(card.organizationEmail ||
+                  card.organizationWebsite ||
+                  card.organizationPhone) && (
+                  <View
+                    style={{
+                      marginTop: 6,
+                      width: 200,
+                      padding: 2,
 
-    {/* Note */}
-    <View style={styles.noteBox}>
-      <Text style={styles.noteText}>
-        "This ID card is property of personal. Please carry it at all times.
-        If found, kindly contact me."
-      </Text>
-    </View>
+                      borderColor: borderColor,
+                      backgroundColor: borderColor,
 
-    {/* ------------------------------ */}
-    {/*   ORGANIZATION CONTACT BOX     */}
-    {/* ------------------------------ */}
-    {(card.organizationEmail ||
-      card.organizationWebsite ||
-      card.organizationPhone) && (
-      <View
-        style={{
-          marginTop: 6,
-          width: 200,
-          padding:2,
-       
-          borderColor: borderColor,
-          backgroundColor: borderColor,
-         
-          alignSelf: "center",
-        }}
-      >
-        {card.organizationEmail && (
-          <Text
-   style={{
-    fontSize: 6,
-    color: "#ffffff",
-    fontWeight: "bold",
-    maxWidth: 180,
-    wordBreak: "break-all",
-    marginLeft:25,
-  }}
-          >
-            Email: {card.organizationEmail}
-          </Text>
-        )}
+                      alignSelf: "center",
+                    }}
+                  >
+                    {card.organizationEmail && (
+                      <Text
+                        style={{
+                          fontSize: 6,
+                          color: "#ffffff",
+                          fontWeight: "bold",
+                          maxWidth: 180,
+                          wordBreak: "break-all",
+                          marginLeft: 25,
+                        }}
+                      >
+                        Email: {card.organizationEmail}
+                      </Text>
+                    )}
 
-        {card.organizationWebsite && (
-          <Text
-  style={{
-    fontSize: 6,
-    color: "#ffffff",
-    fontWeight: "bold",
-    maxWidth: 180,
-    wordBreak: "break-all",
-    marginLeft:25,
-  }}
-          >
-            Website: {card.organizationWebsite}
-          </Text>
-        )}
+                    {card.organizationWebsite && (
+                      <Text
+                        style={{
+                          fontSize: 6,
+                          color: "#ffffff",
+                          fontWeight: "bold",
+                          maxWidth: 180,
+                          wordBreak: "break-all",
+                          marginLeft: 25,
+                        }}
+                      >
+                        Website: {card.organizationWebsite}
+                      </Text>
+                    )}
 
-        {card.organizationPhone && (
-          <Text
-    style={{
-    fontSize: 6,
-    color: "#ffffff",
-    fontWeight: "bold",
-    maxWidth: 180,
-    wordBreak: "break-all",
-    marginLeft:25,
-  }}
-          >
-            Contact: {card.organizationPhone}
-          </Text>
-        )}
+                    {card.organizationPhone && (
+                      <Text
+                        style={{
+                          fontSize: 6,
+                          color: "#ffffff",
+                          fontWeight: "bold",
+                          maxWidth: 180,
+                          wordBreak: "break-all",
+                          marginLeft: 25,
+                        }}
+                      >
+                        Contact: {card.organizationPhone}
+                      </Text>
+                    )}
+                  </View>
+                )}
 
-     
-      </View>
-    )}
-
-
-
-
-    {/* Signature
+                {/* Signature
     {card.signatureImage && (
       <Image style={styles.signatureImage} src={card.signatureImage} />
     )}
@@ -847,84 +837,65 @@ backIssueExpiryText: {
       Authorized Signature
     </Text> */}
 
+                {/* Signature + Issue/Expiry in same row */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 6,
+                    width: "100%",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  {/* Signature Left */}
+                  <View style={{ alignItems: "center" }}>
+                    {card.signatureImage && (
+                      <Image
+                        style={styles.signatureImage}
+                        src={card.signatureImage}
+                      />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 5,
+                        color: labelColor,
+                        marginTop: 1,
+                        textAlign: "center",
+                      }}
+                    >
+                      Authorized Signature
+                    </Text>
+                  </View>
 
+                  {/* Issue + Expiry Right */}
+                  <View style={styles.backIssueExpiryContainer}>
+                    <Text style={styles.backIssueExpiryText}>
+                      Issue: {card.issue || "N/A"}
+                    </Text>
+                    <Text style={styles.backIssueExpiryText}>
+                      Expiry: {card.expiry || "N/A"}
+                    </Text>
+                  </View>
+                </View>
 
+                {/* Bottom Logo */}
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: -4,
+                    right: 0,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  {card.logo && (
+                    <Image src={card.logo} style={{ width: 35, height: 35 }} />
+                  )}
+                </View>
 
-
-
-
-    {/* Signature + Issue/Expiry in same row */}
-<View
-  style={{
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 6,
-    width: "100%",
-    paddingHorizontal: 10,
-  }}
->
-  {/* Signature Left */}
-  <View style={{ alignItems: "center" }}>
-    {card.signatureImage && (
-      <Image style={styles.signatureImage} src={card.signatureImage} />
-    )}
-    <Text
-      style={{
-        fontSize: 5,
-        color: labelColor,
-        marginTop: 1,
-        textAlign: "center",
-      }}
-    >
-      Authorized Signature
-    </Text>
-  </View>
-
-  {/* Issue + Expiry Right */}
-  <View style={styles.backIssueExpiryContainer}>
-    <Text style={styles.backIssueExpiryText}>
-      Issue: {card.issue || "N/A"}
-    </Text>
-    <Text style={styles.backIssueExpiryText}>
-      Expiry: {card.expiry || "N/A"}
-    </Text>
-  </View>
-</View>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {/* Bottom Logo */}
-    <View
-      style={{
-        position: "absolute",
-        bottom:-4,
-        right:0,
-        flexDirection: "row",
-        alignItems: "center",
-      }}
-    >
-      {card.logo && (
-        <Image src={card.logo} style={{ width: 35, height: 35 }} />
-      )}
-    </View>
-
-    {/* Issue – Expiry */}
-    {/* <View style={styles.backIssueExpiryContainer}>
+                {/* Issue – Expiry */}
+                {/* <View style={styles.backIssueExpiryContainer}>
       <Text style={styles.backIssueExpiryText}>
         Issue: {card.issue || "N/A"}
       </Text>
@@ -932,30 +903,15 @@ backIssueExpiryText: {
         Expiry: {card.expiry || "N/A"}
       </Text>
     </View> */}
-
-
-
-
-
-  </View>
-</View>
-
-
-
-
-
-
+              </View>
+            </View>
           </View>
         </Page>
       ))}
     </Document>
   );
 
-
-
-
-
-    // Direct download function
+  // Direct download function
   const downloadPDF = async () => {
     const blob = await pdf(<MyDocument cards={cards} />).toBlob();
     const url = URL.createObjectURL(blob);
@@ -1021,489 +977,529 @@ backIssueExpiryText: {
 
         {/* Card Forms */}
         {/* Card Forms */}
-       {cards.map((card, idx) => (
-        <div key={idx} className="grid grid-cols-1 gap-4 border p-4 rounded-lg shadow">
-          {/* ---------------- ORGANIZATION SECTION ---------------- */}
-          <div className="border border-blue-400 bg-blue-50 p-3 rounded-lg">
-            <h2 className="text-lg font-bold mb-2 text-blue-700">
-              Organization Information
-            </h2>
+        {cards.map((card, idx) => (
+          <div
+            key={idx}
+            className="
+      grid grid-cols-1 gap-4 
+      border border-gray-300 dark:border-gray-700 
+      p-4 rounded-lg shadow 
+      bg-white dark:bg-gray-900 
+      text-gray-900 dark:text-gray-100
+    "
+          >
+            {/* ---------------- ORGANIZATION SECTION ---------------- */}
+            <div
+              className="
+        border border-blue-400 dark:border-blue-600 
+        bg-blue-50 dark:bg-blue-900/40 
+        p-3 rounded-lg shadow-sm
+      "
+            >
+              <h2 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300">
+                Organization Information
+              </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div>
-                <label className="block text-sm font-semibold mb-1">Organization Name</label>
-                <input
-                  value={card.organizationName}
-                  onChange={(e) => updateCard(idx, "organizationName", e.target.value)}
-                  className="border p-2 rounded w-full"
-                  placeholder="Enter Organization Name"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {/* INPUT STYLES */}
+                {[
+                  { label: "Organization Name", key: "organizationName" },
+                  {
+                    label: "Organization Email",
+                    key: "organizationEmail",
+                    type: "email",
+                  },
+                  {
+                    label: "Organization Website",
+                    key: "organizationWebsite",
+                    type: "url",
+                  },
+                  {
+                    label: "Contact Number",
+                    key: "organizationPhone",
+                    type: "tel",
+                  },
+                ].map((item) => (
+                  <div key={item.key}>
+                    <label className="block text-sm font-semibold mb-1">
+                      {item.label}
+                    </label>
+                    <input
+                      type={item.type || "text"}
+                      value={card[item.key] || ""}
+                      onChange={(e) =>
+                        updateCard(idx, item.key, e.target.value)
+                      }
+                      placeholder={`Enter ${item.label}`}
+                      className="
+                w-full p-2 rounded-md 
+                border-2 border-gray-400 dark:border-gray-600 
+                bg-white dark:bg-gray-800 
+                placeholder-gray-500 dark:placeholder-gray-300 
+                focus:border-blue-600 dark:focus:border-blue-400 
+                focus:ring-2 focus:ring-blue-300 
+                transition-all
+              "
+                    />
+                  </div>
+                ))}
+
+                {/* LOGO UPLOAD */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Logo
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                          updateCard(idx, "logo", reader.result);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="
+              w-full p-2 rounded-md border-2 
+              border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800 cursor-pointer
+            "
+                  />
+                </div>
+
+                {/* WATERMARK UPLOAD */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Watermark Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                          updateCard(idx, "watermark", reader.result);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="
+              w-full p-2 rounded-md border-2 
+              border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800 cursor-pointer
+            "
+                  />
+                </div>
               </div>
+            </div>
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Organization Email</label>
-                <input
-                  type="email"
-                  value={card.organizationEmail}
-                  onChange={(e) => updateCard(idx, "organizationEmail", e.target.value)}
-                  className="border p-2 rounded w-full"
-                  placeholder="Enter Email"
-                />
-              </div>
+            {/* ---------------- USER SECTION ---------------- */}
+            <div
+              className="
+        border border-green-400 dark:border-green-600 
+        bg-green-50 dark:bg-green-900/40 
+        p-3 rounded-lg shadow-sm
+      "
+            >
+              <h2 className="text-lg font-bold mb-2 text-green-700 dark:text-green-300">
+                User Information
+              </h2>
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Organization Website</label>
-                <input
-                  type="url"
-                  value={card.organizationWebsite}
-                  onChange={(e) => updateCard(idx, "organizationWebsite", e.target.value)}
-                  className="border p-2 rounded w-full"
-                  placeholder="Enter Website URL"
-                />
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {/* NORMAL INPUTS */}
+                {[
+                  { key: "name", label: "Name" },
+                  { key: "roll", label: "Roll" },
+                  { key: "regNo", label: "Reg No" },
+                ].map((item) => (
+                  <div key={item.key}>
+                    <label className="block text-sm font-semibold mb-1">
+                      {item.label}
+                    </label>
+                    <input
+                      value={card[item.key] || ""}
+                      onChange={(e) =>
+                        updateCard(idx, item.key, e.target.value)
+                      }
+                      placeholder={`Enter ${item.label}`}
+                      className="
+                w-full p-2 rounded-md 
+                border-2 border-gray-400 dark:border-gray-600 
+                bg-white dark:bg-gray-800
+                placeholder-gray-500 dark:placeholder-gray-300 
+                focus:border-green-600 dark:focus:border-green-400 
+                focus:ring-2 focus:ring-green-300 
+                transition-all
+              "
+                    />
+                  </div>
+                ))}
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Contact Number</label>
-                <input
-                  type="tel"
-                  value={card.organizationPhone}
-                  onChange={(e) => updateCard(idx, "organizationPhone", e.target.value)}
-                  className="border p-2 rounded w-full"
-                  placeholder="Enter Contact Number"
-                />
-              </div>
+                {/* DEPARTMENT */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Dept
+                  </label>
+                  <input
+                    list="departments"
+                    value={card.dept}
+                    onChange={(e) => updateCard(idx, "dept", e.target.value)}
+                    placeholder="Select Department"
+                    className="
+              w-full p-2 rounded-md 
+              border-2 border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800
+              placeholder-gray-500 dark:placeholder-gray-300 
+              focus:border-green-600 dark:focus:border-green-400
+              focus:ring-2 focus:ring-green-300
+              transition-all
+            "
+                  />
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Logo</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => updateCard(idx, "logo", reader.result);
-                      reader.readAsDataURL(file);
+                  <datalist id="departments">
+                    {" "}
+                    <option value="CSE" /> <option value="EEE" />{" "}
+                    <option value="ECE" /> <option value="ETE" />{" "}
+                    <option value="ME" /> <option value="Civil" />{" "}
+                    <option value="Architecture" />{" "}
+                    <option value="Software Engineering" />{" "}
+                    <option value="Information Technology" />{" "}
+                    <option value="BBA" /> <option value="MBA" />{" "}
+                    <option value="Accounting" /> <option value="Finance" />{" "}
+                    <option value="Marketing" /> <option value="Management" />{" "}
+                    <option value="English" /> <option value="Bangla" />{" "}
+                    <option value="Economics" />{" "}
+                    <option value="Political Science" />{" "}
+                    <option value="Sociology" />{" "}
+                    <option value="Islamic Studies" />{" "}
+                    <option value="History" /> <option value="Philosophy" />{" "}
+                    <option value="Law" /> <option value="Medicine" />{" "}
+                    <option value="Nursing" /> <option value="Pharmacy" />{" "}
+                    <option value="Dental" /> <option value="Public Health" />{" "}
+                    <option value="Medical Technology" />{" "}
+                    <option value="Agriculture" /> <option value="Fisheries" />{" "}
+                    <option value="Biotechnology" /> <option value="Genetics" />{" "}
+                    <option value="Environmental Science" />{" "}
+                    <option value="Textile Engineering" />{" "}
+                    <option value="Apparel Engineering" />{" "}
+                    <option value="Fashion Design" />{" "}
+                    <option value="Hotel Management" />{" "}
+                    <option value="Tourism" />{" "}
+                    <option value="Automobile Engineering" />{" "}
+                    <option value="Electrical Technology" />{" "}
+                    <option value="Mechanical Technology" />{" "}
+                    <option value="Civil Technology" />{" "}
+                    <option value="Computer Technology" />{" "}
+                    <option value="Telecommunication Technology" />{" "}
+                    <option value="HSC Science" />{" "}
+                    <option value="HSC Commerce" /> <option value="HSC Arts" />{" "}
+                    <option value="Diploma in Engineering" />{" "}
+                    <option value="Diploma in Computer" />{" "}
+                    <option value="Diploma in Civil" />{" "}
+                    <option value="Diploma in Electrical" />{" "}
+                    <option value="Physics" /> <option value="Chemistry" />{" "}
+                    <option value="Biology" /> <option value="Mathematics" />{" "}
+                    <option value="Statistics" /> <option value="Botany" />{" "}
+                    <option value="Zoology" /> <option value="Microbiology" />{" "}
+                    <option value="Biochemistry" />{" "}
+                    <option value="Genetic Engineering" />{" "}
+                    <option value="Geology" /> <option value="Marine Science" />{" "}
+                    <option value="Astronomy" />{" "}
+                    <option value="Physical Education" />{" "}
+                  </datalist>
+                </div>
+
+                {/* SESSION */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Session
+                  </label>
+                  <input
+                    list="sessions"
+                    value={card.session}
+                    onChange={(e) => updateCard(idx, "session", e.target.value)}
+                    placeholder="Select Session"
+                    className="
+              w-full p-2 rounded-md 
+              border-2 border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800
+              placeholder-gray-500 dark:placeholder-gray-300 
+              focus:border-green-600 dark:focus:border-green-400
+              focus:ring-2 focus:ring-green-300
+              transition-all
+            "
+                  />
+
+                  <datalist id="sessions">
+                    {" "}
+                    <option value="2000-2001" /> <option value="2001-2002" />{" "}
+                    <option value="2002-2003" /> <option value="2003-2004" />{" "}
+                    <option value="2004-2005" /> <option value="2005-2006" />{" "}
+                    <option value="2006-2007" /> <option value="2007-2008" />{" "}
+                    <option value="2008-2009" /> <option value="2009-2010" />{" "}
+                    <option value="2010-2011" /> <option value="2011-2012" />{" "}
+                    <option value="2012-2013" /> <option value="2013-2014" />{" "}
+                    <option value="2014-2015" /> <option value="2015-2016" />{" "}
+                    <option value="2016-2017" /> <option value="2017-2018" />{" "}
+                    <option value="2018-2019" /> <option value="2019-2020" />{" "}
+                    <option value="2020-2021" /> <option value="2021-2022" />{" "}
+                    <option value="2022-2023" /> <option value="2023-2024" />{" "}
+                    <option value="2024-2025" /> <option value="2025-2026" />{" "}
+                    <option value="2026-2027" /> <option value="2027-2028" />{" "}
+                    <option value="2028-2029" /> <option value="2029-2030" />{" "}
+                    <option value="2030-2031" /> <option value="2031-2032" />{" "}
+                    <option value="2032-2033" /> <option value="2033-2034" />{" "}
+                    <option value="2034-2035" /> <option value="2035-2036" />{" "}
+                    <option value="2036-2037" /> <option value="2037-2038" />{" "}
+                    <option value="2038-2039" /> <option value="2039-2040" />{" "}
+                    <option value="2040-2041" /> <option value="2041-2042" />{" "}
+                    <option value="2042-2043" /> <option value="2043-2044" />{" "}
+                    <option value="2044-2045" /> <option value="2045-2046" />{" "}
+                    <option value="2046-2047" /> <option value="2047-2048" />{" "}
+                    <option value="2048-2049" /> <option value="2049-2050" />{" "}
+                  </datalist>
+                </div>
+
+                {/* PHONE */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={card.phone}
+                    onChange={(e) => updateCard(idx, "phone", e.target.value)}
+                    placeholder="Enter Phone"
+                    className="
+              w-full p-2 rounded-md 
+              border-2 border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800
+              placeholder-gray-500 dark:placeholder-gray-300 
+              focus:border-green-600 dark:focus:border-green-400
+              focus:ring-2 focus:ring-green-300
+              transition-all
+            "
+                  />
+                </div>
+
+                {/* EMAIL */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Email
+                  </label>
+                  <input
+                    value={card.email}
+                    onChange={(e) => updateCard(idx, "email", e.target.value)}
+                    placeholder="Enter Email"
+                    className="
+              w-full p-2 rounded-md 
+              border-2 border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800
+              placeholder-gray-500 dark:placeholder-gray-300 
+              focus:border-green-600 dark:focus:border-green-400
+              focus:ring-2 focus:ring-green-300
+              transition-all
+            "
+                  />
+                </div>
+
+                {/* BLOOD GROUP */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Blood Group
+                  </label>
+                  <input
+                    list="bloodGroups"
+                    value={card.bloodGroup}
+                    onChange={(e) =>
+                      updateCard(idx, "bloodGroup", e.target.value)
                     }
-                  }}
-                  className="border p-2 rounded w-full cursor-pointer"
-                />
+                    placeholder="Select Blood Group"
+                    className="
+              w-full p-2 rounded-md 
+              border-2 border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800
+              placeholder-gray-500 dark:placeholder-gray-300 
+              focus:border-green-600 dark:focus:border-green-400
+              focus:ring-2 focus:ring-green-300
+              transition-all
+            "
+                  />
+
+                  <datalist id="bloodGroups">
+                    {" "}
+                    <option value="A+" /> <option value="A-" />{" "}
+                    <option value="B+" /> <option value="B-" />{" "}
+                    <option value="AB+" /> <option value="AB-" />{" "}
+                    <option value="O+" /> <option value="O-" />{" "}
+                    <option value="A1+" /> <option value="A1-" />{" "}
+                    <option value="A2+" /> <option value="A2-" />{" "}
+                    <option value="A1B+" /> <option value="A1B-" />{" "}
+                    <option value="A2B+" /> <option value="A2B-" />{" "}
+                    <option value="Bombay Blood Group (Oh)" />{" "}
+                    <option value="Chido" /> <option value="Rhesus Negative" />{" "}
+                  </datalist>
+                </div>
+
+                {/* ADDRESS FIELDS */}
+                {[
+                  { key: "village", label: "Village" },
+                  { key: "post", label: "Post" },
+                  { key: "postCode", label: "Post Code" },
+                  { key: "thana", label: "Thana" },
+                  { key: "district", label: "District" },
+                ].map((item) => (
+                  <div key={item.key}>
+                    <label className="block text-sm font-semibold mb-1">
+                      {item.label}
+                    </label>
+                    <input
+                      value={card[item.key] || ""}
+                      onChange={(e) =>
+                        updateCard(idx, item.key, e.target.value)
+                      }
+                      placeholder={`Enter ${item.label}`}
+                      className="
+                w-full p-2 rounded-md 
+                border-2 border-gray-400 dark:border-gray-600 
+                bg-white dark:bg-gray-800
+                placeholder-gray-500 dark:placeholder-gray-300 
+                focus:border-green-600 dark:focus:border-green-400
+                focus:ring-2 focus:ring-green-300
+                transition-all
+              "
+                    />
+                  </div>
+                ))}
+
+                {/* DATES */}
+                {[
+                  { key: "issue", label: "Issue Date", type: "date" },
+                  { key: "expiry", label: "Expiry Date", type: "date" },
+                ].map((item) => (
+                  <div key={item.key}>
+                    <label className="block text-sm font-semibold mb-1">
+                      {item.label}
+                    </label>
+                    <input
+                      type={item.type}
+                      value={card[item.key] || ""}
+                      onChange={(e) =>
+                        updateCard(idx, item.key, e.target.value)
+                      }
+                      className="
+                w-full p-2 rounded-md 
+                border-2 border-gray-400 dark:border-gray-600 
+                bg-white dark:bg-gray-800
+                focus:border-green-600 dark:focus:border-green-400
+                focus:ring-2 focus:ring-green-300
+              "
+                    />
+                  </div>
+                ))}
+
+                {/* PROFILE IMAGE */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Profile Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      updateCard(
+                        idx,
+                        "profileImage",
+                        URL.createObjectURL(e.target.files[0])
+                      )
+                    }
+                    className="
+              w-full p-2 rounded-md border-2 
+              border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800 cursor-pointer
+            "
+                  />
+                </div>
+
+                {/* SIGNATURE IMAGE */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1">
+                    Signature Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      updateCard(
+                        idx,
+                        "signatureImage",
+                        URL.createObjectURL(e.target.files[0])
+                      )
+                    }
+                    className="
+              w-full p-2 rounded-md border-2 
+              border-gray-400 dark:border-gray-600 
+              bg-white dark:bg-gray-800 cursor-pointer
+            "
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold mb-1">Watermark Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => updateCard(idx, "watermark", reader.result);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="border p-2 rounded w-full cursor-pointer"
-                />
+              {/* BUTTONS */}
+              <div className="flex gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => resetCard(idx)}
+                  className="
+            bg-yellow-500 hover:bg-yellow-600 
+            text-white font-semibold py-2 px-4 rounded
+            transition-all
+          "
+                >
+                  ↻ Reset
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => removeCard(idx)}
+                  className="
+            bg-red-500 hover:bg-red-600 
+            text-white font-semibold py-2 px-4 rounded
+            transition-all
+          "
+                >
+                  ✖ Remove
+                </button>
               </div>
             </div>
           </div>
-
-          {/* ---------------- USER SECTION ---------------- */}
-          <div className="border border-green-400 bg-green-50 p-3 rounded-lg">
-            <h2 className="text-lg font-bold mb-2 text-green-700">User Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div>
-                <label className="block text-sm font-semibold mb-1">Name</label>
-                <input
-                  value={card.name}
-                  onChange={(e) => updateCard(idx, "name", e.target.value)}
-                  placeholder="Enter Name"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Roll</label>
-                <input
-                  value={card.roll}
-                  onChange={(e) => updateCard(idx, "roll", e.target.value)}
-                  placeholder="Enter Roll Number"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Reg No</label>
-                <input
-                  value={card.regNo}
-                  onChange={(e) => updateCard(idx, "regNo", e.target.value)}
-                  placeholder="Enter Registration Number"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Dept</label>
-                <input
-                  list="departments"
-                  value={card.dept}
-                  onChange={(e) => updateCard(idx, "dept", e.target.value)}
-                  placeholder="Select or type department (optional)"
-                  className="border p-2 rounded w-full"
-                />
-                <datalist id="departments">
-                  <option value="CSE" />
-                  <option value="EEE" />
-                  <option value="ECE" />
-                  <option value="ETE" />
-                  <option value="ME" />
-                  <option value="Civil" />
-                  <option value="Architecture" />
-                  <option value="Software Engineering" />
-                  <option value="Information Technology" />
-
-                  <option value="BBA" />
-                  <option value="MBA" />
-                  <option value="Accounting" />
-                  <option value="Finance" />
-                  <option value="Marketing" />
-                  <option value="Management" />
-
-                  <option value="English" />
-                  <option value="Bangla" />
-                  <option value="Economics" />
-                  <option value="Political Science" />
-                  <option value="Sociology" />
-                  <option value="Islamic Studies" />
-                  <option value="History" />
-                  <option value="Philosophy" />
-                  <option value="Law" />
-
-                  <option value="Medicine" />
-                  <option value="Nursing" />
-                  <option value="Pharmacy" />
-                  <option value="Dental" />
-                  <option value="Public Health" />
-                  <option value="Medical Technology" />
-
-                  <option value="Agriculture" />
-                  <option value="Fisheries" />
-                  <option value="Biotechnology" />
-                  <option value="Genetics" />
-                  <option value="Environmental Science" />
-
-                  <option value="Textile Engineering" />
-                  <option value="Apparel Engineering" />
-                  <option value="Fashion Design" />
-
-                  <option value="Hotel Management" />
-                  <option value="Tourism" />
-
-                  <option value="Automobile Engineering" />
-                  <option value="Electrical Technology" />
-                  <option value="Mechanical Technology" />
-                  <option value="Civil Technology" />
-                  <option value="Computer Technology" />
-                  <option value="Telecommunication Technology" />
-
-                  <option value="HSC Science" />
-                  <option value="HSC Commerce" />
-                  <option value="HSC Arts" />
-
-                  <option value="Diploma in Engineering" />
-                  <option value="Diploma in Computer" />
-                  <option value="Diploma in Civil" />
-                  <option value="Diploma in Electrical" />
-
-                  <option value="Physics" />
-                  <option value="Chemistry" />
-                  <option value="Biology" />
-                  <option value="Mathematics" />
-                  <option value="Statistics" />
-                  <option value="Botany" />
-                  <option value="Zoology" />
-                  <option value="Microbiology" />
-                  <option value="Biochemistry" />
-                  <option value="Genetic Engineering" />
-                  <option value="Geology" />
-                  <option value="Marine Science" />
-                  <option value="Astronomy" />
-                  <option value="Physical Education" />
-                </datalist>
-
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Session</label>
-                <input
-                  list="sessions"
-                  value={card.session}
-                  onChange={(e) => updateCard(idx, "session", e.target.value)}
-                  placeholder="Select or type session (optional)"
-                  className="border p-2 rounded w-full"
-                />
-              <datalist id="sessions">
-                  <option value="2000-2001" />
-                  <option value="2001-2002" />
-                  <option value="2002-2003" />
-                  <option value="2003-2004" />
-                  <option value="2004-2005" />
-                  <option value="2005-2006" />
-                  <option value="2006-2007" />
-                  <option value="2007-2008" />
-                  <option value="2008-2009" />
-                  <option value="2009-2010" />
-
-                  <option value="2010-2011" />
-                  <option value="2011-2012" />
-                  <option value="2012-2013" />
-                  <option value="2013-2014" />
-                  <option value="2014-2015" />
-                  <option value="2015-2016" />
-                  <option value="2016-2017" />
-                  <option value="2017-2018" />
-                  <option value="2018-2019" />
-                  <option value="2019-2020" />
-
-                  <option value="2020-2021" />
-                  <option value="2021-2022" />
-                  <option value="2022-2023" />
-                  <option value="2023-2024" />
-                  <option value="2024-2025" />
-                  <option value="2025-2026" />
-                  <option value="2026-2027" />
-                  <option value="2027-2028" />
-                  <option value="2028-2029" />
-                  <option value="2029-2030" />
-
-                  <option value="2030-2031" />
-                  <option value="2031-2032" />
-                  <option value="2032-2033" />
-                  <option value="2033-2034" />
-                  <option value="2034-2035" />
-                  <option value="2035-2036" />
-                  <option value="2036-2037" />
-                  <option value="2037-2038" />
-                  <option value="2038-2039" />
-                  <option value="2039-2040" />
-
-                  <option value="2040-2041" />
-                  <option value="2041-2042" />
-                  <option value="2042-2043" />
-                  <option value="2043-2044" />
-                  <option value="2044-2045" />
-                  <option value="2045-2046" />
-                  <option value="2046-2047" />
-                  <option value="2047-2048" />
-                  <option value="2048-2049" />
-                  <option value="2049-2050" />
-                </datalist>
-
-              </div>
-
-            {/* Phone */}
-    <div>
-      <label className="block text-sm font-semibold mb-1">Phone</label>
-      <input
-        type="tel"
-        value={card.phone}
-        onChange={(e) => updateCard(idx, "phone", e.target.value)}
-        placeholder="Enter Phone Number"
-        className="border p-2 rounded w-full"
-      />
-    </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Email</label>
-                <input
-                  value={card.email}
-                  onChange={(e) => updateCard(idx, "email", e.target.value)}
-                  placeholder="Enter Email"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-
-
-
-              {/* ---------------- BLOOD GROUP ---------------- */}
-<div>
-  <label className="block text-sm font-semibold mb-1">Blood Group</label>
-  <input
-    list="bloodGroups"
-    value={card.bloodGroup || ""}
-    onChange={(e) => updateCard(idx, "bloodGroup", e.target.value)}
-    placeholder="Select or type Blood Group"
-    className="border p-2 rounded w-full"
-  />
-    <datalist id="bloodGroups">
-    <option value="A+" />
-    <option value="A-" />
-    <option value="B+" />
-    <option value="B-" />
-    <option value="AB+" />
-    <option value="AB-" />
-    <option value="O+" />
-    <option value="O-" />
-    <option value="A1+" />
-    <option value="A1-" />
-    <option value="A2+" />
-    <option value="A2-" />
-    <option value="A1B+" />
-    <option value="A1B-" />
-    <option value="A2B+" />
-    <option value="A2B-" />
-    <option value="Bombay Blood Group (Oh)" />
-    <option value="Chido" />
-    <option value="Rhesus Negative" />
-  </datalist>
-</div>
-
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Village</label>
-                <input
-                  value={card.village}
-                  onChange={(e) => updateCard(idx, "village", e.target.value)}
-                  placeholder="Enter Village"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Post</label>
-                <input
-                  value={card.post}
-                  onChange={(e) => updateCard(idx, "post", e.target.value)}
-                  placeholder="Enter Post"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Post Code</label>
-                <input
-                  value={card.postCode}
-                  onChange={(e) => updateCard(idx, "postCode", e.target.value)}
-                  placeholder="Enter Post Code"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Thana</label>
-                <input
-                  value={card.thana}
-                  onChange={(e) => updateCard(idx, "thana", e.target.value)}
-                  placeholder="Enter Thana"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">District</label>
-                <input
-                  value={card.district}
-                  onChange={(e) => updateCard(idx, "district", e.target.value)}
-                  placeholder="Enter District"
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Issue Date</label>
-                <input
-                  type="date"
-                  value={card.issue}
-                  onChange={(e) => updateCard(idx, "issue", e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Expiry Date</label>
-                <input
-                  type="date"
-                  value={card.expiry}
-                  onChange={(e) => updateCard(idx, "expiry", e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Profile Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    updateCard(idx, "profileImage", URL.createObjectURL(e.target.files[0]))
-                  }
-                  className="border p-2 rounded w-full cursor-pointer"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Signature Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    updateCard(idx, "signatureImage", URL.createObjectURL(e.target.files[0]))
-                  }
-                  className="border p-2 rounded w-full cursor-pointer"
-                />
-              </div>
-            </div>
-
-            {/* ---------------- BUTTONS ---------------- */}
-            <div className="flex gap-2 mt-3">
-              <button
-                type="button"
-                onClick={() => resetCard(idx)}
-                className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded"
-              >
-                ↻ Reset
-              </button>
-
-              <button
-                type="button"
-                onClick={() => removeCard(idx)}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-              >
-               ✖ Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
-
-      
+        ))}
       </motion.div>
 
-    
-        <div className="flex gap-2 justify-center mt-4">
-          <button
-  onClick={addCard}
-  className="bg-green-500 cursor-pointer text-white px-4 py-2 rounded-lg 
+      <div className="flex gap-2 justify-center mt-4">
+        <button
+          onClick={addCard}
+          className="bg-green-500 cursor-pointer text-white px-4 py-2 rounded-lg 
              hover:bg-green-600 hover:scale-105 transition-transform transition-colors duration-300"
->
-  Add Card
-</button>
+        >
+          Add Card
+        </button>
 
-<button
-  onClick={downloadPDF}
-  className="bg-orange-500 cursor-pointer text-white px-4 py-2 rounded-lg 
+        <button
+          onClick={downloadPDF}
+          className="bg-orange-500 cursor-pointer text-white px-4 py-2 rounded-lg 
              hover:bg-orange-600 hover:scale-105 transition-transform transition-colors duration-300"
->
-  Download PDF
-</button>
-
-        </div>
-         <p className="text-center text-gray-600 mt-4 text-sm">
-          Click "Download PDF Now" to generate and download your professional ID cards instantly.
-        </p>
-      
+        >
+          Download PDF
+        </button>
+      </div>
+      <p className="text-center text-gray-600 mt-4 text-sm">
+        Click "Download PDF Now" to generate and download your professional ID
+        cards instantly.
+      </p>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
+import companyLogo from "../assets/arafattech.png"; // change path as needed
 
 const Billing = () => {
   const [darkMode] = useState(false);
@@ -41,122 +42,131 @@ const Billing = () => {
   const getVAT = () => ((parseFloat(getTotal()) * vatRate) / 100).toFixed(2);
   const getGrandTotal = () => (parseFloat(getTotal()) + parseFloat(getVAT())).toFixed(2);
 
-  const downloadReceipt = () => {
-    const pdf = new jsPDF();
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-    const centerX = pageWidth / 2;
+const downloadReceipt = () => {
+  const pdf = new jsPDF();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 10;
+  const centerX = pageWidth / 2;
 
-    pdf.setFontSize(18);
-    pdf.setTextColor("#ea580c");
-    pdf.text("Company Name", centerX, 20, { align: "center" });
-    pdf.setFontSize(11);
-    pdf.setTextColor("#000");
-    pdf.text("www.arafat-tech.LTD.com", centerX, 27, { align: "center" });
-    pdf.setDrawColor(200);
-    pdf.line(margin, 32, pageWidth - margin, 32);
+  // --------- ADD LOGO ----------
+  const imgWidth = 25;
+  const imgHeight = 25;
+  const imgY = 8; // smaller top margin
+  const imgX = centerX - imgWidth / 2;
+  pdf.addImage(companyLogo, "PNG", imgX, imgY, imgWidth, imgHeight);
 
-    pdf.setFontSize(12);
-    pdf.text(`Customer: ${customer || "-"}`, margin, 42);
-    pdf.text(`Phone: ${customerPhone || "-"}`, margin, 50);
-    pdf.text(`Invoice No: ${invoiceNo}`, pageWidth - 70, 42);
-    pdf.text(`Date: ${date}`, pageWidth - 70, 50);
+  // --------- COMPANY NAME & WEBSITE ----------
+  const titleY = imgY + imgHeight + 4; // reduce space below logo
+  pdf.setFontSize(16);
+  pdf.setTextColor("#ea580c");
+  pdf.text("Arafat-Tech LTD", centerX, titleY, { align: "center" });
 
-    const colX = { name: margin, qty: pageWidth * 0.55, price: pageWidth * 0.65, discount: pageWidth * 0.78, total: pageWidth - margin };
-    pdf.setFontSize(12);
-    pdf.text("Item", colX.name, 65);
-    pdf.text("Qty", colX.qty, 65);
-    pdf.text("Price", colX.price, 65);
-    pdf.text("Discount %", colX.discount, 65);
-    pdf.text("Total", colX.total, 65, { align: "right" });
+  pdf.setFontSize(9);
+  pdf.setTextColor("#000");
+  pdf.text("www.arafat-tech.LTD.com", centerX, titleY + 6, { align: "center" });
 
-    let y = 72;
-    const lineHeight = 6;
+  pdf.setDrawColor(200);
+  pdf.line(margin, titleY + 10, pageWidth - margin, titleY + 10);
 
-    items.forEach((item) => {
-      const subtotal = item.qty * item.price;
-      const discount = (item.discount / 100) * subtotal || 0;
-      const total = (subtotal - discount).toFixed(2);
-      pdf.setFontSize(11);
-      const splitName = pdf.splitTextToSize(item.name || "-", colX.qty - colX.name - 2);
+  // --------- CUSTOMER & INVOICE INFO ----------
+  let y = titleY + 15; // start closer to top
+  pdf.setFontSize(10);
+  pdf.text(`Customer: ${customer || "-"}`, margin, y);
+  pdf.text(`Phone: ${customerPhone || "-"}`, margin, y + 6);
+  pdf.text(`Invoice No: ${invoiceNo}`, pageWidth - 70, y);
+  pdf.text(`Date: ${date}`, pageWidth - 70, y + 6);
 
-      splitName.forEach((line, i) => {
-        if (y > 270) {
-          pdf.addPage();
-          y = 20;
-        }
-        pdf.text(line, colX.name, y);
-        if (i === 0) {
-          pdf.text(item.qty.toString(), colX.qty, y);
-          pdf.text(item.price.toFixed(2), colX.price, y);
-          pdf.text(item.discount.toString(), colX.discount, y);
-          pdf.text(total.toString(), colX.total, y, { align: "right" });
-        }
-        y += lineHeight;
-      });
+  // --------- TABLE HEADERS ----------
+  y += 15;
+  const colX = { name: margin, qty: pageWidth * 0.55, price: pageWidth * 0.65, discount: pageWidth * 0.78, total: pageWidth - margin };
+  pdf.setFontSize(10);
+  pdf.text("Item", colX.name, y);
+  pdf.text("Qty", colX.qty, y);
+  pdf.text("Price", colX.price, y);
+  pdf.text("Discount %", colX.discount, y);
+  pdf.text("Total", colX.total, y, { align: "right" });
+
+  y += 6;
+  const lineHeight = 5;
+
+  // --------- TABLE ITEMS ----------
+  items.forEach((item) => {
+    const subtotal = item.qty * item.price;
+    const discount = (item.discount / 100) * subtotal || 0;
+    const total = (subtotal - discount).toFixed(2);
+
+    const splitName = pdf.splitTextToSize(item.name || "-", colX.qty - colX.name - 2);
+    splitName.forEach((line, i) => {
       if (y > 270) {
         pdf.addPage();
         y = 20;
       }
+      pdf.text(line, colX.name, y);
+      if (i === 0) {
+        pdf.text(item.qty.toString(), colX.qty, y);
+        pdf.text(item.price.toFixed(2), colX.price, y);
+        pdf.text(item.discount.toString(), colX.discount, y);
+        pdf.text(total.toString(), colX.total, y, { align: "right" });
+      }
+      y += lineHeight;
     });
+  });
 
-    pdf.line(margin, y + 2, pageWidth - margin, y + 2);
-    y += 12;
+  pdf.line(margin, y + 2, pageWidth - margin, y + 2);
+  y += 10;
 
-    pdf.setFontSize(12);
-    pdf.text(`Subtotal: ${getTotal()} Tk`, pageWidth - margin, y, { align: "right" });
-    y += 8;
-    pdf.text(`VAT (${vatRate}%): ${getVAT()} Tk`, pageWidth - margin, y, { align: "right" });
-    y += 8;
-    pdf.setFontSize(14);
-    pdf.setTextColor("#ea580c");
-    pdf.text(`Grand Total: ${getGrandTotal()} Tk`, pageWidth - margin, y, { align: "right" });
+  // --------- TOTALS ----------
+  pdf.setFontSize(10);
+  pdf.text(`Subtotal: ${getTotal()} Tk`, pageWidth - margin, y, { align: "right" });
+  y += 6;
+  pdf.text(`VAT (${vatRate}%): ${getVAT()} Tk`, pageWidth - margin, y, { align: "right" });
+  y += 6;
+  pdf.setFontSize(12);
+  pdf.setTextColor("#ea580c");
+  pdf.text(`Grand Total: ${getGrandTotal()} Tk`, pageWidth - margin, y, { align: "right" });
 
-    if (warranty) {
-      y += 20;
-      pdf.setFontSize(12);
-      pdf.setTextColor("#92400e");
-      pdf.setFillColor(255, 249, 195);
-      pdf.rect(margin, y, pageWidth - margin * 2, 38, "F");
-
-      pdf.setTextColor("#000");
-      pdf.setFontSize(11);
-      const warrantyLines = [
-        "Warranty Claim Instructions:",
-        "1. Please retain this invoice as proof of purchase for warranty service.",
-        "2. The warranty is valid for 6 months from the purchase date.",
-        "3. It covers only manufacturer defects and not physical or water damage.",
-        "4. Any tampering or unauthorized repairs will void the warranty.",
-        "5. To claim warranty, visit our service center with this receipt and the original product.",
-      ];
-      warrantyLines.forEach((line, i) => pdf.text(line, margin + 2, y + 6 + i * 6));
-      y += warrantyLines.length * 6 + 4;
-    }
-
-    y += 20;
-    pdf.setFontSize(12);
-    pdf.setTextColor("#000");
-    pdf.text("Customer Signature", 20, y);
-    pdf.text("Authorized Signature", pageWidth - 80, y);
-    pdf.line(20, y + 2, 70, y + 2);
-    pdf.line(pageWidth - 80, y + 2, pageWidth - 20, y + 2);
-
+  // --------- WARRANTY ----------
+  if (warranty) {
+    y += 15;
     pdf.setFontSize(10);
-    pdf.setTextColor("#666");
-    pdf.setFont(undefined, "italic");
-    pdf.text("Powered by Arafat-Tech", pageWidth / 2, pageHeight - 10, { align: "center" });
+    pdf.setTextColor("#92400e");
+    pdf.setFillColor(255, 249, 195);
+    pdf.rect(margin, y, pageWidth - margin * 2, 38, "F");
 
-    pdf.save(`${invoiceNo}_receipt.pdf`);
+    pdf.setTextColor("#000");
+    pdf.setFontSize(10);
+    const warrantyLines = [
+      "Warranty Claim Instructions:",
+      "1. Please retain this invoice as proof of purchase for warranty service.",
+      "2. The warranty is valid for 6 months from the purchase date.",
+      "3. It covers only manufacturer defects and not physical or water damage.",
+      "4. Any tampering or unauthorized repairs will void the warranty.",
+      "5. To claim warranty, visit our service center with this receipt and the original product.",
+    ];
+    warrantyLines.forEach((line, i) => pdf.text(line, margin + 2, y + 6 + i * 5));
+    y += warrantyLines.length * 5 + 4;
+  }
 
-    setCustomer("");
-    setCustomerPhone("");
-    setVatRate(5);
-    setItems([{ name: "", qty: 1, price: 0, discount: 0 }]);
-    setInvoiceNo("INV-" + Math.floor(1000 + Math.random() * 9000));
-    setDate(new Date().toISOString().slice(0, 10));
-    setShowBill(false);
-  };
+  // --------- SIGNATURES ----------
+  y += 15;
+  pdf.setFontSize(10);
+  pdf.setTextColor("#000");
+  pdf.text("Customer Signature", 20, y);
+  pdf.text("Authorized Signature", pageWidth - 80, y);
+  pdf.line(20, y + 2, 70, y + 2);
+  pdf.line(pageWidth - 80, y + 2, pageWidth - 20, y + 2);
+
+  // --------- FOOTER ----------
+  pdf.setFontSize(7);
+  pdf.setTextColor("#666");
+  pdf.setFont(undefined, "italic");
+  pdf.text("Powered by Arafat-Tech", centerX, pageHeight - 10, { align: "center" });
+
+  pdf.save(`${invoiceNo}_receipt.pdf`);
+};
+
+
 
   const buttonStyle = { backgroundColor: "#ea580c", color: "#fff", cursor: "pointer", padding: "12px 24px", borderRadius: 12, fontWeight: "bold", width: "100%", marginBottom: 20, border: "none" };
 
@@ -200,7 +210,32 @@ const Billing = () => {
 
         {showBill && (
           <div style={{ backgroundColor: darkMode ? "#111827" : "#fff", color: darkMode ? "#fff" : "#000", border: "1px solid #ccc", borderRadius: 16, padding: 24, width: "100%", maxWidth: 600, marginTop: 24 }}>
-            <div style={{ textAlign: "center", marginBottom: 24 }}>
+          
+
+      <div
+
+  style={{
+    backgroundColor: darkMode ? "#111827" : "#fff",
+    color: darkMode ? "#fff" : "#000",
+    border: "1px solid #ccc",
+    borderRadius: 16,
+    padding: 24,
+    width: "100%",
+    maxWidth: 600,
+    marginTop: 24,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center", // <-- centers horizontally
+  }}
+>
+  {/* Logo */}
+  <div style={{ marginBottom: 12 }}>
+    <img
+      src={companyLogo}
+      alt="Company Logo"
+      style={{ width: 60, height: 60, objectFit: "contain" }}
+    />
+  </div>
               <h3 style={{ fontSize: "1.5rem", color: "#ea580c", margin: 0 }}>Company Name</h3>
               <p style={{ fontSize: 12, color: "#666", margin: 0 }}>www.arafat-tech.LTD.com</p>
               <hr style={{ margin: "16px 0", borderColor: "#ccc" }} />
