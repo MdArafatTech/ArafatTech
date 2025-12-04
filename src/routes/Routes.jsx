@@ -20,15 +20,16 @@ import Id from "../pages/Id";
 import IDCardPage from "../pages/IdCardPage";
 import CustomizeCard from "../component/CustomizeCard";
 import SmartId from "../pages/SmartId";
+import Employee from "../pages/Employee";
 
 
 const Routes = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AuthProvider>
+     
         <Root />
-      </AuthProvider>
+    
     ),
     errorElement: <ErrorPage />,
     children: [
@@ -79,6 +80,10 @@ const Routes = createBrowserRouter([
       {
         path: "id",
         element: <Id></Id>,
+      },
+      {
+        path: "employee",
+        element:<Employee></Employee>
       },
 
     

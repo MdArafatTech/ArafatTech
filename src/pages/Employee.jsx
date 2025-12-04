@@ -3,8 +3,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import defaultProfile from "../assets/defualtimg.png";
 import WatermarkImage from "../assets/arafattech.png";
 import mailimg from "../assets/email.png";
-import { FaRegHandPointDown, FaChevronDown } from "react-icons/fa";
+import { FaRegHandPointDown, FaChevronDown, FaVoicemail } from "react-icons/fa";
 import { pdf } from "@react-pdf/renderer"; // <-- MUST BE HERE
+
+import { Text, View, Image, Font } from "@react-pdf/renderer";
+
+// Disable hyphenation globally
+Font.registerHyphenationCallback((word) => [word]);
 
 const containerVariants = {
   hidden: {},
@@ -121,7 +126,7 @@ function ColorPickers({
   );
 }
 
-export default function ProfessionalIDCardPDF() {
+export default function Employee() {
   const [PDFLib, setPDFLib] = useState(null);
 
   const [JsBarcode, setJsBarcode] = useState(null);
@@ -151,11 +156,11 @@ export default function ProfessionalIDCardPDF() {
       profession: "",
       regNo: "", // ✅ added registration number
       phone: "",
-      dob: "",
+
       email: "",
+
       id: "",
-      session: "",
-      bloodGroup: "",
+      blood: "",
       village: "",
       post: "",
       postCode: "",
@@ -191,16 +196,7 @@ export default function ProfessionalIDCardPDF() {
       <p className="p-6 text-center text-orange-500">Loading PDF engine...</p>
     );
 
-  const {
-    PDFViewer,
-    PDFDownloadLink,
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-    Image,
-  } = PDFLib;
+  const { Document, Page, Text, View, StyleSheet, Image } = PDFLib;
 
   const addCard = () => setCards((prev) => [...prev, { ...prev[0] }]);
   const removeCard = (index) =>
@@ -218,13 +214,13 @@ export default function ProfessionalIDCardPDF() {
       const updated = [...prev];
       updated[index] = {
         name: "",
-        roll: "",
+        role: "",
         phone: "",
         email: "",
         regNo: "", // ✅ add this if missing
         session: "",
         id: "",
-        bloodGroup: "",
+        blood: "",
         village: "",
         post: "",
         postCode: "",
@@ -330,7 +326,7 @@ export default function ProfessionalIDCardPDF() {
     infoBox: {
       padding: 4,
       alignItems: "flex-start",
-      marginLeft: 25,
+      marginLeft: 20,
       width: 140, // limit width so long email wraps
       flexDirection: "column",
     },
@@ -354,7 +350,38 @@ export default function ProfessionalIDCardPDF() {
       opacity: 0.14,
     },
 
-   infoContainer: {
+    // infoContainer: {
+    //   alignSelf: "center", // center the whole box horizontally
+    //   width: "60%", // adjust width as needed
+    //   borderWidth: 1, // optional: border for testing
+    //   borderColor: "#ccc",
+    //   padding: 5,
+    //   borderRadius: 4,
+    // },
+
+    // infoRow: {
+    //   flexDirection: "row",
+    //   alignItems: "center",
+    //   marginBottom: 2,
+    // },
+
+    // label: {
+    //   fontSize: 7,
+    //   fontWeight: "800",
+    //   color: labelColor,
+    //   minWidth: 50,
+    // },
+
+    // value: {
+    //   fontSize: 8,
+    //   fontWeight: "bold",
+    //   color: "#000",
+    // },
+
+
+
+
+infoContainer: {
   alignSelf: "center", // center the whole box horizontally
   width: "60%", // adjust width as needed
   borderWidth: 1, // optional: border for testing
@@ -383,6 +410,50 @@ value: {
   color: "#000",
   flexShrink: 1,      // allows text to wrap or shrink if needed
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     footer: {
@@ -628,15 +699,14 @@ value: {
               {/* Info Box (without email) */}
               <View style={styles.infoBox}>
                 {[
-                  "roll",
+                  "role",
                   "dept",
-                  "session",
-                  "regNo",
+                  "id",
+                  "blood",
                   "profession",
                   "dob",
                   "phone",
                   "id",
-                  "blood",
                 ].map(
                   (field) =>
                     card[field] && ( // only show if value exists
@@ -665,7 +735,8 @@ value: {
                   style={styles.barcodeImage}
                   src={generateBarcodeBase64(card)}
                 />
-              </View>
+
+            </View>
 
 
 
@@ -679,37 +750,44 @@ value: {
 
 
               {/* Email below barcode with icon */}
-            
-                         <View
-              style={{
-                width: "100%",          // full width of container
-                alignItems: "center",   // center children horizontally
-                marginTop: 4,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",  // icon + text in a row
-                  alignItems: "center",  // vertical alignment
-                  justifyContent: "center", // center the row contents
-                }}
-              >
-                <Image
-                  src={mailimg}
-                  style={{ width: 10, height: 10, marginRight:1 }}
-                />
-                <Text
-                  style={{
-                    fontSize: 8,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                  wrap
-                >
-                  {card.email || "N/A"}
-                </Text>
-              </View>
-            </View>
+
+             <View
+  style={{
+    width: "100%",          // full width of container
+    alignItems: "center",   // center children horizontally
+    marginTop: 4,
+  }}
+>
+  <View
+    style={{
+      flexDirection: "row",  // icon + text in a row
+      alignItems: "center",  // vertical alignment
+      justifyContent: "center", // center the row contents
+    }}
+  >
+    <Image
+      src={mailimg}
+      style={{ width: 10, height: 10, marginRight: 4 }}
+    />
+    <Text
+      style={{
+        fontSize: 8,
+        fontWeight: "bold",
+        textAlign: "center",
+      }}
+      wrap
+    >
+      {card.email || "N/A"}
+    </Text>
+  </View>
+</View>
+
+
+
+
+
+
+
 
 
 
@@ -894,7 +972,7 @@ value: {
                         textAlign: "center",
                       }}
                     >
-                      Principal's Signature
+                      Authorized Signature
                     </Text>
                   </View>
 
@@ -956,7 +1034,7 @@ value: {
     <div className="min-h-screen  md:p-4 lg:p-6 bg-gray-50">
       <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl p- md:p-3 lg:p-4 space-y-6">
         <h2 className="text-2xl font-bold text-center text-orange-600">
-          Student ID Card Generator
+          Employee ID Card Generator
         </h2>
 
         {/* Color Pickers */}
@@ -1142,8 +1220,8 @@ value: {
                 {/* NORMAL INPUTS */}
                 {[
                   { key: "name", label: "Name" },
-                  { key: "roll", label: "Roll" },
-                  { key: "regNo", label: "Reg No" },
+                 
+                  { key: "id", label: "Id/Code" },
                 ].map((item) => (
                   <div key={item.key}>
                     <label className="block text-sm font-semibold mb-1">
@@ -1168,13 +1246,53 @@ value: {
                   </div>
                 ))}
 
+<div>
+  <label className="block text-sm font-semibold mb-1">
+                    Role
+                  </label>
+                <input
+  list="employeeRoles"
+  value={card.role}
+  onChange={(e) => updateCard(idx, "role", e.target.value)}
+  placeholder="Select Role"
+         className="
+                w-full p-2 rounded-md 
+                border-2 border-gray-400 dark:border-gray-600 
+                bg-white dark:bg-gray-800
+                placeholder-gray-500 dark:placeholder-gray-300 
+                focus:border-green-600 dark:focus:border-green-400 
+                focus:ring-2 focus:ring-green-300 
+                transition-all"
+/>
+<datalist id="employeeRoles">
+  <option value="Teacher" />
+  <option value="Lecturer" />
+  <option value="Assistant Professor" />
+  <option value="Associate Professor" />
+  <option value="Professor" />
+  <option value="Doctor" />
+  <option value="Nurse" />
+  <option value="Receptionist" />
+  <option value="Software Developer" />
+  <option value="IT Support" />
+  <option value="HR" />
+  <option value="Accountant" />
+  <option value="Marketing Executive" />
+  {/* add more roles as needed */}
+</datalist>
+
+
+
+
+</div>
+
                 {/* DEPARTMENT */}
                 <div>
                   <label className="block text-sm font-semibold mb-1">
                     Dept
                   </label>
                   <input
-                    list="departments"
+                      list="employeeDepartments" 
                     value={card.dept}
                     onChange={(e) => updateCard(idx, "dept", e.target.value)}
                     placeholder="Select Department"
@@ -1189,107 +1307,83 @@ value: {
             "
                   />
 
-                  <datalist id="departments">
-                    {" "}
-                    <option value="CSE" /> <option value="EEE" />{" "}
-                    <option value="ECE" /> <option value="ETE" />{" "}
-                    <option value="ME" /> <option value="Civil" />{" "}
-                    <option value="Architecture" />{" "}
-                    <option value="Software Engineering" />{" "}
-                    <option value="Information Technology" />{" "}
-                    <option value="BBA" /> <option value="MBA" />{" "}
-                    <option value="Accounting" /> <option value="Finance" />{" "}
-                    <option value="Marketing" /> <option value="Management" />{" "}
-                    <option value="English" /> <option value="Bangla" />{" "}
-                    <option value="Economics" />{" "}
-                    <option value="Political Science" />{" "}
-                    <option value="Sociology" />{" "}
-                    <option value="Islamic Studies" />{" "}
-                    <option value="History" /> <option value="Philosophy" />{" "}
-                    <option value="Law" /> <option value="Medicine" />{" "}
-                    <option value="Nursing" /> <option value="Pharmacy" />{" "}
-                    <option value="Dental" /> <option value="Public Health" />{" "}
-                    <option value="Medical Technology" />{" "}
-                    <option value="Agriculture" /> <option value="Fisheries" />{" "}
-                    <option value="Biotechnology" /> <option value="Genetics" />{" "}
-                    <option value="Environmental Science" />{" "}
-                    <option value="Textile Engineering" />{" "}
-                    <option value="Apparel Engineering" />{" "}
-                    <option value="Fashion Design" />{" "}
-                    <option value="Hotel Management" />{" "}
-                    <option value="Tourism" />{" "}
-                    <option value="Automobile Engineering" />{" "}
-                    <option value="Electrical Technology" />{" "}
-                    <option value="Mechanical Technology" />{" "}
-                    <option value="Civil Technology" />{" "}
-                    <option value="Computer Technology" />{" "}
-                    <option value="Telecommunication Technology" />{" "}
-                    <option value="HSC Science" />{" "}
-                    <option value="HSC Commerce" /> <option value="HSC Arts" />{" "}
-                    <option value="Diploma in Engineering" />{" "}
-                    <option value="Diploma in Computer" />{" "}
-                    <option value="Diploma in Civil" />{" "}
-                    <option value="Diploma in Electrical" />{" "}
-                    <option value="Physics" /> <option value="Chemistry" />{" "}
-                    <option value="Biology" /> <option value="Mathematics" />{" "}
-                    <option value="Statistics" /> <option value="Botany" />{" "}
-                    <option value="Zoology" /> <option value="Microbiology" />{" "}
-                    <option value="Biochemistry" />{" "}
-                    <option value="Genetic Engineering" />{" "}
-                    <option value="Geology" /> <option value="Marine Science" />{" "}
-                    <option value="Astronomy" />{" "}
-                    <option value="Physical Education" />{" "}
+                  <datalist id="employeeDepartments">
+                    <option value="Administration" />
+                    <option value="Human Resources (HR)" />
+                    <option value="Finance" />
+                    <option value="Accounting" />
+                    <option value="Marketing" />
+                    <option value="Sales" />
+                    <option value="Operations" />
+                    <option value="Project Management" />
+                    <option value="Logistics" />
+                    <option value="Procurement" />
+                    <option value="Public Relations (PR)" />
+                    <option value="Training & Development" />
+                    <option value="Health & Safety" />
+                    <option value="Maintenance" />
+
+                    <option value="IT Support" />
+                    <option value="Software Development" />
+                    <option value="Web Development" />
+                    <option value="Mobile Development" />
+                    <option value="Network Engineering" />
+                    <option value="Quality Assurance (QA)" />
+                    <option value="Engineering" />
+                    <option value="Design" />
+                    <option value="Production" />
+                    <option value="Laboratory" />
+
+                    <option value="Teacher" />
+                    <option value="Lecturer" />
+                    <option value="Assistant Professor" />
+                    <option value="Associate Professor" />
+                    <option value="Professor" />
+                    <option value="Researcher" />
+
+                    <option value="Doctor" />
+                    <option value="Surgeon" />
+                    <option value="Nurse" />
+                    <option value="Pharmacist" />
+                    <option value="Medical Technician" />
+                    <option value="Dentist" />
+                    <option value="Public Health Officer" />
+
+                    <option value="Customer Support" />
+                    <option value="Receptionist" />
                   </datalist>
                 </div>
 
                 {/* SESSION */}
                 <div>
                   <label className="block text-sm font-semibold mb-1">
-                    Session
+                    Blood
                   </label>
                   <input
-                    list="sessions"
-                    value={card.session}
-                    onChange={(e) => updateCard(idx, "session", e.target.value)}
-                    placeholder="Select Session"
+                    list="bloodGroups"
+                    value={card.blood} // make sure your state key is 'blood'
+                    onChange={(e) => updateCard(idx, "blood", e.target.value)}
+                    placeholder="Select Blood Group"
                     className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
+      w-full p-2 rounded-md 
+      border-2 border-gray-400 dark:border-gray-600 
+      bg-white dark:bg-gray-800
+      placeholder-gray-500 dark:placeholder-gray-300 
+      focus:border-green-600 dark:focus:border-green-400
+      focus:ring-2 focus:ring-green-300
+      transition-all
+    "
                   />
 
-                  <datalist id="sessions">
-                    {" "}
-                    <option value="2000-2001" /> <option value="2001-2002" />{" "}
-                    <option value="2002-2003" /> <option value="2003-2004" />{" "}
-                    <option value="2004-2005" /> <option value="2005-2006" />{" "}
-                    <option value="2006-2007" /> <option value="2007-2008" />{" "}
-                    <option value="2008-2009" /> <option value="2009-2010" />{" "}
-                    <option value="2010-2011" /> <option value="2011-2012" />{" "}
-                    <option value="2012-2013" /> <option value="2013-2014" />{" "}
-                    <option value="2014-2015" /> <option value="2015-2016" />{" "}
-                    <option value="2016-2017" /> <option value="2017-2018" />{" "}
-                    <option value="2018-2019" /> <option value="2019-2020" />{" "}
-                    <option value="2020-2021" /> <option value="2021-2022" />{" "}
-                    <option value="2022-2023" /> <option value="2023-2024" />{" "}
-                    <option value="2024-2025" /> <option value="2025-2026" />{" "}
-                    <option value="2026-2027" /> <option value="2027-2028" />{" "}
-                    <option value="2028-2029" /> <option value="2029-2030" />{" "}
-                    <option value="2030-2031" /> <option value="2031-2032" />{" "}
-                    <option value="2032-2033" /> <option value="2033-2034" />{" "}
-                    <option value="2034-2035" /> <option value="2035-2036" />{" "}
-                    <option value="2036-2037" /> <option value="2037-2038" />{" "}
-                    <option value="2038-2039" /> <option value="2039-2040" />{" "}
-                    <option value="2040-2041" /> <option value="2041-2042" />{" "}
-                    <option value="2042-2043" /> <option value="2043-2044" />{" "}
-                    <option value="2044-2045" /> <option value="2045-2046" />{" "}
-                    <option value="2046-2047" /> <option value="2047-2048" />{" "}
-                    <option value="2048-2049" /> <option value="2049-2050" />{" "}
+                  <datalist id="bloodGroups">
+                    <option value="A+" />
+                    <option value="A-" />
+                    <option value="B+" />
+                    <option value="B-" />
+                    <option value="AB+" />
+                    <option value="AB-" />
+                    <option value="O+" />
+                    <option value="O-" />
                   </datalist>
                 </div>
 
@@ -1337,7 +1431,7 @@ value: {
                 </div>
 
                 {/* BLOOD GROUP */}
-                <div>
+                {/* <div>
                   <label className="block text-sm font-semibold mb-1">
                     Blood Group
                   </label>
@@ -1372,7 +1466,7 @@ value: {
                     <option value="Bombay Blood Group (Oh)" />{" "}
                     <option value="Chido" /> <option value="Rhesus Negative" />{" "}
                   </datalist>
-                </div>
+                </div> */}
 
                 {/* ADDRESS FIELDS */}
                 {[
@@ -1527,7 +1621,7 @@ value: {
         </button>
       </div>
       <p className="text-center text-gray-600 mt-4 text-sm">
-        Click "Download PDF Now" to generate and download your Student ID
+        Click "Download PDF Now" to generate and download your Employee ID
         cards instantly.
       </p>
     </div>

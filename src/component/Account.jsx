@@ -1,4 +1,3 @@
-// src/pages/Account.jsx
 import React from "react";
 import { useAuth } from "../provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
@@ -38,9 +37,11 @@ const Account = () => {
               className="w-32 h-32 rounded-full object-cover border border-gray-600"
             />
           ) : (
-            <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600">
-              <span className="text-gray-400 text-sm">No Photo</span>
-            </div>
+            <img
+              src="/default-profile-pic.jpg" // Replace with your actual default image path
+              alt="Default Profile"
+              className="w-32 h-32 rounded-full object-cover border border-gray-600"
+            />
           )}
 
           <div className="flex-1 space-y-2">

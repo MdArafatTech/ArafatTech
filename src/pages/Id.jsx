@@ -280,7 +280,7 @@ export default function ProfessionalIDCardPDF() {
   return (
     <div className="min-h-screen md:p-4 lg:p-6 bg-gray-50">
       <motion.div className="max-w-5xl mx-auto  rounded-xl shadow-xl md:p-3 lg:p-4 space-y-6">
-        <h2 className="text-2xl font-bold text-center text-orange-600">Professional ID Card Generator</h2>
+        <h2 className="text-2xl font-bold text-center text-orange-600">Personal ID Card Generator</h2>
 
         {/* Color Pickers */}
         <div className="flex flex-col items-center mt-4">

@@ -619,7 +619,7 @@ export default function LiveIDCardSideBySidePDF() {
       height: 58,
       borderRadius: 2,
       marginTop: -15,
-      marginLeft: 48,
+      marginLeft: 47,
       marginRight: 38,
     },
     nameText: {
@@ -628,8 +628,8 @@ export default function LiveIDCardSideBySidePDF() {
       marginTop: 15,
       marginLeft: -30,
       width: "100%",
-      color: "#ffffff",
-      textShadow: "1px 1px 0 #999, 2px 2px 0 #888, 3px 3px 0 #777",
+      color: "#f3f3f3",
+      
     },
     infoColumn: {
       display: "flex",
@@ -641,7 +641,7 @@ export default function LiveIDCardSideBySidePDF() {
       fontSize: 10,
       fontWeight: "bold",
       width: 60,
-      color: "#000000",
+      color: "#f3f3f3",
       whiteSpace: "nowrap",
     },
     value: {
@@ -663,10 +663,14 @@ export default function LiveIDCardSideBySidePDF() {
     emailRow: {
       display: "flex",
       alignItems: "center",
-      color: "#0a1057",
+      color: "#f0f6ff",
       marginTop: 8,
-      fontSize: 12,
-      fontWeight: "bold",
+      marginLeft:-25,
+      fontSize: 11,
+      // fontWeight: "bold",
+      //  border: "1px solid #ccc",
+      //  backgroundColor: "#f0f6ff",
+      // borderRadius:2,
     },
     emailIcon: { width: 13, height: 13, marginRight: 5 },
     input: {
@@ -712,7 +716,7 @@ export default function LiveIDCardSideBySidePDF() {
       }}
     >
       <h1 style={{ textAlign: "center", marginBottom: 20 }}>
-        Professional ID Card Generator
+       Smart Personal ID Card Generator
       </h1>
 
       <button
@@ -727,70 +731,127 @@ export default function LiveIDCardSideBySidePDF() {
           marginBottom: 20,
         }}
       >
-        📸 Capture & Prepare PDF
+         Prepare PDF
       </button>
 
-      {frontImg && backImg && (
-        <PDFDownloadLink
-          document={<MyDocument />}
-          fileName="ID_Card.pdf"
-          style={{
-            padding: "10px 18px",
-            background: "#007bff",
-            color: "#fff",
-            borderRadius: 6,
-            textDecoration: "none",
-            display: "block",
-            textAlign: "center",
-            marginBottom: 30,
-          }}
-          onClick={() => {
-            setTimeout(() => window.location.reload(), 100);
-          }}
-        >
-          {({ loading }) => (loading ? "Loading document..." : "⬇ Download PDF")}
-        </PDFDownloadLink>
-      )}
+{frontImg && backImg && (
+  <>
+    <PDFDownloadLink
+      document={<MyDocument />}
+      fileName={`ID_Card_${Date.now()}.pdf`}
+      style={{
+        padding: "10px 18px",
+        background: "#007bff",
+        color: "#fff",
+        borderRadius: 6,
+        textDecoration: "none",
+        display: "block",
+        textAlign: "center",
+        marginBottom: 10,
+      }}
+      onClick={() => {
+        // Safe mobile refresh — waits for download to complete
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+      }}
+    >
+      {({ loading }) =>
+        loading ? "Loading document..." : "⬇ Download PDF"
+      }
+    </PDFDownloadLink>
+
+    {/* Note Section */}
+    <div
+      style={{
+        fontSize: "12px",
+        color: "#333",
+        background: "#f5f7ff",
+        padding: "12px 15px",
+        borderRadius: "10px",
+        borderLeft: "4px solid #007bff",
+        lineHeight: "1.55",
+        marginTop: "5px",
+        marginBottom: "25px",
+      }}
+    >
+          <strong>Note:</strong> If the download doesn’t work after first download, please
+      download again.  
+      If it still doesn’t download, delete the previously downloaded file from
+      your Chrome browser’s download list and try again.
+    </div>
+  </>
+)}
+
 
       {/* Form */}
-      <div style={previewStyles.formCard}>
-        <div style={previewStyles.gridContainer}>
-          {inputFields.map((f) => (
-            <div key={f.name} style={{ display: "flex", flexDirection: "column" }}>
-              <label style={{ fontSize: 13, marginBottom: 4, fontWeight: "bold" }}>
-                {f.placeholder}
-              </label>
-              <input
-                type="text"
-                name={f.name}
-                placeholder={f.placeholder}
-                value={card[f.name]}
-                onChange={handleChange}
-                style={{
-                  ...previewStyles.input,
-                  backgroundColor: darkMode ? "#374151" : "#ffffff",
-                  color: darkMode ? "#e5e7eb" : "#000000",
-                  border: darkMode ? "1px solid #4b5563" : "1px solid #ccc",
-                }}
-              />
-            </div>
-          ))}
-          {fileFields.map((f) => (
-            <div key={f.name} style={{ display: "flex", flexDirection: "column" }}>
-              <label style={{ fontSize: 13, marginBottom: 4, fontWeight: "bold" }}>
-                {f.placeholder}
-              </label>
-              <input
-                type="file"
-                name={f.name}
-                accept="image/*"
-                onChange={handleFileChange}
-                style={previewStyles.input}
-              />
-            </div>
-          ))}
-        </div>
+<div style={previewStyles.formCard}>
+  <div style={previewStyles.gridContainer}>
+    
+    {/* Text Inputs */}
+    {inputFields.map((f) => (
+      <div key={f.name} style={{ display: "flex", flexDirection: "column" }}>
+        <label style={{ fontSize: 13, marginBottom: 4, fontWeight: "bold" }}>
+          {f.placeholder}
+        </label>
+
+<input
+  type={
+    f.name === "issueDate" || f.name === "expireDate"
+      ? "date"
+      : "text"
+  }
+  name={f.name}
+  placeholder={f.placeholder}
+  value={card[f.name]}
+  onChange={handleChange}
+  onClick={(e) => {
+    if (e.target.showPicker && (f.name === "issueDate" || f.name === "expireDate")) {
+      e.target.showPicker(); // Auto-open calendar only for date fields
+    }
+  }}
+  onFocus={(e) => {
+    if (e.target.showPicker && (f.name === "issueDate" || f.name === "expireDate")) {
+      e.target.showPicker(); // Auto-open on focus only for date fields
+    }
+  }}
+  style={{
+    ...previewStyles.input,
+    backgroundColor: darkMode ? "#374151" : "#ffffff",
+    color: darkMode ? "#e5e7eb" : "#000000",
+    border: darkMode ? "1px solid #4b5563" : "1px solid #ccc",
+    cursor: "pointer",
+  }}
+/>
+
+
+
+
       </div>
+    ))}
+
+    {/* Image + Signature Upload Inputs */}
+    {fileFields.map((f) => (
+      <div key={f.name} style={{ display: "flex", flexDirection: "column" }}>
+        <label style={{ fontSize: 13, marginBottom: 4, fontWeight: "bold" }}>
+          {f.placeholder}
+        </label>
+
+        <input
+          type="file"
+          name={f.name}
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{
+            ...previewStyles.input,
+            cursor: "pointer",          // ✅ Added
+          }}
+        />
+      </div>
+    ))}
+
+  </div>
+</div>
 
       {/* Preview */}
       <div style={previewStyles.container}>
@@ -839,8 +900,8 @@ export default function LiveIDCardSideBySidePDF() {
                 marginTop: -6,
                 fontSize: 12,
                 fontWeight: "bold",
-                color: "#eaebf7",
-                textShadow: "1px 1px #0f172a, 2px 2px #1e3a8a, 2px 3px #0f172a",
+                color: "#e6e6e6",
+              
               }}
             >
               <p style={{ margin: "10px 0 2px 6px" }}>
@@ -853,7 +914,7 @@ export default function LiveIDCardSideBySidePDF() {
             </div>
             <div style={{ textAlign: "center", marginLeft: 136, marginTop: 57 }}>
               <QRCodeCanvas value={`mailto:${card.email}`} size={60} />
-              <p style={{ fontSize: 7, marginTop: 3, marginLeft: -130 }}>Scan to Email</p>
+              <p style={{ fontSize: 7, marginTop: 3,color: "#f3f3f3", marginLeft: -130 }}>Scan to Email</p>
             </div>
             <div
               style={{
@@ -872,8 +933,8 @@ export default function LiveIDCardSideBySidePDF() {
                 <div style={{ width: 70, height: 25 }} />
               )}
               <div style={{ textAlign: "right", fontSize: 9, fontWeight: "bold", marginTop: -25 }}>
-                <p style={{ marginTop: -70, color: "#000000" }}>Issue: {card.issue || "N/A"}</p>
-                <p style={{ marginTop: -4, fontWeight: "bold", color: "#000000" }}>
+                <p style={{ marginTop: -70, color: "#f5f5f5" }}>Issue: {card.issue || "N/A"}</p>
+                <p style={{ marginTop: -4, fontWeight: "bold", color: "#f5f5f5" }}>
                   Expiry: {card.expiry || "N/A"}
                 </p>
               </div>

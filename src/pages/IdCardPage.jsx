@@ -55,7 +55,7 @@ export default function IDCardPage() {
               </p>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-col lg:flex-row gap-3 w-full mt-4 justify-center">
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 w-full mt-4 justify-center">
                 <motion.button
                   onClick={() => setShowCustom(true)}
                   whileHover={{ scale: 1.05 }}
@@ -83,6 +83,14 @@ export default function IDCardPage() {
   className="bg-red-500 cursor-pointer text-center text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-red-600 w-full lg:w-auto flex justify-center items-center"
 >
   Idendity Card
+</MotionLink>
+<MotionLink
+  to="/employee"
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="bg-blue-500 cursor-pointer text-center text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-blue-600 w-full lg:w-auto flex justify-center items-center"
+>
+ Employee Id
 </MotionLink>
 
               
