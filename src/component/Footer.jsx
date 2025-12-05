@@ -1,51 +1,72 @@
-import React from "react";
-import { FaLinkedin } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import fimg from "../assets/arafattech.png";
-import { FaGithub } from 'react-icons/fa';
-
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check system preference on mount
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setDarkMode(mediaQuery.matches);
+
+    // Listen for changes in system preference
+    const handleChange = (e) => setDarkMode(e.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
   return (
-    <footer className="footer bg-black text-white  w-full  bottom-0 p-8 grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 place-items-center  ">
+    <footer
+      className={`footer w-full bottom-0 p-8 grid grid-cols-1 sm:grid-cols-3 gap-6 place-items-center transition-colors duration-300 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
+      }`}
+    >
+      {/* Logo */}
+      <div className="sm:order-1 order-1 flex justify-center">
+        <Link to="/">
+          <img className="h-30 cursor-pointer" src={fimg} alt="Footer Logo" />
+        </Link>
+      </div>
+
       {/* Navigation Links */}
-      <nav className="flex flex-col gap-2   font-medium items-center md:items-start">
-        <a className="hover:text-amber-300" href="/">
+      <nav className="sm:order-2 order-2 flex flex-col gap-2 font-medium items-center sm:items-start">
+        <Link to="/" className="hover:text-amber-300 transition">
           Home
-        </a>
-        <a className="hover:text-amber-300" href="/billing">
-         Billing
-        </a>
-        <a className="hover:text-amber-300" href="/identity">
+        </Link>
+        <Link to="/billing" className="hover:text-amber-300 transition">
+          Billing
+        </Link>
+        <Link to="/identity" className="hover:text-amber-300 transition">
           Identity
-        </a>
-        <a className="hover:text-amber-300" href="/idcard">
+        </Link>
+        <Link to="/idcard" className="hover:text-amber-300 transition">
           Portal
-        </a>
-        <a className="hover:text-amber-300" href="/idcardpage">
+        </Link>
+        <Link to="/idcardpage" className="hover:text-amber-300 transition">
           IdCard
-        </a>
-        <a className="hover:text-amber-300" href="/contact">
-         Contact
-        </a>
-       
+        </Link>
+        <Link to="/contact" className="hover:text-amber-300 transition">
+          Contact
+        </Link>
       </nav>
 
       {/* Social Section */}
-      <div className="flex flex-col items-center gap-3 mt-4 md:mt-0">
+      <div className="sm:order-3 order-3 flex flex-col items-center gap-3 mt-4 sm:mt-0">
         <h1 className="font-bold text-xl">Social</h1>
         <div className="flex gap-3">
           <a
-               href="https://github.com/MdArafatTech/"
+            href="https://github.com/MdArafatTech/"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-500 text-xl rounded-full text-white hover:scale-110 transition-transform"
           >
-             <FaGithub />
+            <FaGithub />
           </a>
           <a
-                href="mailto:mdalarafatabir@gmail.com"
+            href="mailto:mdalarafatabir@gmail.com"
             className="p-2 bg-red-500 text-xl rounded-full text-white hover:scale-110 transition-transform"
           >
             <MdEmail />
@@ -53,19 +74,17 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Logo */}
-      <div className="flex justify-center mt-4 md:mt-0">
-       <a href="/"> <img className="h-30 cursor-pointer" src={fimg} alt="Footer Logo" /></a>
+      {/* Powered by ArafatTECH */}
+      <div className="col-span-1 sm:col-span-3 order-4 mt-6 text-center">
+        <p className="font-bold italic">
+          <a href="https://github.com/MdArafatTech/">Powered by ArafatTECH</a>
+        </p>
       </div>
 
-      <Link
-        to="https://github.com/MdArafatTech"
-        className=" bottom-0  left-0 my-3"
-      >
-        <h1 className="font-bold  italic text-center items-center">
-          Designed By ArafatTECH
-        </h1>
-      </Link>
+      {/* Copyright Notice */}
+      <div className="col-span-1 sm:col-span-3 order-5 mt-2 text-center text-sm text-gray-400">
+        © 2025 Arafat-Tech Ltd. All Rights Reserved.
+      </div>
     </footer>
   );
 };

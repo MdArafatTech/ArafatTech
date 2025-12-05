@@ -11,13 +11,16 @@ import Routes from './routes/Routes.jsx';
 import { AuthProvider } from './provider/AuthProvider';
 import { Buffer } from "buffer";
 
+
 window.Buffer = Buffer; // <-- Add this line
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
+     
       <RouterProvider router={Routes} />
+     
     </AuthProvider>
   </StrictMode>
 );

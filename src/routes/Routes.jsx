@@ -5,7 +5,7 @@ import ErrorPage from "../pages/ErrorPage";
 import HomePage from "../pages/HomePage";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import { AuthProvider } from "../provider/AuthProvider";
+
 
 import ForgotPass from "../component/ForgotPass";
 import Account from "../component/Account";
@@ -21,6 +21,9 @@ import IDCardPage from "../pages/IdCardPage";
 import CustomizeCard from "../component/CustomizeCard";
 import SmartId from "../pages/SmartId";
 import Employee from "../pages/Employee";
+import LoginButton from "../component/LoginButton";
+import Clock from "../component/Clock";
+import LogoutButton from "../component/LogoutButton";
 
 
 const Routes = createBrowserRouter([
@@ -100,6 +103,18 @@ const Routes = createBrowserRouter([
         path: "smartid",
         element:<SmartId></SmartId>,
       },
+      {
+       path:"loginbutton",
+       element:<LoginButton></LoginButton>,
+      },
+      {
+       path:"logout",
+       element:<LogoutButton></LogoutButton>,
+      },
+      {
+       path:"clock",
+       element:<Clock></Clock>,
+      }
     ],
   },
 ]);

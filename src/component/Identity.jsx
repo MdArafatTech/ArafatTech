@@ -460,6 +460,23 @@ const hobbies = ["Reading","Writing","Sports","Music","Traveling","Gaming","Cook
 const religions = ["Islam", "Hinduism", "Christianity", "Buddhism", "Other"];
 
 const Identity = () => {
+
+  /* --------------------- AUTO THEME SYSTEM ---------------------- */
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const applyTheme = () => setDark(media.matches);
+
+    applyTheme();
+    media.addEventListener("change", applyTheme);
+
+    return () => media.removeEventListener("change", applyTheme);
+  }, []);
+
+  /* -------------------------------------------------------------- */
+
   const [form, setForm] = useState({
     name: "", father: "", mother: "", dob: "", age: "", gender: "", nationality: "",
     religion: "", marital: "", blood: "", hobby: "", email: "", phone: "",
@@ -470,6 +487,7 @@ const Identity = () => {
     hscResult: "", hscYear: "", hscInstitution: "",
     universityResult: "", universityYear: "", universityInstitution: "",
   });
+
   const [sameAddress, setSameAddress] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState(false);
@@ -517,11 +535,9 @@ const Identity = () => {
     const rowHeight = 21;
     let contentY = 10;
 
-    // Background
     doc.setFillColor(255, 249, 195);
     doc.rect(0, 0, pageWidth, pageHeight, "F");
 
-    // Header
     const headerHeight = 50;
     doc.setFillColor(250, 130, 50);
     doc.rect(0, contentY, pageWidth, headerHeight, "F");
@@ -531,7 +547,6 @@ const Identity = () => {
     doc.text("IDENTITY FORM", pageWidth / 2, contentY + 33, { align: "center" });
     contentY += headerHeight + spacing;
 
-    // QR Code & Image
     const qrSize = 80;
     const imageWidth = 100;
     const imageHeight = 120;
@@ -539,12 +554,13 @@ const Identity = () => {
     const imgX = pageWidth - margin - imageWidth;
     const topY = contentY;
 
-    const getImageData = (file) => new Promise((resolve) => {
-      if (!file) return resolve(null);
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
-      reader.readAsDataURL(file);
-    });
+    const getImageData = (file) =>
+      new Promise((resolve) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
 
     const imageData = await getImageData(imageFile);
 
@@ -553,9 +569,6 @@ const Identity = () => {
 
     contentY += Math.max(qrSize, imageHeight) + 8;
 
-    // Draw Tables with text wrapping
-
-    // Personal Information table
     const drawInfoTable = (title, rows) => {
       doc.setFillColor(250, 200, 150);
       doc.rect(margin, contentY, pageWidth - 2 * margin, rowHeight, "F");
@@ -596,7 +609,6 @@ const Identity = () => {
       contentY += spacing;
     };
 
-    // Address Tables
     const drawAddressTables = () => {
       const tableWidth = (pageWidth - 2 * margin - 20) / 2;
       const gap = 20;
@@ -643,7 +655,6 @@ const Identity = () => {
       contentY += spacing;
     };
 
-    // Education Table
     const drawEducationTable = () => {
       doc.setFillColor(250, 200, 150);
       doc.rect(margin, contentY, pageWidth - 2 * margin, rowHeight, "F");
@@ -722,30 +733,33 @@ const Identity = () => {
     drawAddressTables();
     drawEducationTable();
 
-  // Footer
-// Footer
-// Footer at the very top right corner with no space
-doc.setFontSize(7);
-doc.setFont(undefined, "italic");
-doc.setTextColor("#666");
-const footerText = "Powered by ArafatTech";
-const footerX = pageWidth - margin - doc.getTextWidth(footerText); // Right edge
-const footerY = 8; // Exact top of the page
-doc.text(footerText, footerX, footerY);
+    doc.setFontSize(7);
+    doc.setFont(undefined, "italic");
+    doc.setTextColor("#666");
+    const footerText = "Powered by ArafatTech";
+    const footerX = pageWidth - margin - doc.getTextWidth(footerText);
+    const footerY = 8;
+    doc.text(footerText, footerX, footerY);
 
-
-doc.save("identity_form.pdf");
-
+    doc.save("identity_form.pdf");
   };
 
-  const inputStyle = "p-3 border rounded-lg transition duration-200 hover:border-orange-400 w-full";
+  /* ----------------------- THEME BASED STYLES ---------------------- */
+
+  const themeBG = dark ? "bg-[#0f0f0f]" : "bg-yellow-50";
+  const cardBG = dark ? "bg-[#1a1a1a] text-white border-gray-700" : "bg-white text-black";
+  const inputStyle = dark
+    ? "p-3 border rounded-lg w-full bg-black text-white border-gray-600 focus:border-orange-400"
+    : "p-3 border rounded-lg w-full bg-white text-black hover:border-orange-400";
+
+  /* ---------------------------------------------------------------- */
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-yellow-50 text-black">
+    <div className={`min-h-screen flex items-start justify-center ${themeBG}`}>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-4xl shadow-xl rounded-xl p-6 border bg-white mt-4"
+        className={`w-full max-w-4xl shadow-xl rounded-xl p-6 border mt-4 ${cardBG}`}
       >
         <h2 className="text-2xl font-bold text-orange-600 text-center mb-2">
           Identity Form – Arafat-Tech Ltd
@@ -754,6 +768,7 @@ doc.save("identity_form.pdf");
         {!preview ? (
           <>
             <h3 className="font-semibold mb-2 text-lg">Personal Information</h3>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {[
                 ["name", "Full Name"],
@@ -827,74 +842,41 @@ doc.save("identity_form.pdf");
             </div>
 
             <h3 className="font-semibold mb-2 text-lg">Address Information</h3>
+
             <div className="flex gap-4 mb-4">
               <div className="flex-1">
                 <label className="font-semibold mb-1 block">Present Address</label>
-                <input
-                  placeholder="Village"
-                  name="presentVillage"
-                  value={form.presentVillage}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  placeholder="Thana"
-                  name="presentThana"
-                  value={form.presentThana}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  list="districtList"
-                  placeholder="District"
-                  name="presentDistrict"
-                  value={form.presentDistrict}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  list="divisionList"
-                  placeholder="Division"
-                  name="presentDivision"
-                  value={form.presentDivision}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
+
+                <input placeholder="Village" name="presentVillage"
+                  value={form.presentVillage} onChange={handleChange} className={inputStyle} />
+
+                <input placeholder="Thana" name="presentThana"
+                  value={form.presentThana} onChange={handleChange} className={inputStyle} />
+
+                <input list="districtList" placeholder="District" name="presentDistrict"
+                  value={form.presentDistrict} onChange={handleChange} className={inputStyle} />
+
+                <input list="divisionList" placeholder="Division" name="presentDivision"
+                  value={form.presentDivision} onChange={handleChange} className={inputStyle} />
               </div>
+
               <div className="flex-1">
                 <label className="font-semibold mb-1 block">Permanent Address</label>
-                <input
-                  placeholder="Village"
-                  name="permanentVillage"
-                  value={form.permanentVillage}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  placeholder="Thana"
-                  name="permanentThana"
-                  value={form.permanentThana}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  list="districtList"
-                  placeholder="District"
-                  name="permanentDistrict"
-                  value={form.permanentDistrict}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  list="divisionList"
-                  placeholder="Division"
-                  name="permanentDivision"
-                  value={form.permanentDivision}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
+
+                <input placeholder="Village" name="permanentVillage"
+                  value={form.permanentVillage} onChange={handleChange} className={inputStyle} />
+
+                <input placeholder="Thana" name="permanentThana"
+                  value={form.permanentThana} onChange={handleChange} className={inputStyle} />
+
+                <input list="districtList" placeholder="District" name="permanentDistrict"
+                  value={form.permanentDistrict} onChange={handleChange} className={inputStyle} />
+
+                <input list="divisionList" placeholder="Division" name="permanentDivision"
+                  value={form.permanentDivision} onChange={handleChange} className={inputStyle} />
               </div>
             </div>
+
             <div className="mb-4">
               <input
                 type="checkbox"
@@ -907,11 +889,13 @@ doc.save("identity_form.pdf");
                 Permanent address same as present
               </label>
             </div>
+
             <datalist id="districtList">
               {districts.map((d) => (
                 <option key={d} value={d} />
               ))}
             </datalist>
+
             <datalist id="divisionList">
               {divisions.map((d) => (
                 <option key={d} value={d} />
@@ -919,30 +903,19 @@ doc.save("identity_form.pdf");
             </datalist>
 
             <h3 className="font-semibold mb-2 text-lg">Education Background</h3>
+
             {["ssc", "hsc", "university"].map((edu) => (
               <div key={edu} className="mb-4">
                 <label className="font-semibold mb-1 block">{edu.toUpperCase()}</label>
-                <input
-                  placeholder="Result"
-                  name={`${edu}Result`}
-                  value={form[`${edu}Result`]}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  placeholder="Year"
-                  name={`${edu}Year`}
-                  value={form[`${edu}Year`]}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
-                <input
-                  placeholder="Institution"
-                  name={`${edu}Institution`}
-                  value={form[`${edu}Institution`]}
-                  onChange={handleChange}
-                  className={inputStyle}
-                />
+
+                <input placeholder="Result" name={`${edu}Result`} value={form[`${edu}Result`]}
+                  onChange={handleChange} className={inputStyle} />
+
+                <input placeholder="Year" name={`${edu}Year`} value={form[`${edu}Year`]}
+                  onChange={handleChange} className={inputStyle} />
+
+                <input placeholder="Institution" name={`${edu}Institution`} value={form[`${edu}Institution`]}
+                  onChange={handleChange} className={inputStyle} />
               </div>
             ))}
 
@@ -971,11 +944,9 @@ doc.save("identity_form.pdf");
               Create Form Preview
             </motion.button>
 
-
-             <p className="text-center text-gray-600 mt-4 text-sm">
-                    Click "Create Form Preview" to generate and prepare your  Identity
-                    from instantly.
-                  </p>
+            <p className="text-center text-gray-600 mt-4 text-sm">
+              Click "Create Form Preview" to generate your Identity form instantly.
+            </p>
           </>
         ) : (
           <section aria-live="polite">
@@ -987,6 +958,7 @@ doc.save("identity_form.pdf");
                 </div>
               ))}
             </div>
+
             {imageFile && (
               <img
                 src={URL.createObjectURL(imageFile)}
@@ -994,6 +966,7 @@ doc.save("identity_form.pdf");
                 className="w-32 h-32 mt-2 object-cover border rounded-lg"
               />
             )}
+
             <div className="mt-6 flex gap-4 flex-col md:flex-row">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -1002,6 +975,7 @@ doc.save("identity_form.pdf");
               >
                 Download PDF
               </motion.button>
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 onClick={() => setPreview(false)}

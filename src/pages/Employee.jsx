@@ -8,6 +8,10 @@ import { pdf } from "@react-pdf/renderer"; // <-- MUST BE HERE
 
 import { Text, View, Image, Font } from "@react-pdf/renderer";
 
+
+
+
+
 // Disable hyphenation globally
 Font.registerHyphenationCallback((word) => [word]);
 
@@ -1032,7 +1036,19 @@ value: {
 
   return (
     <div className="min-h-screen  md:p-4 lg:p-6 bg-gray-50">
+
+
+
+ 
+
+
       <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl p- md:p-3 lg:p-4 space-y-6">
+       
+       
+       
+       
+       
+       
         <h2 className="text-2xl font-bold text-center text-orange-600">
           Employee ID Card Generator
         </h2>

@@ -210,7 +210,7 @@ const Login = () => {
   {/* Google Icon - turns white on hover */}
   <FaGoogle className="text-2xl text-red-500 group-hover:text-white transition-colors duration-300" />
   
-  <span className="group-hover:text-white transition-colors duration-300">
+  <span className="group-hover:text-white cursor-pointer transition-colors duration-300">
     Continue with Google
   </span>
 </button>

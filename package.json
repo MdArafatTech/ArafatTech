@@ -24,6 +24,7 @@
     "html2pdf.js": "^0.12.1",
     "jsbarcode": "^3.12.1",
     "jspdf": "^3.0.4",
+    "lucide-react": "^0.555.0",
     "pdfjs-dist": "^5.4.394",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
