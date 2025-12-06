@@ -224,6 +224,9 @@ const Header = () => {
             )}
           </ul>
         </nav>
+        
+
+
 
         {/* Mobile menu button */}
         <button
@@ -243,7 +246,7 @@ const Header = () => {
       )}
 
       {/* Mobile drawer */}
-      <div
+      {/* <div
         className={`fixed top-0 left-0 h-full w-full transform transition-transform duration-300 z-[2600] ${
           open ? "translate-x-0" : "-translate-x-full"
         } ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}
@@ -299,7 +302,89 @@ const Header = () => {
 
 )}
         </ul>
-      </div>
+      </div> */}
+
+
+
+
+
+
+<div
+  className={`fixed top-0 left-0 h-full w-full transform transition-transform duration-300 z-[2600] ${
+    open ? "translate-x-0" : "-translate-x-full"
+  } ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}
+>
+  <div className="flex justify-between items-center p-4 border-b border-gray-700">
+    <Link to="/" onClick={() => setOpen(false)}>
+      <img src={navimg} alt="Logo" className="h-20 w-auto" />
+    </Link>
+    <FaTimes
+      className="text-2xl cursor-pointer"
+      onClick={() => setOpen(false)}
+    />
+  </div>
+
+  <ul className="flex flex-col gap-6 p-6 text-lg font-medium text-center">
+    {[
+      { name: "Home", path: "/" },
+      { name: "Billing", path: "/billing" },
+      { name: "Identity", path: "/identity" },
+      { name: "Portal", path: "/idcard" },
+      { name: "IdCard", path: "/idcardpage" },
+      { name: "Contact", path: "/contact" },
+    ].map((link) => (
+      <li key={link.path}>
+        <Link
+          to={link.path}
+          className={isActive(link.path) ? "active-link" : ""}
+          onClick={() => setOpen(false)} // Close drawer on click
+        >
+          {link.name}
+        </Link>
+      </li>
+    ))}
+
+    {currentUser && (
+      <li>
+        <Link
+          to="/account"
+          className={isActive("/account") ? "active-link" : ""}
+          onClick={() => setOpen(false)}
+        >
+          Account
+        </Link>
+      </li>
+    )}
+
+ {!currentUser && (
+<li>
+  <Link
+    to="/login"
+    onClick={() => {
+      // Close drawer before navigating
+      setTimeout(() => setOpen(false), 800); // Adjust timeout to match animation duration
+    }}
+  >
+    <LoginButton />
+  </Link>
+</li>
+
+)}
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </header>
   );
 };
