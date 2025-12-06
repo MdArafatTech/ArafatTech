@@ -17,7 +17,7 @@ const HomePage = () => {
     },
     {
       title: "Id Card Generation",
-      desc: "Generate dynamic PDFs for students, and idcard.",
+      desc: "Generate dynamic ID card for personal and employee and idcard.",
       img: service2,
       link: "/idcardpage",
     },
@@ -35,13 +35,13 @@ const HomePage = () => {
     },
     {
       title: "Calculation",
-      desc: "Google sign-in, email/password registration, and secure login.",
+      desc: "Digital BMI calculation with send data by email,scientific calculation,unit converter.",
       img: service2,
       link: "/calculation",
     },
     {
-      title: "Custom Solutions",
-      desc: "Tailored software solutions for educational and tech-based needs.",
+      title: "TimeZone With Country Info",
+      desc: "Custom Clock time zone with country info and weather info.",
       img: service3,
       link: "/clockcountry",
     },
