@@ -306,9 +306,7 @@ export default function Clock() {
 
   return (
     <div
-      className={`${
-        darkMode ? "bg-gray-900 text-white -mb-10 mt-35" : "bg-yellow-50 text-gray-900"
-      } flex flex-col items-center justify-center py-10 rounded-xl p-4 transition-colors duration-500`}
+      className={"flex flex-col items-center justify-center py-10 rounded-xl p-4 transition-colors duration-500"}
     >
       {/* Digital Clock + Weather */}
 
@@ -434,10 +432,10 @@ export default function Clock() {
         {/* Digital Clock Section */}
         <div
           className={`digital-clock font-['LED_Digital_7'] text-5xl md:text-7xl p-4 rounded-lg ${
-            darkMode
-              ? "shadow-[0_0_20px_cyan] text-cyan-400 border-cyan-400"
-              : "shadow-[0_0_20px-pink] text-red-500 border-red-500"
-          } border-4 drop-shadow-[0_0_5px] transition-colors duration-500 flex flex-col items-center`}
+  darkMode
+    ? "bg-gray-900 text-cyan-400 border-cyan-400 shadow-[0_0_20px_cyan] drop-shadow-[0_0_5px_cyan]"
+    : "bg-yellow-50 text-red-500 border-red-500 shadow-[0_0_20px_pink] drop-shadow-[0_0_5px_pink]"
+} border-4 transition-colors duration-500 flex flex-col items-center`}
         >
           <div>
             {two(hours % 12 === 0 ? 12 : hours % 12)}:{two(minutes)}:

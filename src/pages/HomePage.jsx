@@ -34,16 +34,16 @@ const HomePage = () => {
       link: "/idcard",
     },
     {
-      title: "Secure Authentication",
+      title: "Calculation",
       desc: "Google sign-in, email/password registration, and secure login.",
       img: service2,
-      link: "/",
+      link: "/calculation",
     },
     {
       title: "Custom Solutions",
       desc: "Tailored software solutions for educational and tech-based needs.",
       img: service3,
-      link: "/",
+      link: "/clockcountry",
     },
   ];
 
@@ -60,54 +60,19 @@ const HomePage = () => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-orange-600 mb-6">
             Welcome to Arafat-Tech Ltd
           </h1>
-         <div className="-mt-5">
+          <div className="-mt-5 -mb-30 lg:-mt-9">
+            <Clock />
+          </div>
+        </div>
 
-    <Clock />
-  
-</div>
-
-  
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-        <div className="md:w-1/2 flex justify-center mt-8 md:mt-0">
+        <div className="md:w-1/2 flex justify-center mt-6 md:mt-0">
           <img
             src={heroImg}
             alt="Hero Animation"
-            className="w-full max-w-md rounded-xl shadow-lg"
+            className="w-full h-132 mt-38 max-w-md rounded-xl shadow-lg"
           />
         </div>
       </motion.section>
-
-
-
-
-
-
-
-
-
-
-
-      
 
       {/* About Section */}
       <motion.section
@@ -120,9 +85,10 @@ const HomePage = () => {
           About Arafat-Tech
         </h2>
         <p className="text-gray-700 dark:text-gray-200 text-lg md:text-xl">
-          Arafat-Tech Ltd is a technology-driven company providing smart solutions
-          for educational institutions and businesses. From identity management
-          to PDF generation and automated billing, we make processes simple and efficient.
+          Arafat-Tech Ltd is a technology-driven company providing smart
+          solutions for educational institutions and businesses. From identity
+          management to PDF generation and automated billing, we make processes
+          simple and efficient.
         </p>
       </motion.section>
 
@@ -146,7 +112,9 @@ const HomePage = () => {
                 alt={service.title}
                 className="w-20 h-20 mb-4 object-cover rounded-full"
               />
-              <h3 className="text-xl font-bold text-orange-600 mb-2">{service.title}</h3>
+              <h3 className="text-xl font-bold text-orange-600 mb-2">
+                {service.title}
+              </h3>
               <p className="text-gray-700 dark:text-gray-300">{service.desc}</p>
             </motion.div>
           </Link>
@@ -164,7 +132,8 @@ const HomePage = () => {
           Ready to start?
         </h2>
         <p className="text-gray-700 dark:text-gray-200 mb-6 text-lg md:text-xl">
-          Get in touch with us today and explore our solutions for your business or institution.
+          Get in touch with us today and explore our solutions for your business
+          or institution.
         </p>
         <Link
           to="/contact"

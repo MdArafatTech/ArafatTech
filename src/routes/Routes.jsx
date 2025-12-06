@@ -24,6 +24,8 @@ import Employee from "../pages/Employee";
 import LoginButton from "../component/LoginButton";
 import Clock from "../component/Clock";
 import LogoutButton from "../component/LogoutButton";
+import Calculation from "../project/Calculation";
+import ClockCountry from "../component/ClockContry";
 
 
 const Routes = createBrowserRouter([
@@ -114,7 +116,15 @@ const Routes = createBrowserRouter([
       {
        path:"clock",
        element:<Clock></Clock>,
-      }
+      },
+      {
+       path:"calculation",
+       element:<Calculation></Calculation>,
+      },
+      {
+       path:"clockcountry",
+       element:<ClockCountry></ClockCountry>,
+      },
     ],
   },
 ]);
