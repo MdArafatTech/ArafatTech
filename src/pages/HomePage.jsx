@@ -40,10 +40,10 @@ const HomePage = () => {
       link: "/calculation",
     },
     {
-      title: "TimeZone With Country Info",
-      desc: "Custom Clock time zone with country info and weather info.",
+      title: "Image and Qr tools",
+      desc: "Custom Qr And Image resizer and bacground Remover.",
       img: service3,
-      link: "/clockcountry",
+      link: "/qrAndImage"
     },
   ];
 
@@ -69,7 +69,7 @@ const HomePage = () => {
           <img
             src={heroImg}
             alt="Hero Animation"
-            className="w-full h-132 mt-38 max-w-md rounded-xl shadow-lg"
+            className="w-full h-80 lg:h-128 mt-37 max-w-md rounded-xl shadow-lg"
           />
         </div>
       </motion.section>

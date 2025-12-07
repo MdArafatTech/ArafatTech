@@ -65,7 +65,7 @@ function ColorPickers({ labelColor, setLabelColor, borderColor, setBorderColor, 
   );
 }
 
-export default function ProfessionalIDCardPDF() {
+export default function PersonalIDCard() {
   const [PDFLib, setPDFLib] = useState(null);
   const [JsBarcode, setJsBarcode] = useState(null);
 

@@ -121,7 +121,7 @@ function ColorPickers({
   );
 }
 
-export default function ProfessionalIDCardPDF() {
+export default function StudentIdCard() {
   const [PDFLib, setPDFLib] = useState(null);
 
   const [JsBarcode, setJsBarcode] = useState(null);

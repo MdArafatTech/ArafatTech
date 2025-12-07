@@ -4,8 +4,8 @@ import { FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import IDCardGenerator from "./Pdf";
-import IDCardGenerator2 from "./Id";
+import IDCardGenerator from "./StudentIdCard";
+import IDCardGenerator2 from "./PersonalIdCard";
 import idCardGif from "../assets/idcardgif.gif";
 
 const MotionLink = motion(Link);
@@ -104,7 +104,7 @@ export default function IDCardPage() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-red-500 text-white py-3 rounded-xl shadow-lg hover:bg-red-600 text-center"
                 >
-                  Identity Card
+                 Smart Id Card
                 </MotionLink>
 
                 <MotionLink
@@ -113,7 +113,7 @@ export default function IDCardPage() {
                   whileTap={{ scale: 0.95 }}
                   className="bg-blue-500 text-white py-3 rounded-xl shadow-lg hover:bg-blue-600 text-center"
                 >
-                  Employee ID
+                  Employee ID Card
                 </MotionLink>
               </div>
             </motion.div>

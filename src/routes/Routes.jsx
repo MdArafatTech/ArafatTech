@@ -5,18 +5,15 @@ import ErrorPage from "../pages/ErrorPage";
 import HomePage from "../pages/HomePage";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-
-
 import ForgotPass from "../component/ForgotPass";
 import Account from "../component/Account";
-import PDFGenerator from "../pages/Pdf";
+import PDFGenerator from "../pages/StudentIdCard";
 import Billing from "../component/Billing";
 import Identity from "../component/Identity";
 import ContactForm from "../component/ContactFrom";
 import Contact from "../pages/Contact";
 import IDCard from "../pages/IdCard";
 
-import Id from "../pages/Id";
 import IDCardPage from "../pages/IdCardPage";
 import CustomizeCard from "../component/CustomizeCard";
 import SmartId from "../pages/SmartId";
@@ -24,8 +21,15 @@ import Employee from "../pages/Employee";
 import LoginButton from "../component/LoginButton";
 import Clock from "../component/Clock";
 import LogoutButton from "../component/LogoutButton";
-import Calculation from "../project/Calculation";
+
 import ClockCountry from "../component/ClockContry";
+import Tools from "../project/Tools";
+import ImageStudio from "../project/ImageStudio";
+import HealthAndCalculation from "../project/HealthAndCalculation";
+import QrGenerator from "../project/QrGenarator";
+import QrAndImage from "../project/QrAndImage";
+import PersonalIDCard from "../pages/PersonalIdCard";
+import StudentIdCard from "../pages/StudentIdCard";
 
 
 const Routes = createBrowserRouter([
@@ -59,8 +63,8 @@ const Routes = createBrowserRouter([
         element: <Account></Account>,
       },
       {
-        path: "pdf",
-        element: <PDFGenerator></PDFGenerator>,
+        path: "studentidcard",
+        element: <StudentIdCard></StudentIdCard>,
       },
       {
         path: "idcard",
@@ -83,8 +87,8 @@ const Routes = createBrowserRouter([
         element: <Contact></Contact>,
       },
       {
-        path: "id",
-        element: <Id></Id>,
+        path: "personalidcard",
+        element: <PersonalIDCard></PersonalIDCard>,
       },
       {
         path: "employee",
@@ -118,12 +122,28 @@ const Routes = createBrowserRouter([
        element:<Clock></Clock>,
       },
       {
-       path:"calculation",
-       element:<Calculation></Calculation>,
+       path:"healthandcalculation",
+       element:<HealthAndCalculation></HealthAndCalculation>
       },
       {
        path:"clockcountry",
        element:<ClockCountry></ClockCountry>,
+      },
+      {
+       path:"tools",
+       element:<Tools></Tools>,
+      },
+      {
+       path:"imagestudio",
+       element:<ImageStudio></ImageStudio>,
+      },
+      {
+       path:"qrgenarator",
+       element:<QrGenerator></QrGenerator>,
+      },
+      {
+       path:"qrandimage",
+       element:<QrAndImage></QrAndImage>,
       },
     ],
   },
