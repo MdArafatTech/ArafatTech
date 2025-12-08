@@ -264,104 +264,82 @@ const CgpaCalculator = () => {
           const { totalPoints, totalCredits, gpa } = computeSemesterResult(sem.courses);
 
           return (
-            <motion.div
-              key={semIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={theme === "dark" ? darkStyles.semester : styles.semester}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <h2>{sem.name}</h2>
-                {semesters.length > 1 && (
-                  <button
-                    onClick={() => removeSemester(semIndex)}
-                    style={{ ...styles.removeBtn, backgroundColor: "#6c757d" }}
-                  >
-                    Remove Semester
-                  </button>
-                )}
-              </div>
 
-              {sem.courses.map((c, courseIndex) => (
-                <div key={courseIndex} style={styles.courseRow}>
-                  <input
-                    type="text"
-                    placeholder="Subject Name"
-                    value={c.name}
-                    onChange={(e) =>
-                      updateCourse(semIndex, courseIndex, "name", e.target.value)
-                    }
-                    style={theme === "dark" ? darkStyles.input : styles.input}
-                  />
-                  <select
-                    value={c.grade}
-                    onChange={(e) =>
-                      updateCourse(semIndex, courseIndex, "grade", e.target.value)
-                    }
-                    style={theme === "dark" ? darkStyles.select : styles.select}
-                  >
-                    {gradeOptions.map((g) => (
-                      <option key={g} value={g}>
-                        {g}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    placeholder="Credit"
-                    value={c.credit}
-                    onChange={(e) =>
-                      updateCourse(semIndex, courseIndex, "credit", e.target.value)
-                    }
-                    min="0"
-                    step="0.5"
-                    style={theme === "dark" ? darkStyles.input : styles.input}
-                  />
-                  <button
-                    onClick={() => removeCourse(semIndex, courseIndex)}
-                    style={styles.removeBtn}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button onClick={() => addCourse(semIndex)} style={styles.button}>
-                Add Course
-              </button>
+           
 
-              <div style={{ marginTop: "20px", height: "250px" }}>
-                <Bar data={chartData} options={chartOptions} />
-              </div>
+<motion.div
+  key={semIndex}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  style={theme === "dark" ? responsiveStyles.semesterDark : responsiveStyles.semester}
+>
+  <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center" }}>
+    <h2 style={{ flex: "1 1 auto", minWidth: "150px" }}>{sem.name}</h2>
+    {semesters.length > 1 && (
+      <button
+        onClick={() => removeSemester(semIndex)}
+        style={{ ...responsiveStyles.removeBtn, marginTop: "5px", backgroundColor: "#6c757d" }}
+      >
+        Remove Semester
+      </button>
+    )}
+  </div>
 
-              <div style={styles.semesterResult}>
-                <p>
-                  <strong>Semester Credits:</strong> {totalCredits}
-                </p>
-                <p>
-                  <strong>Semester Points:</strong> {totalPoints}
-                </p>
-                <p
-                  style={{
-                    fontSize: "1.2em",
-                    color:
-                      gpa >= 3.75
-                        ? "#28a745"
-                        : gpa >= 3.0
-                        ? "#ffc107"
-                        : "#dc3545",
-                  }}
-                >
-                  <strong>GPA: {gpa}</strong>
-                </p>
-              </div>
-            </motion.div>
+  {sem.courses.map((c, courseIndex) => (
+    <div key={courseIndex} style={responsiveStyles.courseRow}>
+      <input
+        type="text"
+        placeholder="Subject Name"
+        value={c.name}
+        onChange={(e) => updateCourse(semIndex, courseIndex, "name", e.target.value)}
+        style={responsiveStyles.input}
+      />
+      <select
+        value={c.grade}
+        onChange={(e) => updateCourse(semIndex, courseIndex, "grade", e.target.value)}
+        style={responsiveStyles.select}
+      >
+        {gradeOptions.map((g) => (
+          <option key={g} value={g}>{g}</option>
+        ))}
+      </select>
+      <input
+        type="number"
+        placeholder="Credit"
+        value={c.credit}
+        onChange={(e) => updateCourse(semIndex, courseIndex, "credit", e.target.value)}
+        min="0"
+        step="0.5"
+        style={responsiveStyles.input}
+      />
+      <button
+        onClick={() => removeCourse(semIndex, courseIndex)}
+        style={responsiveStyles.removeBtn}
+      >
+        Remove
+      </button>
+    </div>
+  ))}
+
+  <button onClick={() => addCourse(semIndex)} style={responsiveStyles.button}>Add Course</button>
+
+  <div style={{ marginTop: "20px", width: "100%", minHeight: "250px" }}>
+    <Bar data={chartData} options={chartOptions} />
+  </div>
+
+  <div style={responsiveStyles.semesterResult}>
+    <p><strong>Semester Credits:</strong> {totalCredits}</p>
+    <p><strong>Semester Points:</strong> {totalPoints}</p>
+    <p style={{ fontSize: "1.2em", color: gpa >= 3.75 ? "#28a745" : gpa >= 3.0 ? "#ffc107" : "#dc3545" }}>
+      <strong>GPA: {gpa}</strong>
+    </p>
+  </div>
+</motion.div>
+
+
+
+            
           );
         })}
       </AnimatePresence>
@@ -458,6 +436,97 @@ const darkStyles = {
   semester: { ...styles.semester, backgroundColor: "#2c2c3e" },
   resultCard: { ...styles.resultCard, backgroundColor: "#2c2c3e" },
 };
+
+
+
+
+
+const responsiveStyles = {
+  semester: {
+    padding: "10px",
+    boxSizing: "border-box",
+    width: "100%",
+    maxWidth: "900px",
+    margin: "0 auto",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "8px",
+    marginBottom: "20px",
+  },
+  semesterDark: {
+    padding: "10px",
+    boxSizing: "border-box",
+    width: "100%",
+    maxWidth: "900px",
+    margin: "0 auto",
+    backgroundColor: "#1a1a1a",
+    borderRadius: "8px",
+    marginBottom: "20px",
+    color: "#fff",
+  },
+  courseRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    marginTop: "10px",
+  },
+  input: {
+    flex: "2 1 200px",
+    minWidth: "100px",
+    padding: "6px 8px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+  },
+  select: {
+    flex: "1 1 100px",
+    minWidth: "80px",
+    padding: "6px 8px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+  },
+  removeBtn: {
+    flex: "0 0 auto",
+    padding: "6px 12px",
+    borderRadius: "4px",
+    border: "none",
+    cursor: "pointer",
+    backgroundColor: "#dc3545",
+    color: "#fff",
+  },
+  button: {
+    marginTop: "10px",
+    padding: "8px 12px",
+    width: "100%",
+    borderRadius: "4px",
+    border: "none",
+    cursor: "pointer",
+    backgroundColor: "#007bff",
+    color: "#fff",
+  },
+  semesterResult: {
+    marginTop: "20px",
+  },
+
+  // Media queries
+  '@media (max-width: 768px)': {
+    courseRow: {
+      flexDirection: "column",
+    },
+    input: {
+      width: "100%",
+    },
+    select: {
+      width: "100%",
+    },
+  },
+};
+
+
+
+
+
+
+
+
 
 export default CgpaCalculator;
 

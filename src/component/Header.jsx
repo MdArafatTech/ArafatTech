@@ -362,6 +362,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
           <Link
             to="/cgpacalculator"
             className="hover-spark hover:text-amber-500"
+             onClick={() => setOpen(false)}
           >
            CGPA Calculattor
           </Link>
