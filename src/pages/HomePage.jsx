@@ -34,16 +34,16 @@ const HomePage = () => {
       link: "/idcard",
     },
     {
-      title: "Calculation",
+      title: "Health & Calculation",
       desc: "Digital BMI calculation with send data by email,scientific calculation,unit converter.",
       img: service2,
-      link: "/calculation",
+      link: "/healthandcalculation",
     },
     {
-      title: "Image and Qr tools",
-      desc: "Custom Qr And Image resizer and bacground Remover.",
+      title: "CGPA Calculator",
+      desc: "Calculate your CGPA .",
       img: service3,
-      link: "/qrAndImage"
+      link: "/cgpacalculator"
     },
   ];
 

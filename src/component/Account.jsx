@@ -55,16 +55,51 @@ const Account = () => {
 
   // DEVICE BRAND + MODEL DETECT
   useEffect(() => {
-    const ua = navigator.userAgent;
-    let brand = "Unknown";
-    let model = "Unknown";
-    let type = "Unknown";
+    const ua = navigator.userAgent.toLowerCase();
 
-    // ... (your detection logic)
+    // Device type
+    let type = 'Desktop';
+    if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua)) {
+      type = /mobile|android|iemobile/i.test(ua) ? 'Mobile' : 'Tablet';
+    }
 
+    // Brand/Model detection
+    let brand = 'Unknown';
+    let model = 'Unknown';
+
+    if (/android/i.test(ua)) {
+      if (/samsung/i.test(ua)) {
+        brand = 'Samsung';
+        model = ua.match(/sm-[a-z0-9]+/i)?.[0]?.toUpperCase() || 'Galaxy Series';
+      } else if (/pixel/i.test(ua)) {
+        brand = 'Google';
+        model = 'Pixel';
+      } else if (/oneplus/i.test(ua)) {
+        brand = 'OnePlus';
+      } else if (/realme/i.test(ua)) {
+        brand = 'Realme';
+      } else if (/oppo/i.test(ua)) {
+        brand = 'Oppo';
+      } else if (/xiaomi|redmi|miui/i.test(ua)) {
+        brand = 'Xiaomi';
+        model = ua.match(/mi\s[a-z0-9]+/i)?.[0]?.toUpperCase() || 'Redmi Series';
+      } else if (/motorola|xt\d+/i.test(ua)) {
+        brand = 'Motorola';
+        model = ua.match(/xt\d+/i)?.[0]?.toUpperCase() || 'Motorola Series';
+      } else {
+        brand = 'Android Device';
+      }
+    } else if (/iphone/i.test(ua)) {
+      brand = 'Apple';
+      model = 'iPhone';
+    } else if (/ipad/i.test(ua)) {
+      brand = 'Apple';
+      model = 'iPad';
+    }
+
+    setDeviceType(type);
     setDeviceName(brand);
     setDeviceModel(model);
-    setDeviceType(type);
     setBrowser(detectBrowser());
     setOS(detectOS());
   }, []);
@@ -121,7 +156,6 @@ const Account = () => {
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-         
           >
             <LogoutButton animate={isLoggingOut} />
           </button>

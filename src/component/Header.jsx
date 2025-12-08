@@ -173,7 +173,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
 
   return (
     <header
-      className={`sticky top-0 shadow-md z-[3000] transition-colors duration-300 ${
+       className={`sticky top-0 shadow-md z-[3000] transition-colors duration-300 ${
         darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
       }`}
     >
@@ -196,7 +196,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
       <li key={link.path}>
         <Link
           to={link.path}
-          className={`hover-spark ${isActive(link.path) ? "active-link" : ""}`}
+          className={`hover-spark hover:text-amber-500 ${isActive(link.path) ? "active-link" : ""}`}
         >
           {link.name}
         </Link>
@@ -217,19 +217,32 @@ const [toolsOpen, setToolsOpen] = useState(false);
       <ul className="absolute left-0 top-full hidden group-hover:block bg-white dark:bg-gray-900 shadow-lg rounded-lg py-2 w-48 z-50">
         <li>
           <Link
+            to="/cgpacalculator"
+            className="hover-spark  hover:text-amber-500 pl-4 "
+          >
+           CGPA Calculator
+          </Link>
+        </li>
+
+ <Link
+            to="/healthandcalculation"
+            className="hover-spark hover:text-amber-500 pl-4"
+          >
+            HealthAndCalculate
+          </Link>
+
+
+
+        <li>
+          <Link
             to="/qrandimage"
-            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="hover-spark hover:text-amber-500 pl-4"
           >
             QrAndImage
           </Link>
         </li>
         <li>
-          <Link
-            to="/healthandcalculation"
-            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            HealthAndCalculate
-          </Link>
+         
         </li>
       </ul>
     </li>
@@ -239,7 +252,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
     <li>
       <Link
         to="/contact"
-        className={`hover-spark ${isActive("/contact") ? "active-link" : ""}`}
+        className={`hover-spark ${isActive("/contact") ? "active-link" : "hover-spark hover:text-amber-500"}`}
       >
         Contact
       </Link>
@@ -324,7 +337,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
     <li key={link.path}>
       <Link
         to={link.path}
-        className={isActive(link.path) ? "active-link" : ""}
+        className={isActive(link.path) ? "active-link" : "hover-spark hover:text-amber-500"}
         onClick={() => setOpen(false)}
       >
         {link.name}
@@ -336,31 +349,45 @@ const [toolsOpen, setToolsOpen] = useState(false);
   <li className="flex flex-col items-center">
     <button
       onClick={() => setToolsOpen((prev) => !prev)}
-      className="flex items-center gap-2 hover-spark"
+      className="flex items-center gap-2 hover-spark hover:text-amber-500"
     >
       Tools <span>{toolsOpen ? "▴" : "▾"}</span>
     </button>
 
     {toolsOpen && (
       <ul className="flex flex-col gap-3 mt-2">
-        <li>
+
+
+         <li>
           <Link
-            to="/qrandimage"
-            className="hover-spark"
-            onClick={() => setOpen(false)}
+            to="/cgpacalculator"
+            className="hover-spark hover:text-amber-500"
           >
-            QrAndImage
+           CGPA Calculattor
           </Link>
         </li>
-        <li>
+
+   <li>
           <Link
             to="/healthandcalculation"
-            className="hover-spark"
+            className="hover-spark hover:text-amber-500"
             onClick={() => setOpen(false)}
           >
             HealthAndCalculate
           </Link>
         </li>
+
+
+        <li>
+          <Link
+            to="/qrandimage"
+            className="hover-spark hover:text-amber-500"
+            onClick={() => setOpen(false)}
+          >
+            QrAndImage
+          </Link>
+        </li>
+     
       </ul>
     )}
   </li>
@@ -370,7 +397,7 @@ const [toolsOpen, setToolsOpen] = useState(false);
   <li>
     <Link
       to="/contact"
-      className={isActive("/contact") ? "active-link" : ""}
+      className={isActive("/contact") ? "active-link" : "hover-spark hover:text-amber-500"}
       onClick={() => setOpen(false)}
     >
       Contact

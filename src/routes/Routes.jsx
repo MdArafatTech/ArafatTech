@@ -7,7 +7,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import ForgotPass from "../component/ForgotPass";
 import Account from "../component/Account";
-import PDFGenerator from "../pages/StudentIdCard";
+
 import Billing from "../component/Billing";
 import Identity from "../component/Identity";
 import ContactForm from "../component/ContactFrom";
@@ -22,7 +22,7 @@ import LoginButton from "../component/LoginButton";
 import Clock from "../component/Clock";
 import LogoutButton from "../component/LogoutButton";
 
-import ClockCountry from "../component/ClockContry";
+
 import Tools from "../project/Tools";
 import ImageStudio from "../project/ImageStudio";
 import HealthAndCalculation from "../project/HealthAndCalculation";
@@ -30,6 +30,7 @@ import QrGenerator from "../project/QrGenarator";
 import QrAndImage from "../project/QrAndImage";
 import PersonalIDCard from "../pages/PersonalIdCard";
 import StudentIdCard from "../pages/StudentIdCard";
+import CgpaCalculator from "../component/CgpaCalculator";
 
 
 const Routes = createBrowserRouter([
@@ -126,8 +127,8 @@ const Routes = createBrowserRouter([
        element:<HealthAndCalculation></HealthAndCalculation>
       },
       {
-       path:"clockcountry",
-       element:<ClockCountry></ClockCountry>,
+       path:"cgpacalculator",
+       element:<CgpaCalculator></CgpaCalculator>,
       },
       {
        path:"tools",
