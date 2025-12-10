@@ -2,39 +2,45 @@ import React, { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
 import { saveAs } from "file-saver";
 
-
 // Global settings
 const defaultSize = 300;
 const defaultMargin = 10;
 
-// Country codes (expanded)
+// More comprehensive country‑code list (you can expand as needed)
 const COUNTRY_CODES = [
-  { name: "Bangladesh", code: "880" },
-  { name: "India", code: "91" },
-  { name: "Pakistan", code: "92" },
-  { name: "Sri Lanka", code: "94" },
-  { name: "Nepal", code: "977" },
-  { name: "Bhutan", code: "975" },
-  { name: "United States", code: "1" },
-  { name: "Canada", code: "1" },
-  { name: "United Kingdom", code: "44" },
+  { name: "Afghanistan", code: "93" },
+  { name: "Albania", code: "355" },
+  { name: "Algeria", code: "213" },
+  { name: "Andorra", code: "376" },
+  { name: "Angola", code: "244" },
+  { name: "Argentina", code: "54" },
+  { name: "Armenia", code: "374" },
   { name: "Australia", code: "61" },
-  { name: "Germany", code: "49" },
-  { name: "France", code: "33" },
-  { name: "Spain", code: "34" },
-  { name: "Italy", code: "39" },
-  { name: "Netherlands", code: "31" },
+  { name: "Austria", code: "43" },
+  { name: "Azerbaijan", code: "994" },
+  { name: "Bangladesh", code: "880" },
   { name: "Belgium", code: "32" },
   { name: "Brazil", code: "55" },
-  { name: "Egypt", code: "20" },
-  { name: "Saudi Arabia", code: "966" },
-  { name: "UAE", code: "971" },
-  { name: "Turkey", code: "90" },
+  { name: "Canada", code: "1" },
   { name: "China", code: "86" },
+  { name: "Egypt", code: "20" },
+  { name: "France", code: "33" },
+  { name: "Germany", code: "49" },
+  { name: "India", code: "91" },
+  { name: "Italy", code: "39" },
   { name: "Japan", code: "81" },
+  { name: "Netherlands", code: "31" },
+  { name: "Pakistan", code: "92" },
+  { name: "Saudi Arabia", code: "966" },
   { name: "South Korea", code: "82" },
+  { name: "Spain", code: "34" },
+  { name: "Sri Lanka", code: "94" },
   { name: "Thailand", code: "66" },
-  { name: "Vietnam", code: "84" },
+  { name: "Turkey", code: "90" },
+  { name: "UAE", code: "971" },
+  { name: "UK", code: "44" },
+  { name: "USA", code: "1" },
+  // ... add other countries as needed
 ];
 
 // Pixel styles
@@ -104,9 +110,11 @@ export default function QrGeneratorAdvanced() {
     if (qrType === "phone") return `tel:${countryCode}${trimmed}`;
     if (qrType === "whatsapp") return `https://wa.me/${countryCode}${trimmed}`;
     if (qrType === "email") return `mailto:${trimmed}`;
+    if (qrType === "telegram") return `https://t.me/${trimmed}`;
     return trimmed || " ";
   };
 
+  // Initialize and update QR codes
   useEffect(() => {
     qrInstances.current = values.map(
       (_, idx) =>
@@ -130,7 +138,7 @@ export default function QrGeneratorAdvanced() {
         qr.append(qrRefs.current[idx]);
       }
     });
-  }, []);
+  }, []);  // run once
 
   useEffect(() => {
     qrInstances.current.forEach((qr, idx) => {
@@ -152,7 +160,7 @@ export default function QrGeneratorAdvanced() {
         qr.append(qrRefs.current[idx]);
       }
     });
-  }, [values, fgColor, bgColor, pixelStyle, cornerStyle, size, logo, logoSize, margin, errorCorrection]);
+  }, [values, fgColor, bgColor, pixelStyle, cornerStyle, size, logo, logoSize, margin, errorCorrection, qrType, countryCode]);
 
   const handleValuesChange = (e) => {
     const input = e.target.value;
@@ -170,48 +178,36 @@ export default function QrGeneratorAdvanced() {
     reader.readAsDataURL(file);
   };
 
+  const downloadSVG = async () => {
+    if (!qrInstances.current[0]) return;
 
-const downloadSVG = async () => {
-  if (!qrInstances.current[0]) return;
+    try {
+      const blob = await qrInstances.current[0].getRawData("svg");
+      let svgText = await blob.text();
+      svgText = svgText.replace(/<\?xml.*?\?>\s*/g, "");
 
-  try {
-    // Get SVG blob from QRCodeStyling
-    const blob = await qrInstances.current[0].getRawData("svg");
+      const padding = 150;
+      const finalWidth = size + padding * 2;
+      const finalHeight = size + padding * 2;
 
-    // Convert blob → text (SVG XML)
-    let svgText = await blob.text();
+      const centeredSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="${finalWidth}"
+             height="${finalHeight}"
+             viewBox="0 0 ${finalWidth} ${finalHeight}">
+          <g transform="translate(${padding}, ${padding})">
+            ${svgText}
+          </g>
+        </svg>
+      `;
 
-    // Remove XML declaration if present
-    svgText = svgText.replace(/<\?xml.*?\?>\s*/g, "");
-
-    // Create a wrapper to center QR
-    const padding = 150;
-    const finalWidth = size + padding * 2;
-    const finalHeight = size + padding * 2;
-
-    const centeredSVG = `
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="${finalWidth}"
-           height="${finalHeight}"
-           viewBox="0 0 ${finalWidth} ${finalHeight}">
-        <g transform="translate(${padding}, ${padding})">
-          ${svgText}
-        </g>
-      </svg>
-    `;
-
-    // Download final SVG
-    const file = new Blob([centeredSVG], { type: "image/svg+xml" });
-    saveAs(file, "qr.svg");
-
-  } catch (err) {
-    console.error("SVG Download Error:", err);
-    alert("❌ QR generator could not produce SVG. Try again.");
-  }
-};
-
-
-
+      const file = new Blob([centeredSVG], { type: "image/svg+xml" });
+      saveAs(file, "qr.svg");
+    } catch (err) {
+      console.error("SVG Download Error:", err);
+      alert("❌ QR generator could not produce SVG. Try again.");
+    }
+  };
 
   return (
     <div className={`${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"} min-h-screen p-4 transition-colors`}>
@@ -222,57 +218,66 @@ const downloadSVG = async () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="col-span-1 md:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg space-y-6">
-            <div>
-              <label className="block font-semibold mb-2">QR Type</label>
-              <select
-                value={qrType}
-                onChange={(e) => setQrType(e.target.value)}
-                className="w-full p-2 border bg-gray-300 rounded"
-              >
-                <option value="text">Text</option>
-                <option value="url">URL</option>
-                <option value="phone">Phone</option>
-                <option value="whatsapp">WhatsApp</option>
-                <option value="email">Email</option>
-              </select>
-            </div>
+        <div>
+  <label className="block font-semibold mb-2">QR Type</label>
+  <select
+    value={qrType}
+    onChange={(e) => setQrType(e.target.value)}
+    className={`w-full p-2 border rounded transition-colors 
+      ${darkMode ? "bg-gray-700 text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"}`}
+  >
+    <option value="text">Text</option>
+    <option value="url">URL</option>
+    <option value="phone">Phone</option>
+    <option value="whatsapp">WhatsApp</option>
+    <option value="email">Email</option>
+    <option value="telegram">Telegram</option>
+  </select>
+</div>
+
 
             <div>
-              <label className="block  rounded p-1 font-semibold mb-2">
-                {qrType === "phone" || qrType === "whatsapp" ? "Phone Numbers (one per line)" : "Input Values (one per line)"}
+              <label className="block font-semibold mb-2">
+                {(qrType === "phone" || qrType === "whatsapp" || qrType === "telegram")
+                  ? "Phone/Username (one per line)"
+                  : "Input Values (one per line)"}
               </label>
-              { (qrType === "phone" || qrType === "whatsapp") && (
+
+              {(qrType === "phone" || qrType === "whatsapp" || qrType === "telegram") && (
                 <select
-                  className="w-full p-2 bg-blue-300 border rounded mb-2"
+                  className="w-full p-2 border rounded mb-2 bg-gray-200 dark:bg-gray-700"
                   value={countryCode}
                   onChange={(e) => setCountryCode(e.target.value)}
                 >
                   {COUNTRY_CODES.map((c) => (
-                    <option key={c.code} value={c.code}>{`${c.name} (+${c.code})`}</option>
+                    <option key={c.code} value={c.code}>
+                      {`${c.name} (+${c.code})`}
+                    </option>
                   ))}
                 </select>
               )}
+
               <textarea
                 rows={values.length > 1 ? Math.min(values.length, 10) : 4}
                 onChange={handleValuesChange}
                 placeholder="Enter one value per line"
-                className="w-full p-3 border rounded font-mono resize-y"
+                className="w-full p-3 border rounded font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
                 value={values.join("\n")}
               />
             </div>
-
-         
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <label className="block font-semibold mb-1">Pixel Style</label>
                 <select
-                  className="w-full p-2 bg-gray-300 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                   value={pixelStyle}
                   onChange={(e) => setPixelStyle(e.target.value)}
                 >
                   {PIXEL_STYLES.map((p) => (
-                    <option key={p.key} value={p.key}>{p.label}</option>
+                    <option key={p.key} value={p.key}>
+                      {p.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -280,13 +285,13 @@ const downloadSVG = async () => {
               <div>
                 <label className="block font-semibold mb-1">Corner Style</label>
                 <select
-                  className="w-full p-2 bg-blue-300 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                   value={cornerStyle}
                   onChange={(e) => setCornerStyle(e.target.value)}
                 >
-                  <option value="square ">Square</option>
-                  <option value="rounded ">Rounded</option>
-                  <option value="extra-rounded ">Extra Rounded</option>
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="extra-rounded">Extra Rounded</option>
                 </select>
               </div>
 
@@ -298,7 +303,7 @@ const downloadSVG = async () => {
                   max={2000}
                   value={size}
                   onChange={(e) => setSize(+e.target.value)}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                 />
               </div>
 
@@ -310,19 +315,21 @@ const downloadSVG = async () => {
                   max={100}
                   value={margin}
                   onChange={(e) => setMargin(+e.target.value)}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                 />
               </div>
 
               <div>
                 <label className="block font-semibold mb-1">Error Correction</label>
                 <select
-                  className="w-full p-2 bg-gray-300 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                   value={errorCorrection}
                   onChange={(e) => setErrorCorrection(e.target.value)}
                 >
-                  {ERROR_CORRECTION_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  {ERROR_CORRECTION_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -333,7 +340,7 @@ const downloadSVG = async () => {
                   type="color"
                   value={fgColor}
                   onChange={(e) => setFgColor(e.target.value)}
-                  className="w-full h-10 rounded"
+                  className="w-full h-10 rounded border"
                 />
               </div>
 
@@ -343,7 +350,7 @@ const downloadSVG = async () => {
                   type="color"
                   value={bgColor}
                   onChange={(e) => setBgColor(e.target.value)}
-                  className="w-full h-10 rounded"
+                  className="w-full h-10 rounded border"
                 />
               </div>
 
@@ -355,17 +362,26 @@ const downloadSVG = async () => {
                   max={50}
                   value={logoSize}
                   onChange={(e) => setLogoSize(+e.target.value)}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded bg-gray-200 dark:bg-gray-700"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block font-semibold mb-2">Upload Logo</label>
-              <input className="btn btn-accent w-full" type="file" accept="image/*" onChange={handleLogoChange} />
+              <label className="block font-semibold mb-2">Upload Logo (optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleLogoChange}
+                className="w-full"
+              />
               {logo && (
                 <div className="mt-3 flex items-center gap-4">
-                  <img src={logo} alt="logo preview" className="w-16 h-16 object-contain border rounded" />
+                  <img
+                    src={logo}
+                    alt="logo preview"
+                    className="w-16 h-16 object-contain border rounded"
+                  />
                   <button
                     onClick={() => setLogo(null)}
                     className="text-red-500 hover:underline"
@@ -393,23 +409,19 @@ const downloadSVG = async () => {
               }`}
             >
               {values.map((val, idx) => (
-                <div
-                  key={idx}
-                  className="flex  justify-center items-center p-2"
-                >
+                <div key={idx} className="flex justify-center items-center p-2">
                   <div
                     ref={(el) => (qrRefs.current[idx] = el)}
-                    className=" w-full rounded-lg shadow bg-white dark:bg-gray-700"
+                    className="w-full rounded-lg shadow bg-white dark:bg-gray-700"
                   />
                 </div>
               ))}
             </div>
 
             <div className="mt-6 flex flex-wrap gap-4 justify-center">
-            
               <button
                 onClick={downloadSVG}
-                className="px-6 py-2 cursor-pointer bg-green-600 text-white rounded hover:bg-green-700 transition"
+                className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
               >
                 Download SVG
               </button>
@@ -421,7 +433,7 @@ const downloadSVG = async () => {
           <details className="group">
             <summary className="font-semibold cursor-pointer">About QR Generator</summary>
             <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-              This QR Generator allows you to create custom QR codes with advanced styling options, logo embedding, and multiple input support. The preview updates in real-time as you adjust settings. All QR codes are generated using the QRCodeStyling library and can be downloaded in PNG or SVG format.
+              This QR Generator allows you to create custom QR codes with advanced styling options, logo embedding, multiple input support, and now supports Telegram, Phone, WhatsApp, Email, URL or plain text. The preview updates in real-time as you adjust settings. All QR codes are generated using the QRCodeStyling library and can be downloaded in SVG format.
             </div>
           </details>
         </div>

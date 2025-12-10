@@ -31,6 +31,8 @@ import QrAndImage from "../project/QrAndImage";
 import PersonalIDCard from "../pages/PersonalIdCard";
 import StudentIdCard from "../pages/StudentIdCard";
 import CgpaCalculator from "../component/CgpaCalculator";
+import GradingNoteSection from "../project/GradingNoteSection";
+import Services from "../pages/Services";
 
 
 const Routes = createBrowserRouter([
@@ -145,6 +147,14 @@ const Routes = createBrowserRouter([
       {
        path:"qrandimage",
        element:<QrAndImage></QrAndImage>,
+      },
+      {
+       path:"gradingnotesection",
+       element:<GradingNoteSection></GradingNoteSection>,
+      },
+      {
+       path:"services",
+       element:<Services></Services>
       },
     ],
   },

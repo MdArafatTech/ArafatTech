@@ -132,7 +132,7 @@ const Register = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="you@example.com"
+                      placeholder="📩 you@example.com"
                       required
                       className="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-4 focus:ring-blue-500/30 dark:focus:ring-yellow-500/20 outline-none transition"
                     />
@@ -148,7 +148,7 @@ const Register = () => {
                         type={formData.showPassword ? "text" : "password"}
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder="Create a strong password"
+                        placeholder="🔑 Create a strong password"
                         required
                         className="w-full px-5 py-4 pr-14 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-4 focus:ring-blue-500/30 dark:focus:ring-yellow-500/20 outline-none"
                       />
@@ -168,7 +168,7 @@ const Register = () => {
                         type={formData.showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        placeholder="Type password again"
+                        placeholder="🔑 Type password again"
                         required
                         className="w-full px-5 py-4 pr-14 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-4 focus:ring-blue-500/30 dark:focus:ring-yellow-500/20 outline-none"
                       />
@@ -225,9 +225,6 @@ const Register = () => {
             </div>
           </div>
 
-          <p className="text-center mt-8 text-sm text-gray-500">
-            Designed by <span className="font-bold text-blue-600">ArafatTECH</span>
-          </p>
         </div>
       </div>
     </>
