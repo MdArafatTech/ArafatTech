@@ -125,7 +125,7 @@
   },
 
   "English": {
-    "1st_Year": [
+    "1": [
       { "code": "211101", "name": "English Reading Skills", "credit": 4.0 },
       { "code": "211103", "name": "English Writing Skills", "credit": 4.0 },
       { "code": "211105", "name": "Introduction to Poetry", "credit": 4.0 },
@@ -155,7 +155,7 @@
         "credit": 4.0
       }
     ],
-    "2nd_Year": [
+    "2": [
       { "code": "221101", "name": "Introduction to Drama", "credit": 4.0 },
       { "code": "221103", "name": "Romantic Poetry", "credit": 4.0 },
       {
@@ -184,7 +184,7 @@
         "credit": 4.0
       }
     ],
-    "3rd_Year": [
+    "3": [
       {
         "code": "231101",
         "name": "Elizabethan and Jacobean Drama",
@@ -218,7 +218,7 @@
       },
       { "code": "231115", "name": "Introduction to Linguistics", "credit": 4.0 }
     ],
-    "4th_Year": [
+    "4": [
       { "code": "241101", "name": "Nineteenth Century Novel", "credit": 4.0 },
       { "code": "241103", "name": "Twentieth Century Poetry", "credit": 4.0 },
       { "code": "241105", "name": "Modern Drama", "credit": 4.0 },
