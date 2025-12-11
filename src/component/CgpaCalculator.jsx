@@ -22,7 +22,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import subjectsData from "../data/subjects.json";
 import Select from "react-select";
 import GradingNoteSection from "../project/GradingNoteSection";
-
+import { FaSkullCrossbones } from "react-icons/fa6";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const gradePointMap = {
@@ -63,13 +63,49 @@ const CgpaCalculator = () => {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
-
   const updateCourse = (semIndex, courseIndex, field, value) => {
     const updated = [...semesters];
     updated[semIndex].courses[courseIndex][field] = value;
     setSemesters(updated);
   };
+
+  const selectStyle = (theme) => ({
+    container: (provided) => ({
+      ...provided,
+      width: "100%",
+    }),
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: theme === "dark" ? "#333" : "#fff",
+      borderColor: theme === "dark" ? "#666" : "#ccc",
+      minHeight: "38px",
+      boxShadow: "none",
+      "&:hover": { borderColor: "#007bff" },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: theme === "dark" ? "#333" : "#fff",
+      color: theme === "dark" ? "#fff" : "#000",
+      maxHeight: "250px",
+      overflowY: "auto",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? "#007bff"
+        : state.isFocused
+        ? theme === "dark"
+          ? "#444"
+          : "#f0f0f0"
+        : theme === "dark"
+        ? "#333"
+        : "#fff",
+      color: state.isSelected ? "#fff" : theme === "dark" ? "#fff" : "#000",
+      cursor: "pointer",
+    }),
+    singleValue: (p) => ({ ...p, color: theme === "dark" ? "#fff" : "#000" }),
+    placeholder: (p) => ({ ...p, color: theme === "dark" ? "#bbb" : "#666" }),
+  });
 
   const departmentOptions = Object.keys(subjectsData).map((dep) => ({
     value: dep,
@@ -251,437 +287,397 @@ const CgpaCalculator = () => {
   };
 
   return (
+    <div className="px-1 md:px-[4%] lg:px-[6%]">
+      <div style={theme === "dark" ? darkStyles.container : styles.container}>
+        <h1 style={theme === "dark" ? darkStyles.title : styles.title}>
+          Bangladesh Semester GPA / CGPA Calculator
+        </h1>
 
-<div className="px-1 md:px-[4%] lg:px-[6%]">
-
-
-
-    <div style={theme === "dark" ? darkStyles.container : styles.container}>
-      <h1 style={theme === "dark" ? darkStyles.title : styles.title}>
-        Bangladesh Semester GPA / CGPA Calculator
-      </h1>
-
-      {/* User Info */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 my-5">
-        <div className="flex flex-col">
-          <label className="mb-1 font-semibold text-sm">Name</label>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={theme === "dark" ? darkStyles.input : styles.input}
-          />
+        {/* User Info */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 my-5">
+          <div className="flex flex-col">
+            <label className="mb-1 font-semibold text-sm">Name</label>
+            <input
+              className="text-sm md:text-md lg:text-lg"
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={theme === "dark" ? darkStyles.input : styles.input}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-1 font-semibold text-sm">Registration</label>
+            <input
+              className="text-sm md:text-md lg:text-lg"
+              type="number"
+              placeholder="Enter registration"
+              value={reg}
+              onChange={(e) => setReg(e.target.value)}
+              style={theme === "dark" ? darkStyles.input : styles.input}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-1 font-semibold text-sm">Roll</label>
+            <input
+              className="text-sm md:text-md lg:text-lg"
+              type="number"
+              placeholder="Enter roll"
+              value={roll}
+              onChange={(e) => setRoll(e.target.value)}
+              style={theme === "dark" ? darkStyles.input : styles.input}
+            />
+          </div>
         </div>
-        <div className="flex flex-col">
-          <label className="mb-1 font-semibold text-sm">Registration</label>
-          <input
-            type="number"
-            placeholder="Enter registration"
-            value={reg}
-            onChange={(e) => setReg(e.target.value)}
-            style={theme === "dark" ? darkStyles.input : styles.input}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="mb-1 font-semibold text-sm">Roll</label>
-          <input
-            type="number"
-            placeholder="Enter roll"
-            value={roll}
-            onChange={(e) => setRoll(e.target.value)}
-            style={theme === "dark" ? darkStyles.input : styles.input}
-          />
-        </div>
-      </div>
 
-      <AnimatePresence>
-        {semesters.map((sem, semIndex) => {
-          const chartData = {
-            labels: sem.courses.map((c, i) => c.name || `Course ${i + 1}`),
-            datasets: [
-              {
-                label: "Grade Point",
-                data: sem.courses.map((c) => gradePointMap[c.grade]),
-                backgroundColor: theme === "dark" ? "#4bc0c0" : "#007bff",
+        <AnimatePresence>
+          {semesters.map((sem, semIndex) => {
+            const chartData = {
+              labels: sem.courses.map((c, i) => c.name || `Course ${i + 1}`),
+              datasets: [
+                {
+                  label: "Grade Point",
+                  data: sem.courses.map((c) => gradePointMap[c.grade]),
+                  backgroundColor: theme === "dark" ? "#4bc0c0" : "#007bff",
+                },
+              ],
+            };
+
+            const chartOptions = {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: { y: { beginAtZero: true, max: 4 } },
+              plugins: {
+                legend: {
+                  labels: { color: theme === "dark" ? "#fff" : "#000" },
+                },
               },
-            ],
-          };
-          const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, max: 4 } },
-            plugins: {
-              legend: { labels: { color: theme === "dark" ? "#fff" : "#000" } },
-            },
-          };
-          const { totalPoints, totalCredits, gpa } = computeSemesterResult(
-            sem.courses
-          );
+            };
 
-          return (
-            <motion.div
-              key={semIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={
-                theme === "dark"
-                  ? responsiveStyles.semesterDark
-                  : responsiveStyles.semester
-              }
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+            const { totalPoints, totalCredits, gpa } = computeSemesterResult(
+              sem.courses
+            );
+
+            return (
+              <motion.div
+                key={semIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={
+                  theme === "dark"
+                    ? responsiveStyles.semesterDark
+                    : responsiveStyles.semester
+                }
               >
-                <h2 style={{ flex: "1 1 auto", minWidth: "150px" }}>
-                  {sem.name}
-                </h2>
-                {semesters.length > 1 && (
-                  <button
-                    onClick={() => removeSemester(semIndex)}
-                    style={{
-                      ...responsiveStyles.removeBtn,
-                      marginTop: "5px",
-                      marginBottom: "8px",
-                      backgroundColor: "#6c757d",
-                    }}
-                  >
-                    Remove Semester
-                  </button>
-                )}
-              </div>
-
-              {/* Department & Year per semester */}
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "10px",
-                  marginBottom: "10px",
-                }}
-              >
-                {/* Department */}
-                <Select
-                  value={
-                    sem.department
-                      ? { value: sem.department, label: sem.department }
-                      : null
-                  }
-                  onChange={(selected) =>
-                    updateSemesterField(
-                      semIndex,
-                      "department",
-                      selected?.value || ""
-                    )
-                  }
-                  options={Object.keys(subjectsData).map((dep) => ({
-                    value: dep,
-                    label: dep,
-                  }))}
-                  styles={{
-                    container: (provided) => ({
-                      ...provided,
-                      flex: "1 1 150px",
-                      minWidth: "120px",
-                    }),
-                    control: (provided) => ({
-                      ...provided,
-                      backgroundColor: theme === "dark" ? "#333" : "#fff",
-                      borderColor: theme === "dark" ? "#666" : "#ccc",
-                      boxShadow: "none",
-                      "&:hover": { borderColor: "#007bff" },
-                      minHeight: "35px",
-                    }),
-                    menu: (provided) => ({
-                      ...provided,
-                      backgroundColor: theme === "dark" ? "#333" : "#fff",
-                      color: theme === "dark" ? "#fff" : "#000",
-                      maxHeight: "300px",
-                      overflowY: "auto",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      backgroundColor: state.isSelected
-                        ? "#007bff"
-                        : state.isFocused
-                        ? theme === "dark"
-                          ? "#444"
-                          : "#f0f0f0"
-                        : theme === "dark"
-                        ? "#333"
-                        : "#fff",
-                      color: state.isSelected
-                        ? "#fff"
-                        : theme === "dark"
-                        ? "#fff"
-                        : "#000",
-                      cursor: "pointer",
-                    }),
-                    singleValue: (provided) => ({
-                      ...provided,
-                      color: theme === "dark" ? "#fff" : "#000",
-                    }),
-                    placeholder: (provided) => ({
-                      ...provided,
-                      color: theme === "dark" ? "#bbb" : "#666",
-                    }),
-                  }}
-                />
-
-                {/* Year */}
-                <Select
-                  value={
-                    sem.year
-                      ? {
-                          value: sem.year,
-                          label:
-                            sem.year === "1"
-                              ? "1st Year"
-                              : sem.year === "2"
-                              ? "2nd Year"
-                              : sem.year === "3"
-                              ? "3rd Year"
-                              : "4th Year",
-                        }
-                      : null
-                  }
-                  onChange={(selected) =>
-                    updateSemesterField(semIndex, "year", selected?.value || "")
-                  }
-                  options={[
-                    { value: "1", label: "1st Year" },
-                    { value: "2", label: "2nd Year" },
-                    { value: "3", label: "3rd Year" },
-                    { value: "4", label: "4th Year" },
-                  ]}
-                  styles={{
-                    container: (provided) => ({
-                      ...provided,
-                      flex: "1 1 100px",
-                      minWidth: "100px",
-                    }),
-                    control: (provided) => ({
-                      ...provided,
-                      backgroundColor: theme === "dark" ? "#333" : "#fff",
-                      borderColor: theme === "dark" ? "#666" : "#ccc",
-                      boxShadow: "none",
-                      "&:hover": { borderColor: "#007bff" },
-                      minHeight: "35px",
-                    }),
-                    menu: (provided) => ({
-                      ...provided,
-                      backgroundColor: theme === "dark" ? "#333" : "#fff",
-                      color: theme === "dark" ? "#fff" : "#000",
-                      maxHeight: "200px",
-                      overflowY: "auto",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      backgroundColor: state.isSelected
-                        ? "#007bff"
-                        : state.isFocused
-                        ? theme === "dark"
-                          ? "#444"
-                          : "#f0f0f0"
-                        : theme === "dark"
-                        ? "#333"
-                        : "#fff",
-                      color: state.isSelected
-                        ? "#fff"
-                        : theme === "dark"
-                        ? "#fff"
-                        : "#000",
-                      cursor: "pointer",
-                    }),
-                    singleValue: (provided) => ({
-                      ...provided,
-                      color: theme === "dark" ? "#fff" : "#000",
-                    }),
-                    placeholder: (provided) => ({
-                      ...provided,
-                      color: theme === "dark" ? "#bbb" : "#666",
-                    }),
-                  }}
-                />
-              </div>
-
-
-
-
-{/* Course Entry Guidance Label */}
-<div style={{ 
-  marginBottom: "15px",
-  padding: "12px",
-  background: theme === "dark" ? "#1f2937" : "#f3f4f6",
-  borderRadius: "10px",
-  border: theme === "dark" ? "1px solid #374151" : "1px solid #e5e7eb"
-}}>
-  <h3 style={{ 
-    marginBottom: "6px",
-    fontSize: "18px",
-    fontWeight: "600",
-    color: theme === "dark" ? "#f9fafb" : "#111827"
-  }}>
-    Course Input Instructions
-  </h3>
-
-  <p style={{
-    marginBottom: "6px",
-    fontSize: "14px",
-    color: theme === "dark" ? "#d1d5db" : "#4b5563"
-  }}>
-    Please fill in each subject below. Select the correct grade based on the National University grading
-    scale and enter the credit value for accurate CGPA calculation.
-  </p>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-              {sem.courses.map((c, courseIndex) => (
-                <div key={courseIndex} style={responsiveStyles.courseRow}>
-                  <input
-                    type="text"
-                    placeholder="Subject Name"
-                    value={c.name}
-                    onChange={(e) =>
-                      updateCourse(
-                        semIndex,
-                        courseIndex,
-                        "name",
-                        e.target.value
-                      )
-                    }
-                    style={responsiveStyles.input}
-                  />
-                  <select
-                    value={c.grade}
-                    onChange={(e) =>
-                      updateCourse(
-                        semIndex,
-                        courseIndex,
-                        "grade",
-                        e.target.value
-                      )
-                    }
-                    style={responsiveStyles.select}
-                  >
-                    {gradeOptions.map((g) => (
-                      <option key={g} value={g}>
-                        {g}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    placeholder="Credit"
-                    value={c.credit}
-                    onChange={(e) =>
-                      updateCourse(
-                        semIndex,
-                        courseIndex,
-                        "credit",
-                        e.target.value
-                      )
-                    }
-                    min="0"
-                    step="0.5"
-                    style={responsiveStyles.input}
-                  />
-                  <button
-                    onClick={() => removeCourse(semIndex, courseIndex)}
-                    style={responsiveStyles.removeBtn}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-
-              <button
-                onClick={() => addCourse(semIndex)}
-                style={responsiveStyles.button}
-              >
-                Add Course
-              </button>
-
-              <div
-                style={{ marginTop: "20px", width: "100%", minHeight: "250px" }}
-              >
-                <Bar data={chartData} options={chartOptions} />
-              </div>
-
-              <div style={responsiveStyles.semesterResult}>
-                <p>
-                  <strong>Semester Credits:</strong> {totalCredits}
-                </p>
-                <p>
-                  <strong>Semester Points:</strong> {totalPoints}
-                </p>
-                <p
+                {/* ---------------- CENTERED SEMESTER TITLE FIX ---------------- */}
+                <div
                   style={{
-                    fontSize: "1.2em",
-                    color:
-                      gpa >= 3.75
-                        ? "#28a745"
-                        : gpa >= 3.0
-                        ? "#ffc107"
-                        : "#dc3545",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    position: "relative",
+                    width: "100%",
+                    padding: "20px 0",
                   }}
                 >
-                  <strong>GPA: {gpa}</strong>
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
+                  {/* Center Title */}
+                  <h2
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      margin: 4,
+                      marginBottom: 23,
+                      fontWeight: "700",
+                     
+                      textAlign: "center",
+                    }}
+                    className=" bg-blue-500 p-1 rounded text-sm md:text-md lg:text-lg"
+                  >
+                    {sem.name}
+                  </h2>
 
-      <div style={styles.buttonRow}>
-        <button onClick={addSemester} style={styles.button}>
-          Add Semester
-        </button>
-      </div>
+                  {/* Right Remove Button */}
+                  {semesters.length > 1 && (
+                    <button
+                      onClick={() => removeSemester(semIndex)}
+                      style={{
+                        ...responsiveStyles.removeBtn,
+                      }}
+                      className="text-sm md:text-md lg:text-lg -mt-6 -mr-1"
+                    >
+                      <FaSkullCrossbones />
+                    </button>
+                  )}
+                </div>
+                {/* -------------------------------------------------------------- */}
 
-      <div
-        id="result-card"
-        style={theme === "dark" ? darkStyles.resultCard : styles.resultCard}
-      >
-        <h2>Overall Result</h2>
-        <p>
-          <strong>Total Credits:</strong> {totalCredits}
-        </p>
-        <p>
-          <strong>Total Grade Points:</strong> {totalPoints}
-        </p>
-        <p
-          style={{
-            fontSize: "1.5em",
-            color:
-              cgpa >= 3.75 ? "#28a745" : cgpa >= 3.0 ? "#ffc107" : "#dc3545",
-          }}
+                {/* Department & Year */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "15px",
+                    marginBottom: "15px",
+                  }}
+                >
+                  {/* Department */}
+                  <div className="flex flex-col" style={{ flex: "1 1 200px" }}>
+                    <label className="mb-1 font-semibold text-sm md:text-md lg:text-lg">
+                      Department
+                    </label>
+
+                    <Select
+                      className="text-sm md:text-md lg:text-lg"
+                      placeholder="Select Department"
+                      value={
+                        sem.department
+                          ? { value: sem.department, label: sem.department }
+                          : null
+                      }
+                      onChange={(selected) =>
+                        updateSemesterField(
+                          semIndex,
+                          "department",
+                          selected?.value || ""
+                        )
+                      }
+                      options={Object.keys(subjectsData).map((dep) => ({
+                        value: dep,
+                        label: dep,
+                      }))}
+                      styles={selectStyle(theme)}
+                    />
+                  </div>
+
+                  {/* Year */}
+                  <div className="flex flex-col" style={{ flex: "1 1 200px" }}>
+                    <label className="mb-1 font-semibold text-sm md:text-md lg:text-lg">
+                      Year
+                    </label>
+
+                    <Select
+                      className="text-sm md:text-md lg:text-lg"
+                      placeholder="Select Year"
+                      value={
+                        sem.year
+                          ? {
+                              value: sem.year,
+                              label:
+                                sem.year === "1"
+                                  ? "1st Year"
+                                  : sem.year === "2"
+                                  ? "2nd Year"
+                                  : sem.year === "3"
+                                  ? "3rd Year"
+                                  : "4th Year",
+                            }
+                          : null
+                      }
+                      onChange={(selected) =>
+                        updateSemesterField(
+                          semIndex,
+                          "year",
+                          selected?.value || ""
+                        )
+                      }
+                      options={[
+                        { value: "1", label: "1st Year" },
+                        { value: "2", label: "2nd Year" },
+                        { value: "3", label: "3rd Year" },
+                        { value: "4", label: "4th Year" },
+                      ]}
+                      styles={selectStyle(theme)}
+                    />
+                  </div>
+                </div>
+
+                {/* Course Input Instructions */}
+                <div
+                  style={{
+                    marginBottom: "15px",
+                    padding: "12px",
+                    background: theme === "dark" ? "#1f2937" : "#f3f4f6",
+                    borderRadius: "10px",
+                    border:
+                      theme === "dark"
+                        ? "1px solid #374151"
+                        : "1px solid #e5e7eb",
+                  }}
+                >
+                  <h3
+                    style={{
+                      marginBottom: "6px",
+                      fontSize: "18px",
+                      fontWeight: "600",
+                      color: theme === "dark" ? "#f9fafb" : "#111827",
+                    }}
+                  >
+                    Subject,Grade,Credit Input Section.
+                  </h3>
+
+                  <p
+                    style={{
+                      marginBottom: "6px",
+                      fontSize: "14px",
+                      color: theme === "dark" ? "#d1d5db" : "#4b5563",
+                    }}
+                  >
+                    Please fill in each subject below. Select the correct grade
+                    based on the National University grading scale and enter the
+                    credit value.
+                  </p>
+                </div>
+
+                {/* Courses Loop */}
+                {sem.courses.map((c, courseIndex) => (
+                  <div key={courseIndex} style={responsiveStyles.courseRow}>
+                    <input
+                      className="text-sm md:text-md lg:text-lg"
+                      type="text"
+                      placeholder="Subject Name"
+                      value={c.name}
+                      onChange={(e) =>
+                        updateCourse(
+                          semIndex,
+                          courseIndex,
+                          "name",
+                          e.target.value
+                        )
+                      }
+                      style={responsiveStyles.input}
+                    />
+
+                    <select
+                      className="text-sm md:text-md lg:text-lg"
+                      value={c.grade}
+                      onChange={(e) =>
+                        updateCourse(
+                          semIndex,
+                          courseIndex,
+                          "grade",
+                          e.target.value
+                        )
+                      }
+                      style={responsiveStyles.select}
+                    >
+                      {gradeOptions.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </select>
+
+                    <input
+                      className="text-sm md:text-md lg:text-lg"
+                      type="number"
+                      placeholder="Credit"
+                      value={c.credit}
+                      onChange={(e) =>
+                        updateCourse(
+                          semIndex,
+                          courseIndex,
+                          "credit",
+                          e.target.value
+                        )
+                      }
+                      min="0"
+                      step="0.5"
+                      style={responsiveStyles.input}
+                    />
+
+                    <button
+                      className="text-sm md:text-md lg:text-lg"
+                      onClick={() => removeCourse(semIndex, courseIndex)}
+                      style={responsiveStyles.removeBtn}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
+                {/* Add Course Button */}
+                <button
+                  onClick={() => addCourse(semIndex)}
+                  style={responsiveStyles.button}
+                  className="text-sm md:text-md lg:text-lg"
+                >
+                  Add Course
+                </button>
+
+                {/* Chart */}
+                <div
+                  style={{
+                    marginTop: "20px",
+                    width: "100%",
+                    minHeight: "250px",
+                  }}
+                >
+                  <Bar data={chartData} options={chartOptions} />
+                </div>
+
+                {/* Semester Result */}
+                <div style={responsiveStyles.semesterResult}>
+                  <p>
+                    <strong>Semester Credits:</strong> {totalCredits}
+                  </p>
+                  <p>
+                    <strong>Semester Points:</strong> {totalPoints}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "1.2em",
+                      color:
+                        gpa >= 3.75
+                          ? "#28a745"
+                          : gpa >= 3.0
+                          ? "#ffc107"
+                          : "#dc3545",
+                    }}
+                  >
+                    <strong>GPA: {gpa}</strong>
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+
+        <div style={styles.buttonRow}>
+          <button onClick={addSemester} style={styles.button}>
+            Add Semester
+          </button>
+        </div>
+
+        <div
+          id="result-card"
+          style={theme === "dark" ? darkStyles.resultCard : styles.resultCard}
         >
-          <strong>CGPA: {cgpa}</strong>
-        </p>
-        <button onClick={downloadPdf} style={styles.button}>
-          Download PDF
-        </button>
-      </div>
+          <h2>Overall Result</h2>
+          <p>
+            <strong>Total Credits:</strong> {totalCredits}
+          </p>
+          <p>
+            <strong>Total Grade Points:</strong> {totalPoints}
+          </p>
+          <p
+            style={{
+              fontSize: "1.5em",
+              color:
+                cgpa >= 3.75 ? "#28a745" : cgpa >= 3.0 ? "#ffc107" : "#dc3545",
+            }}
+          >
+            <strong>CGPA: {cgpa}</strong>
+          </p>
+          <button onClick={downloadPdf} style={styles.button}>
+            Download PDF
+          </button>
+        </div>
 
-      <GradingNoteSection></GradingNoteSection>
-    </div>
+        <GradingNoteSection></GradingNoteSection>
+      </div>
     </div>
   );
 };
