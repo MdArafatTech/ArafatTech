@@ -294,7 +294,9 @@ const CgpaCalculator = () => {
         </h1>
 
         {/* User Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 my-5">
+<div className=" w-full ml-auto md:ml-[0%] lg:ml-[20%]">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5  gap-3 my-5 ">
           <div className="flex flex-col">
             <label className="mb-1 font-semibold text-sm">Name</label>
             <input
@@ -328,6 +330,7 @@ const CgpaCalculator = () => {
               style={theme === "dark" ? darkStyles.input : styles.input}
             />
           </div>
+        </div>
         </div>
 
         <AnimatePresence>
@@ -393,7 +396,7 @@ const CgpaCalculator = () => {
                      
                       textAlign: "center",
                     }}
-                    className=" bg-blue-500 p-1 rounded text-sm md:text-md lg:text-lg"
+                    className=" bg-blue-400 p-1 rounded text-sm md:text-md lg:text-lg"
                   >
                     {sem.name}
                   </h2>

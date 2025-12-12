@@ -250,47 +250,25 @@
   },
 
   "Physics": {
-       "1": [
-      { "code": "212701", "name": "Mechanics", "credit": 4 },
-      { "code": "212703", "name": "Properties of Matter, Waves & Oscillations", "credit": 4 },
-      { "code": "212705", "name": "Heat, Thermodynamics and Radiation", "credit": 4 },
-      { "code": "212706", "name": "Practical-I (Properties of Matter, Waves & Oscillations, Heat, Thermodynamics and Radiation)", "credit": 4 },
+   
+  "1": [
+    { "code": "212701", "name": "Mechanics", "credit": 3 },
+    { "code": "212703", "name": "Properties of Matter, Waves & Oscillations", "credit": 3 },
+    { "code": "212705", "name": "Heat, Thermodynamics and Radiation", "credit": 3 },
+    { "code": "212706", "name": "Physics Practical-I", "credit": 3 },
 
-      {
-        "code": "213709",
-        "name": "Foundations of Mathematics (Optional, Group-A)",
-        "credit": 4
-      },
-      {
-        "code": "213711",
-        "name": "Calculus-1 (Optional, Group-A)",
-        "credit": 2
-      },
-      {
-        "code": "212807",
-        "name": "Chemistry-I (Optional, Group-B)",
-        "credit": 4
-      },
-      {
-        "code": "212808",
-        "name": "Chemistry-I Practical (Optional, Group-B)",
-        "credit": 2
-      },
-      {
-        "code": "213607",
-        "name": "Fundamentals of Statistics (Optional, Group-C)",
-        "credit": 4
-      },
-      {
-        "code": "213610",
-        "name": "Lab-1: Fundamentals of Statistics (Optional, Group-C)",
-        "credit": 2
-      },
+    { "code": "213709", "name": "Fundamentals of Mathematics", "credit": 4 },
+    { "code": "213711", "name": "Calculus-I", "credit": 2 },
 
-      { "code": "219901", "name": "History of Bangladesh: Language, Culture and Identity (Compulsory)", "credit": 4 },
-      { "code": "219903", "name": "Information and Communication Technology (ICT) (Compulsory)", "credit": 3 },
-      { "code": "219904", "name": "Lab: Information and Communication Technology (Compulsory)", "credit": 1 }
-    ],
+    { "code": "212807", "name": "Chemistry-I", "credit": 4 },
+    { "code": "212808", "name": "Chemistry-I Practical", "credit": 2 },
+
+    { "code": "213607", "name": "Introduction to Statistics", "credit": 4 },
+    { "code": "213608", "name": "Statistics Practical-I", "credit": 2 },
+
+    { "code": "211501", "name": "History of the Emergence of Independent Bangladesh", "credit": 4 }
+  ],
+
 
     "2": [
       { "code": "222701", "name": "Electricity & Magnetism", "credit": 4 },
