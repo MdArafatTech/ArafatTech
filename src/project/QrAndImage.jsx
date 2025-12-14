@@ -1,5 +1,5 @@
 
-import ImageStudio from './ImageStudio';
+
 import QrGenerator from './QrGenarator';
 
 const QrAndImage = () => {

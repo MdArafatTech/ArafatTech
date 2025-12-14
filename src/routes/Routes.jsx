@@ -24,7 +24,7 @@ import LogoutButton from "../component/LogoutButton";
 
 
 import Tools from "../project/Tools";
-import ImageStudio from "../project/ImageStudio";
+
 import HealthAndCalculation from "../project/HealthAndCalculation";
 import QrGenerator from "../project/QrGenarator";
 import QrAndImage from "../project/QrAndImage";
@@ -136,10 +136,8 @@ const Routes = createBrowserRouter([
        path:"tools",
        element:<Tools></Tools>,
       },
-      {
-       path:"imagestudio",
-       element:<ImageStudio></ImageStudio>,
-      },
+    
+     
       {
        path:"qrgenarator",
        element:<QrGenerator></QrGenerator>,

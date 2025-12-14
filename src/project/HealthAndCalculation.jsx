@@ -1,37 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // HealthAndCalculation.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import emailjs from "emailjs-com";
@@ -598,8 +564,7 @@ const HealthAndCalculation = () => {
              text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700
              drop-shadow-2xl"
           >
-            <span>BMI</span> & Health{" "}
-            <span>Calculator</span>
+            <span>BMI</span> & Health <span>Calculator</span>
           </h1>
         </div>
 
@@ -631,8 +596,8 @@ const HealthAndCalculation = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className={`p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
-                  darkMode 
-                    ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20" 
+                  darkMode
+                    ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20"
                     : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
                 }`}
               />
@@ -654,8 +619,8 @@ const HealthAndCalculation = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
-                  darkMode 
-                    ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20" 
+                  darkMode
+                    ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20"
                     : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
                 }`}
               />
@@ -676,8 +641,7 @@ const HealthAndCalculation = () => {
                 <span className="font-bold text-blue-600 dark:text-blue-400">
                   download your BMI & health report
                 </span>
-                , enter your{" "}
-                <span className="font-bold">name</span> and{" "}
+                , enter your <span className="font-bold">name</span> and{" "}
                 <span className="font-bold">email address</span>.
               </p>
             </div>
@@ -688,7 +652,9 @@ const HealthAndCalculation = () => {
           {/* BMI Calculator - Mobile Full Width */}
           <div
             className={`p-4 sm:p-6 rounded-2xl shadow-2xl backdrop-blur-xl border ${
-              darkMode ? "bg-gray-800/90 border-gray-700/50" : "bg-white/90 border-gray-200/50"
+              darkMode
+                ? "bg-gray-800/90 border-gray-700/50"
+                : "bg-white/90 border-gray-200/50"
             }`}
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
@@ -713,8 +679,8 @@ const HealthAndCalculation = () => {
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                   className={`p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
-                    darkMode 
-                      ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20" 
+                    darkMode
+                      ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20"
                       : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
                   }`}
                 />
@@ -737,8 +703,8 @@ const HealthAndCalculation = () => {
                   value={heightCm}
                   onChange={(e) => setHeightCm(e.target.value)}
                   className={`p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
-                    darkMode 
-                      ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20" 
+                    darkMode
+                      ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20"
                       : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
                   }`}
                 />
@@ -746,37 +712,36 @@ const HealthAndCalculation = () => {
             </div>
 
             {/* Height in ft + Convert Button - Full Width on Mobile */}
-          <div className="flex flex-col gap-3 mb-6">
-  <label
-    htmlFor="heightFt"
-    className={`font-semibold text-sm sm:text-base ${
-      darkMode ? "text-gray-300" : "text-gray-700"
-    }`}
-  >
-    Height (ft)
-  </label>
-  <div className="flex flex-col sm:flex-row gap-3">
-    <input
-      id="heightFt"
-      type="number"
-      placeholder="Enter height in ft"
-      value={heightFt}
-      onChange={(e) => setHeightFt(e.target.value)}
-      className={`flex-1 p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
-        darkMode 
-          ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20" 
-          : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
-      }`}
-    />
-    <button
-      onClick={handleConvert}
-      className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base cursor-pointer rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-2xl active:scale-95 transition-all duration-200 shadow-xl border border-blue-400/50 font-semibold flex items-center justify-center whitespace-nowrap"
-    >
-      Convert to cm
-    </button>
-  </div>
-</div>
-
+            <div className="flex flex-col gap-3 mb-6">
+              <label
+                htmlFor="heightFt"
+                className={`font-semibold text-sm sm:text-base ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                Height (ft)
+              </label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  id="heightFt"
+                  type="number"
+                  placeholder="Enter height in ft"
+                  value={heightFt}
+                  onChange={(e) => setHeightFt(e.target.value)}
+                  className={`flex-1 p-3 sm:p-4 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 font-medium shadow-lg hover:shadow-xl active:shadow-2xl border border-cyan-300/50 ${
+                    darkMode
+                      ? "bg-gray-700/80 text-white backdrop-blur-sm border-white/20"
+                      : "bg-white/80 text-gray-900 backdrop-blur-sm border-gray-200/50"
+                  }`}
+                />
+                <button
+                  onClick={handleConvert}
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base cursor-pointer rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-2xl active:scale-95 transition-all duration-200 shadow-xl border border-blue-400/50 font-semibold flex items-center justify-center whitespace-nowrap"
+                >
+                  Convert to cm
+                </button>
+              </div>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button
@@ -823,7 +788,9 @@ const HealthAndCalculation = () => {
                 <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                   <div
                     className={`p-4 sm:p-6 rounded-2xl shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center ${
-                      darkMode ? "bg-gray-900/80 border border-gray-700/50" : "bg-white/90 border border-gray-200/50"
+                      darkMode
+                        ? "bg-gray-900/80 border border-gray-700/50"
+                        : "bg-white/90 border border-gray-200/50"
                     }`}
                   >
                     <div className="w-48 sm:w-52 md:w-64 h-48 sm:h-52 md:h-64 flex-shrink-0">
@@ -833,14 +800,20 @@ const HealthAndCalculation = () => {
                       <p className="text-lg sm:text-xl font-bold">
                         BMI: <span className="text-2xl">{bmiResult.bmi}</span>
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{bmiResult.category}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Scale max: 40</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        {bmiResult.category}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        Scale max: 40
+                      </p>
                     </div>
                   </div>
 
                   <div
                     className={`p-4 sm:p-6 rounded-2xl shadow-2xl border backdrop-blur-xl ${
-                      darkMode ? "bg-gray-900/80 border-gray-700/50" : "bg-white/90 border-gray-200/50"
+                      darkMode
+                        ? "bg-gray-900/80 border-gray-700/50"
+                        : "bg-white/90 border-gray-200/50"
                     }`}
                   >
                     <h4 className="font-bold text-lg sm:text-xl mb-4 bg-gradient-to-r from-gray-700 to-gray-800 bg-clip-text text-transparent">
@@ -850,8 +823,12 @@ const HealthAndCalculation = () => {
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-gray-300 dark:border-gray-600">
-                            <th className="text-left pb-3 font-semibold">Category</th>
-                            <th className="text-left pb-3 font-semibold pl-4">Range</th>
+                            <th className="text-left pb-3 font-semibold">
+                              Category
+                            </th>
+                            <th className="text-left pb-3 font-semibold pl-4">
+                              Range
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -860,12 +837,28 @@ const HealthAndCalculation = () => {
                             return (
                               <tr
                                 key={r.category}
-                                className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${isActive ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white" : ""}`}
+                                className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
+                                  isActive
+                                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                                    : ""
+                                }`}
                               >
-                                <td className={`py-3 pr-4 font-semibold ${isActive ? "" : "text-gray-900 dark:text-gray-100"}`}>
+                                <td
+                                  className={`py-3 pr-4 font-semibold ${
+                                    isActive
+                                      ? ""
+                                      : "text-gray-900 dark:text-gray-100"
+                                  }`}
+                                >
                                   {r.category}
                                 </td>
-                                <td className={`py-3 ${isActive ? "font-semibold" : "text-gray-700 dark:text-gray-300"}`}>
+                                <td
+                                  className={`py-3 ${
+                                    isActive
+                                      ? "font-semibold"
+                                      : "text-gray-700 dark:text-gray-300"
+                                  }`}
+                                >
                                   {r.range}
                                 </td>
                               </tr>
@@ -883,7 +876,9 @@ const HealthAndCalculation = () => {
           {/* Health Calculator - Mobile Full Width */}
           <div
             className={`p-4 sm:p-6 rounded-2xl shadow-2xl backdrop-blur-xl border ${
-              darkMode ? "bg-gray-800/90 border-gray-700/50" : "bg-white/90 border-gray-200/50"
+              darkMode
+                ? "bg-gray-800/90 border-gray-700/50"
+                : "bg-white/90 border-gray-200/50"
             }`}
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
@@ -1013,9 +1008,13 @@ const HealthAndCalculation = () => {
                 >
                   <option value={1.2}>Sedentary (little or no exercise)</option>
                   <option value={1.375}>Lightly active (1-3 days/week)</option>
-                  <option value={1.55}>Moderately active (3-5 days/week)</option>
+                  <option value={1.55}>
+                    Moderately active (3-5 days/week)
+                  </option>
                   <option value={1.725}>Very active (6-7 days/week)</option>
-                  <option value={1.9}>Extra active (hard exercise daily)</option>
+                  <option value={1.9}>
+                    Extra active (hard exercise daily)
+                  </option>
                 </select>
               </div>
             </div>
@@ -1063,7 +1062,9 @@ const HealthAndCalculation = () => {
                 </div>
 
                 <div className="p-6 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-2xl backdrop-blur-xl border border-yellow-300/50">
-                  <h4 className="text-xl font-bold mb-4">Suggestions & Review</h4>
+                  <h4 className="text-xl font-bold mb-4">
+                    Suggestions & Review
+                  </h4>
                   <div className="space-y-3 text-lg">
                     <div className="flex items-start gap-3 p-3 rounded-xl bg-white/20 backdrop-blur-sm">
                       <span className="text-2xl mt-0.5">⚖️</span>
@@ -1158,18 +1159,24 @@ const HealthAndCalculation = () => {
 
         <div className="max-w-4xl mx-auto space-y-4 text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
           <p className="text-center">
-            Explore our comprehensive suite of tools designed to simplify calculations, 
-            conversions, and professional tasks. Perfect for students, professionals, and enthusiasts.
+            Explore our comprehensive suite of tools designed to simplify
+            calculations, conversions, and professional tasks. Perfect for
+            students, professionals, and enthusiasts.
           </p>
 
           <p className="text-center">
-            Includes unit converters, advanced calculators, physics & chemistry utilities. 
-            Fully optimized for mobile and desktop with instant local computation.
+            Includes unit converters, advanced calculators, physics & chemistry
+            utilities. Fully optimized for mobile and desktop with instant local
+            computation.
           </p>
 
           <div className="text-center p-4 bg-blue-50/50 dark:bg-blue-900/30 rounded-2xl border border-blue-200/50 dark:border-blue-500/50">
-            <span className="font-bold text-blue-700 dark:text-blue-300 text-lg">💡</span>
-            <p className="mt-2 font-semibold">All calculations run locally - your privacy is protected!</p>
+            <span className="font-bold text-blue-700 dark:text-blue-300 text-lg">
+              💡
+            </span>
+            <p className="mt-2 font-semibold">
+              All calculations run locally - your privacy is protected!
+            </p>
           </div>
         </div>
 
@@ -1182,5 +1189,3 @@ const HealthAndCalculation = () => {
 };
 
 export default HealthAndCalculation;
-
-
