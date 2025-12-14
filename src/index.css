@@ -128,3 +128,88 @@
   font-style: normal;
 }
 
+
+
+
+/* cgpa calculator */
+
+
+
+/* ===== Base layout (desktop / tablet) ===== */
+.course-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.course-subject {
+  flex: 2.5;
+}
+
+.course-mid {
+  display: flex;
+  gap: 10px;
+  flex: 2;
+}
+
+.course-mid input,
+.course-mid select {
+  flex: 1;
+}
+
+.course-remove {
+  flex: 1;
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 768px) {
+  .course-row {
+    gap: 8px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 400px) {
+  .course-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .course-subject {
+    width: 100%;
+  }
+
+  .course-mid {
+    width: 100%;
+  }
+
+  .course-mid input,
+  .course-mid select {
+    width: 50%;
+  }
+
+  .course-remove {
+    width: 100%;
+  }
+}
+
+/* ===== Consistent input sizing ===== */
+.course-row input,
+.course-row select,
+.course-row button {
+  height: 40px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+

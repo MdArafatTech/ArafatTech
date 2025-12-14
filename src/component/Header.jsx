@@ -93,7 +93,7 @@ const Header = () => {
         to="/qrandimage"
         className="block px-4 py-2 hover:bg-orange-100 dark:hover:bg-orange-600 rounded-md transition"
       >
-        QR And Image
+        QR Genarator
       </Link>
     </li>
   </ul>
@@ -230,7 +230,7 @@ const Header = () => {
                     className="hover-spark hover:text-amber-500"
                     onClick={() => setOpen(false)}
                   >
-                    QrAndImage
+                    Qr Genarator
                   </Link>
                 </li>
               </ul>

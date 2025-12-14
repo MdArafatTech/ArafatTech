@@ -10,7 +10,7 @@ const QrAndImage = () => {
              <QrGenerator></QrGenerator>
 
              
-           <ImageStudio></ImageStudio>
+        
 
            
         </div>
