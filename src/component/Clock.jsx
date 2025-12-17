@@ -309,11 +309,32 @@ export default function Clock() {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center rounded-xl p-2 sm:p-4 bg-gradient-to-br from-slate-50 to-amber-50 dark:from-slate-900 dark:to-slate-800">
-      <div className="flex  flex-col items-center justify-center py-12 px-2 sm:px-4 md:px-6 rounded-2xl shadow-2xl max-w-4xl mx-auto w-full transition-all duration-500 bg-gradient-to-br backdrop-blur-md border border-white/20 dark:border-slate-700/50 relative overflow-visible">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div className="min-h-screen flex items-center justify-center  rounded-3xl p-2 sm:p-4 bg-gradient-to-br from-slate-50 to-amber-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="flex mx-auto flex-col items-center justify-center py-12 px-2 sm:px-4 md:px-6  shadow-2xl max-w-4xl  w-full transition-all duration-500 bg-gradient-to-br backdrop-blur-md border border-white/20 dark:border-slate-700/50 relative overflow-visible">
         {/* Dynamic Background based on time of day */}
         <div
-          className={`absolute inset-0 transition-all duration-1000 ${
+          className={`absolute  inset-0 transition-all duration-1000 ${
             isDaytime
               ? "bg-gradient-to-br from-amber-50/95 via-yellow-50/95 to-orange-50/95"
               : "bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-blue-900/95"
@@ -321,7 +342,7 @@ export default function Clock() {
         />
 
         {/* Header with Country Selector - Fixed for mobile */}
-        <div className="w-full max-w-md mb-8 relative z-50">
+        <div className="w-full  max-w-md mb-8 relative z-50">
           <div className="flex items-center justify-center px-0 sm:px-0">
             <div
               className="relative w-full sm:w-64 md:w-80 mx-0"
@@ -391,10 +412,10 @@ export default function Clock() {
                     role="listbox"
                   >
                     {/* Search Input */}
-                    <div className="p-3 sm:p-2 sm:p-3 border-b sticky top-0 backdrop-blur-md z-[10000] border-slate-200/50">
+                    <div className="p-3 sm:p-2  border-b sticky top-0 backdrop-blur-md z-[10000] border-slate-200/50">
                       <input
                         type="text"
-                        className={`w-full p-3 sm:p-2 sm:p-3 rounded-lg font-medium border-2 outline-none transition-all duration-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200/50 text-base sm:text-sm ${
+                        className={`w-full p-3 sm:p-2  rounded-lg font-medium border-2 outline-none transition-all duration-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200/50 text-base sm:text-sm ${
                           isDaytime
                             ? "bg-amber-50/80 text-slate-900 border-amber-200 hover:border-amber-300 shadow-sm"
                             : "bg-slate-700/80 text-white border-slate-600 hover:border-slate-500 focus:bg-slate-600 shadow-blue-500/10"
@@ -470,7 +491,7 @@ export default function Clock() {
         {/* Digital Clock & Weather Dashboard - NO X PADDING ON MOBILE */}
         <div className="w-full grid grid-cols-1 items-center justify-items-center gap-4 sm:gap-6 md:gap-8 relative  z-10 px-1 ">
           <div
-            className={`digital-clock font-['LED_Digital_7'] text-4xl sm:text-5xl md:text-6xl lg:text-8xl p-4 sm:p-6 md:p-8 lg:p-12 rounded-3xl border-4 shadow-2xl backdrop-blur-xl transition-all duration-700 hover:scale-[1.02] flex flex-col items-center justify-center relative overflow-hidden max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-0 w-full  sm:mx-0 px-1 sm:px-1 ${
+            className={`digital-clock font-['LED_Digital_7'] text-4xl sm:text-5xl md:text-6xl lg:text-8xl p-4 sm:p-6 md:p-8 lg:p-12 rounded-3xl border-4 shadow-xl flex flex-col items-center justify-center relative overflow-hidden max-w-sm sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-0 w-full  sm:mx-0 px-1 sm:px-1 ${
               isDaytime
                 ? "bg-gradient-to-br from-yellow-400/25 via-amber-50/95 to-orange-400/25 text-orange-600 border-orange-400/70 shadow-[0_0_50px_rgba(251,146,60,0.4)] drop-shadow-[0_0_20px_rgba(251,146,60,0.3)] before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-400/15 before:to-orange-400/15 before:animate-pulse"
                 : "bg-gradient-to-br from-blue-500/25 via-slate-900/95 to-indigo-500/25 text-cyan-400 border-cyan-400/70 shadow-[0_0_50px_rgba(34,211,238,0.4)] drop-shadow-[0_0_20px_rgba(34,211,238,0.3)] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500/15 before:to-indigo-500/15 before:animate-pulse"
@@ -652,5 +673,9 @@ export default function Clock() {
         </div>
       </div>
     </div>
+
+
+
+
   );
 }
