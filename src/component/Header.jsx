@@ -45,7 +45,7 @@ const Header = () => {
               { name: "Home", path: "/" },
               { name: "Billing", path: "/billing" },
               { name: "Identity", path: "/identity" },
-              { name: "Portal", path: "/idcard" },
+              { name: "Portal", path: "/studentportal" },
               { name: "IdCard", path: "/idcardpage" },
             ].map((link) => (
               <li key={link.path}>
@@ -175,7 +175,7 @@ const Header = () => {
             { name: "Home", path: "/" },
             { name: "Billing", path: "/billing" },
             { name: "Identity", path: "/identity" },
-            { name: "Portal", path: "/idcard" },
+            { name: "Portal", path: "/studentportal" },
             { name: "IdCard", path: "/idcardpage" },
           ].map((link) => (
             <li key={link.path}>

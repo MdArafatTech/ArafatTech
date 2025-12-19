@@ -1,4 +1,14 @@
 import React, { useState } from "react";
+
+
+
+
+
+
+
+
+
+
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import registerGif from "../assets/register.gif";
 import { useAuth } from "../provider/AuthProvider";
@@ -232,3 +242,18 @@ const Register = () => {
 };
 
 export default Register;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

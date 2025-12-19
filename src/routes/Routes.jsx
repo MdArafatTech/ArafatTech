@@ -12,7 +12,7 @@ import Billing from "../component/Billing";
 import Identity from "../component/Identity";
 import ContactForm from "../component/ContactFrom";
 import Contact from "../pages/Contact";
-import IDCard from "../pages/IdCard";
+
 
 import IDCardPage from "../pages/IdCardPage";
 import CustomizeCard from "../component/CustomizeCard";
@@ -33,6 +33,8 @@ import StudentIdCard from "../pages/StudentIdCard";
 import CgpaCalculator from "../component/CgpaCalculator";
 import GradingNoteSection from "../project/GradingNoteSection";
 import Services from "../pages/Services";
+import StudentPortal from "../pages/Studentportal";
+import PremiumDownloadButton from "../component/PremiumDownloadButton";
 
 
 const Routes = createBrowserRouter([
@@ -70,8 +72,8 @@ const Routes = createBrowserRouter([
         element: <StudentIdCard></StudentIdCard>,
       },
       {
-        path: "idcard",
-        element: <IDCard></IDCard>,
+        path: "studentportal",
+        element: <StudentPortal></StudentPortal>,
       },
       {
         path: "billing",
@@ -154,6 +156,11 @@ const Routes = createBrowserRouter([
        path:"services",
        element:<Services></Services>
       },
+    {
+       path:"premiumdownloadbutton",
+       element:<PremiumDownloadButton></PremiumDownloadButton>
+      },
+      
     ],
   },
 ]);

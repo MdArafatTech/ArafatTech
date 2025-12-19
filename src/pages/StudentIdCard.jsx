@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import defaultProfile from "../assets/defualtimg.png";
 import WatermarkImage from "../assets/arafattech.png";
+
+import PremiumDownloadButton from "../component/PremiumDownloadButton"; // Adjust path
 import mailimg from "../assets/email.png";
 import { FaRegHandPointDown, FaChevronDown } from "react-icons/fa";
-import { pdf } from "@react-pdf/renderer"; // <-- MUST BE HERE
+import { pdf } from "@react-pdf/renderer";
 
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
@@ -34,11 +34,7 @@ const itemVariants = {
     x: 0,
     y: 0,
     opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
+    transition: { type: "spring", stiffness: 300, damping: 20 },
   },
 };
 
@@ -53,7 +49,6 @@ function ColorPickers({
   setNoteBgColor,
   issueBgColor,
   setIssueBgColor,
-
   showColorPickers,
 }) {
   const pickers = [
@@ -97,21 +92,25 @@ function ColorPickers({
           initial="hidden"
           animate="visible"
           exit="hidden"
-          className="flex flex-wrap text-black gap-4 justify-center mt-4 bg-gray-100 p-4 rounded-lg shadow-inner overflow-hidden w-full max-w-3xl"
+          className="flex flex-wrap gap-6 sm:gap-8 justify-center mt-8 p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 backdrop-blur-md bg-white/90 dark:bg-gray-900/90"
         >
           {pickers.map((picker) => (
             <motion.div
               key={picker.label}
               custom={picker.direction}
               variants={itemVariants}
-              className="flex items-center gap-2"
+              className="flex flex-col items-center gap-3"
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <label>{picker.label}:</label>
+              <span className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
+                {picker.label}
+              </span>
               <input
                 type="color"
                 value={picker.value}
                 onChange={(e) => picker.setter(e.target.value)}
-                className="w-7 h-7 border-2 rounded cursor-pointer"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl cursor-pointer border-4 border-white dark:border-gray-800 shadow-xl hover:shadow-2xl transition-all"
               />
             </motion.div>
           ))}
@@ -123,20 +122,18 @@ function ColorPickers({
 
 export default function StudentIdCard() {
   const [PDFLib, setPDFLib] = useState(null);
-
   const [JsBarcode, setJsBarcode] = useState(null);
 
-  // Default colors & images
+  // Default colors
   const defaultLabelColor = "#1e3a8a";
   const defaultBorderColor = "#dc2626";
   const defaultHeaderColor = "#1e3a8a";
   const defaultNoteBgColor = "#e0e7ff";
   const defaultIssueBgColor = "#e0e7ff";
-
   const defaultProfileImage = defaultProfile;
   const defaultWatermark = WatermarkImage;
 
-  // State for customization
+  // Customization states
   const [labelColor, setLabelColor] = useState(defaultLabelColor);
   const [borderColor, setBorderColor] = useState(defaultBorderColor);
   const [headerColor, setHeaderColor] = useState(defaultHeaderColor);
@@ -147,14 +144,13 @@ export default function StudentIdCard() {
   const [cards, setCards] = useState([
     {
       name: "",
-      role: "",
-      profession: "",
-      regNo: "", // ✅ added registration number
+      roll: "",
+      regNo: "",
+      dept: "",
+      session: "",
       phone: "",
-      dob: "",
       email: "",
       id: "",
-      session: "",
       bloodGroup: "",
       village: "",
       post: "",
@@ -166,45 +162,60 @@ export default function StudentIdCard() {
       issue: "",
       expiry: "",
       watermark: defaultWatermark,
-      logo: null, // ✅ college/organization logo
-      organizationName: "", // ✅ organization name
-
+      logo: null,
+      organizationName: "",
       organizationEmail: "",
       organizationWebsite: "",
       organizationPhone: "",
     },
   ]);
 
+  // Automatically follow system theme (light/dark)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleThemeChange = (e) => {
+      if (e.matches) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    };
+
+    // Initial check
+    handleThemeChange(mediaQuery);
+
+    // Listen for changes
+    mediaQuery.addEventListener("change", handleThemeChange);
+
+    return () => mediaQuery.removeEventListener("change", handleThemeChange);
+  }, []);
+
+  // Load libraries
   useEffect(() => {
     import("@react-pdf/renderer").then((module) => {
       setPDFLib(module);
-
-      // ⭐ IMPORTANT: Disable hyphenation so email text breaks cleanly
       module.Font.registerHyphenationCallback((word) => [word]);
     });
-
     import("jsbarcode").then((module) => setJsBarcode(() => module.default));
   }, []);
 
   if (!PDFLib)
     return (
-      <p className="p-6 text-center text-orange-500">Loading PDF engine...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <p className="text-2xl text-orange-500 dark:text-orange-400">
+          Loading PDF engine...
+        </p>
+      </div>
     );
 
-  const {
-    PDFViewer,
-    PDFDownloadLink,
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-    Image,
-  } = PDFLib;
+  const { Document, Page, Text, View, StyleSheet, Image } = PDFLib;
 
   const addCard = () => setCards((prev) => [...prev, { ...prev[0] }]);
+
   const removeCard = (index) =>
     setCards((prev) => prev.filter((_, i) => i !== index));
+
   const updateCard = (index, field, value) => {
     setCards((prev) => {
       const updated = [...prev];
@@ -221,7 +232,7 @@ export default function StudentIdCard() {
         roll: "",
         phone: "",
         email: "",
-        regNo: "", // ✅ add this if missing
+        regNo: "",
         session: "",
         id: "",
         bloodGroup: "",
@@ -235,11 +246,12 @@ export default function StudentIdCard() {
         issue: "",
         expiry: "",
         watermark: defaultWatermark,
-        logo: null, // new
-        organizationName: "", // ✅ organization name
+        logo: null,
+        organizationName: "",
         organizationEmail: "",
         organizationWebsite: "",
         organizationPhone: "",
+        dept: "",
       };
       return updated;
     });
@@ -253,7 +265,7 @@ export default function StudentIdCard() {
   const generateBarcodeBase64 = (card) => {
     if (!JsBarcode) return "";
     const canvas = document.createElement("canvas");
-    const data = `Name: ${card.name}\nRole: ${card.role}\nPhone: ${card.phone}\nEmail: ${card.email}\nID: ${card.id}\nBlood: ${card.blood}\nVillage: ${card.village}\nThana: ${card.thana}\nDistrict: ${card.district}`;
+    const data = `Name: ${card.name}\nRoll: ${card.roll}\nDept: ${card.dept}\nSession: ${card.session}\nPhone: ${card.phone}\nEmail: ${card.email}\nBlood: ${card.bloodGroup}`;
     JsBarcode(canvas, data, {
       format: "CODE128",
       height: 25,
@@ -264,14 +276,12 @@ export default function StudentIdCard() {
 
   const styles = StyleSheet.create({
     page: { padding: 10, fontFamily: "Helvetica" },
-
     cardContainer: {
       flexDirection: "row",
       justifyContent: "space-around",
       flexWrap: "wrap",
       marginBottom: 10,
     },
-
     card: {
       width: 180,
       minHeight: 290,
@@ -284,7 +294,6 @@ export default function StudentIdCard() {
       padding: 6,
       position: "relative",
     },
-
     frontHeader: {
       height: 130,
       width: 350,
@@ -297,7 +306,6 @@ export default function StudentIdCard() {
       transform: "rotate(-15deg)",
       position: "relative",
     },
-
     yellowStrip: {
       position: "absolute",
       top: 100,
@@ -305,36 +313,21 @@ export default function StudentIdCard() {
       width: "100%",
       height: 4,
       backgroundColor: borderColor,
-
-      // soft glow fade
-      borderTopWidth: 1,
-      borderBottomWidth: 1,
-      borderTopColor: "#fffff",
-      borderBottomColor: "rgba(0,0,0,0.3)",
-
-      // glossy shine line
-      borderRadius: 1,
-      paddingTop: 0.5,
     },
-
     profileImage: {
       width: "34%",
-      hight: "36%",
       aspectRatio: 0.85,
-
       marginTop: -18,
       padding: 3,
       backgroundColor: borderColor,
     },
-
     infoBox: {
       padding: 4,
       alignItems: "flex-start",
       marginLeft: 25,
-      width: 140, // limit width so long email wraps
+      width: 140,
       flexDirection: "column",
     },
-
     nameText: {
       fontSize: 11,
       fontWeight: "bold",
@@ -343,7 +336,6 @@ export default function StudentIdCard() {
       marginBottom: 10,
       marginTop: 2,
     },
-
     watermark: {
       position: "absolute",
       top: 174,
@@ -353,75 +345,35 @@ export default function StudentIdCard() {
       height: 100,
       opacity: 0.14,
     },
-
-   infoContainer: {
-  alignSelf: "center", // center the whole box horizontally
-  width: "60%", // adjust width as needed
-  borderWidth: 1, // optional: border for testing
-  borderColor: "#ccc",
-  padding: 5,
-  borderRadius: 4,
-},
-
-infoRow: {
-  flexDirection: "row",
-  alignItems: "center",
-  marginBottom: 2,
-},
-
-label: {
-  fontSize: 7,
-  fontWeight: "800",
-  color: labelColor,
-  minWidth: 40,       // reduce from 50
-  marginRight: 4,     // small spacing instead of large gap
-},
-
-value: {
-  fontSize: 8,
-  fontWeight: "bold",
-  color: "#000",
-  flexShrink: 1,      // allows text to wrap or shrink if needed
-},
-
-
-    footer: {
-      position: "absolute",
-      bottom: -3,
-      left: -1,
-      right: -1,
-      width: 300,
-      height: 20,
-      backgroundColor: borderColor,
-      color: "#000",
-      fontSize: 6,
-      textAlign: "center",
-      textAlignVertical: "center",
-      borderBottomLeftRadius: 8,
-      borderBottomRightRadius: 8,
+    infoRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 2,
     },
-
+    label: {
+      fontSize: 7,
+      fontWeight: "800",
+      color: labelColor,
+      minWidth: 40,
+      marginRight: 4,
+    },
+    value: {
+      fontSize: 8,
+      fontWeight: "bold",
+      color: "#000",
+      flexShrink: 1,
+    },
     barcodeContainer: {
       marginTop: 4,
-
-      alignSelf: "center", // Centers the entire container and restricts its width
-
-      paddingHorizontal: 2, // Adds space to the left and right of the barcode
+      alignSelf: "center",
+      paddingHorizontal: 2,
       paddingVertical: 1,
-
-      // REMOVED: marginLeft: 24, and marginRight: 24,
-
       borderWidth: 0.5,
       borderColor: headerColor,
       borderRadius: 2,
       backgroundColor: "#fff",
     },
-
-    barcodeImage: {
-      width: 80, // smaller width
-      height: 25, // smaller height for sharp print
-    },
-
+    barcodeImage: { width: 80, height: 25 },
     backCard: {
       width: 180,
       minHeight: 280,
@@ -432,8 +384,8 @@ value: {
       borderWidth: 4,
       padding: 6,
       position: "relative",
+      backgroundColor: "#f9fafb",
     },
-
     backTopStrip: {
       position: "absolute",
       top: -2,
@@ -441,10 +393,7 @@ value: {
       width: 300,
       height: 22,
       backgroundColor: borderColor,
-      borderTopLeftRadius: 8,
-      borderTopRightRadius: 8,
     },
-
     backYellowStrip2: {
       position: "absolute",
       bottom: 42,
@@ -453,16 +402,7 @@ value: {
       height: 4,
       backgroundColor: borderColor,
       transform: "rotate(-11deg)",
-
-      // Glow simulation
-      borderTopWidth: 1,
-      borderBottomWidth: 1,
-      borderTopColor: "rgba(255,255,255,0.6)", // top glow highlight
-      borderBottomColor: "rgba(0,0,0,0.3)", // bottom soft shadow
-
-      borderRadius: 2,
     },
-
     backYellowStrip3: {
       position: "absolute",
       bottom: 34,
@@ -471,35 +411,17 @@ value: {
       height: 4,
       backgroundColor: borderColor,
       transform: "rotate(-11deg)",
-
-      // Glow simulation
-      borderTopWidth: 1,
-      borderBottomWidth: 1,
-      borderTopColor: "rgba(255,255,255,0.6)", // glowing upper edge
-      borderBottomColor: "rgba(0,0,0,0.3)", // shadow for depth
-
-      borderRadius: 2,
     },
-
     backGreenBottom: {
       position: "absolute",
-      bottom: -40, // move down to cover extra space created by rotation
-      left: -30, // shift left to cover left edge
-      width: 260, // extra width to cover diagonal corners
-      height: 80, // slightly taller to cover bottom fully
+      bottom: -40,
+      left: -30,
+      width: 260,
+      height: 80,
       backgroundColor: headerColor,
       transform: "rotate(169deg)",
       zIndex: 1,
     },
-
-    addressRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 4,
-      marginBottom: 2,
-      alignSelf: "center",
-    },
-
     backContent: {
       padding: 1,
       justifyContent: "flex-start",
@@ -507,7 +429,6 @@ value: {
       flex: 1,
       zIndex: 1,
     },
-
     backAddressText: {
       fontSize: 7,
       alignSelf: "center",
@@ -516,42 +437,27 @@ value: {
       marginTop: 1,
       fontWeight: "600",
     },
-
-    qrBox: {
-      width: 60,
-      height: 60,
-      alignSelf: "center",
-      marginTop: 5,
-    },
-
-    qrText: {
-      fontSize: 6,
-      textAlign: "center",
-      color: labelColor,
-    },
-
+    qrBox: { width: 60, height: 60, alignSelf: "center", marginTop: 5 },
+    qrText: { fontSize: 6, textAlign: "center", color: labelColor },
     noteBox: {
       backgroundColor: noteBgColor,
       padding: 4,
       borderRadius: 7,
       marginTop: 7,
     },
-
     noteText: {
       fontSize: 6,
       fontStyle: "italic",
       textAlign: "center",
       color: labelColor,
     },
-
     signatureImage: {
       width: 85,
       height: 26,
       marginTop: 6,
       marginBottom: 2,
-      alignSelf: "center", // ✅ centers image horizontally
+      alignSelf: "center",
     },
-
     backIssueExpiryContainer: {
       borderRadius: 2,
       paddingVertical: 2,
@@ -559,9 +465,8 @@ value: {
       justifyContent: "center",
       alignItems: "flex-end",
       width: 65,
-      height: 22, // ✅ fixed height to prevent wrapping
+      height: 22,
     },
-
     backIssueExpiryText: {
       fontSize: 5,
       color: labelColor,
@@ -575,14 +480,13 @@ value: {
       {cards.map((card, idx) => (
         <Page key={idx} size="A4" style={styles.page}>
           <View style={styles.cardContainer}>
-            {/* Front */}
+            {/* Front Card */}
             <View style={styles.card}>
               <View style={styles.frontHeader}>
                 <View style={[styles.yellowStrip, { top: 122 }]} />
                 <View style={[styles.yellowStrip, { top: 130 }]} />
               </View>
 
-              {/* Front Card Logo + Name at top-left */}
               <View
                 style={{
                   position: "absolute",
@@ -601,13 +505,10 @@ value: {
                 <Text
                   style={{ fontSize: 10, fontWeight: "bold", color: "#ffffff" }}
                 >
-                  {card.organizationName && card.organizationName.trim() !== ""
-                    ? card.organizationName
-                    : ""}
+                  {card.organizationName.trim() || ""}
                 </Text>
               </View>
 
-              {/* Profile Image */}
               <View style={{ alignItems: "center" }}>
                 <Image
                   style={styles.profileImage}
@@ -615,51 +516,35 @@ value: {
                 />
               </View>
 
-              {/* Name */}
-              <Text style={styles.nameText}>{card.name}</Text>
+              <Text style={styles.nameText}>{card.name || "Student Name"}</Text>
 
-              {/* Watermark */}
               <Image src={WatermarkImage} style={styles.watermark} />
-              <Image
-                src={card.watermark || defaultWatermark}
-                style={styles.watermark}
-              />
+              {card.watermark && (
+                <Image src={card.watermark} style={styles.watermark} />
+              )}
 
-              {/* Info Box (without email) */}
               <View style={styles.infoBox}>
                 {[
                   "roll",
                   "dept",
                   "session",
                   "regNo",
-                  "profession",
-                  "dob",
                   "phone",
                   "id",
-                  "blood",
+                  "bloodGroup",
                 ].map(
                   (field) =>
-                    card[field] && ( // only show if value exists
+                    card[field] && (
                       <View style={styles.infoRow} key={field}>
                         <Text style={styles.label}>
                           {field.charAt(0).toUpperCase() + field.slice(1)}:
                         </Text>
-                        <View
-                          style={{ flex: 1, minWidth: 100, flexWrap: "wrap" }}
-                        >
-                          <Text style={styles.value}>{card[field]}</Text>
-                        </View>
+                        <Text style={styles.value}>{card[field]}</Text>
                       </View>
                     )
                 )}
               </View>
 
-              {/* Watermark */}
-              {card.watermark && (
-                <Image src={card.watermark} style={styles.watermark} />
-              )}
-
-              {/* Barcode */}
               <View style={styles.barcodeContainer}>
                 <Image
                   style={styles.barcodeImage}
@@ -667,90 +552,48 @@ value: {
                 />
               </View>
 
-
-
-
-
-
-
-
-
-
-
-
-              {/* Email below barcode with icon */}
-            
-                         <View
-              style={{
-                width: "100%",          // full width of container
-                alignItems: "center",   // center children horizontally
-                marginTop: 4,
-              }}
-            >
               <View
-                style={{
-                  flexDirection: "row",  // icon + text in a row
-                  alignItems: "center",  // vertical alignment
-                  justifyContent: "center", // center the row contents
-                }}
+                style={{ width: "100%", alignItems: "center", marginTop: 4 }}
               >
-                <Image
-                  src={mailimg}
-                  style={{ width: 10, height: 10, marginRight:1 }}
-                />
-                <Text
+                <View
                   style={{
-                    fontSize: 8,
-                    fontWeight: "bold",
-                    textAlign: "center",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  wrap
                 >
-                  {card.email || "N/A"}
-                </Text>
+                  <Image
+                    src={mailimg}
+                    style={{ width: 10, height: 10, marginRight: 1 }}
+                  />
+                  <Text style={{ fontSize: 8, fontWeight: "bold" }}>
+                    {card.email || "N/A"}
+                  </Text>
+                </View>
               </View>
             </View>
 
-
-
-
-
-
-
-
-
-
-
-
-
-              <Text style={styles.footer}></Text>
-            </View>
-
-            {/* Back */}
+            {/* Back Card */}
             <View style={styles.backCard}>
-              {/* Top: Organization Name + Address */}
               <View style={{ padding: 10 }}>
                 {card.organizationName && (
-                  <View style={{ marginTop: 4, marginBottom: -3 }}>
+                  <View style={{ marginTop: 4 }}>
                     <Text
                       style={{
                         fontSize: 12,
                         fontWeight: "bold",
-                        color: "#000000",
+                        color: "#000",
                         textAlign: "center",
-                        marginBottom: 4,
                       }}
                     >
                       {card.organizationName}
                     </Text>
-
                     <Text style={styles.backAddressText}>
                       {[card.village?.trim(), card.post?.trim()]
                         .filter(Boolean)
                         .join(", ")}
-                      {card.postCode && ` – ${card.postCode.trim()}`}
+                      {card.postCode && ` - ${card.postCode.trim()}`}
                     </Text>
-
                     <Text style={styles.backAddressText}>
                       {[card.thana?.trim(), card.district?.trim()]
                         .filter(Boolean)
@@ -760,15 +603,12 @@ value: {
                 )}
               </View>
 
-              {/* Strips */}
-              <View style={styles.backTopStrip}></View>
+              <View style={styles.backTopStrip} />
               <View style={styles.backYellowStrip2} />
               <View style={styles.backYellowStrip3} />
-              <View style={styles.backGreenBottom}></View>
+              <View style={styles.backGreenBottom} />
 
-              {/* CARD MAIN CONTENT */}
               <View style={styles.backContent}>
-                {/* QR */}
                 <View style={styles.qrBox}>
                   <Image
                     style={{ width: 60, height: 60 }}
@@ -777,7 +617,6 @@ value: {
                   <Text style={styles.qrText}>Scan to Email</Text>
                 </View>
 
-                {/* Note */}
                 <View style={styles.noteBox}>
                   <Text style={styles.noteText}>
                     "This ID card is property of personal. Please carry it at
@@ -785,9 +624,6 @@ value: {
                   </Text>
                 </View>
 
-                {/* ------------------------------ */}
-                {/*   ORGANIZATION CONTACT BOX     */}
-                {/* ------------------------------ */}
                 {(card.organizationEmail ||
                   card.organizationWebsite ||
                   card.organizationPhone) && (
@@ -796,10 +632,7 @@ value: {
                       marginTop: 6,
                       width: 200,
                       padding: 2,
-
-                      borderColor: borderColor,
                       backgroundColor: borderColor,
-
                       alignSelf: "center",
                     }}
                   >
@@ -809,38 +642,30 @@ value: {
                           fontSize: 6,
                           color: "#ffffff",
                           fontWeight: "bold",
-                          maxWidth: 180,
-                          wordBreak: "break-all",
                           marginLeft: 25,
                         }}
                       >
                         Email: {card.organizationEmail}
                       </Text>
                     )}
-
                     {card.organizationWebsite && (
                       <Text
                         style={{
                           fontSize: 6,
                           color: "#ffffff",
                           fontWeight: "bold",
-                          maxWidth: 180,
-                          wordBreak: "break-all",
                           marginLeft: 25,
                         }}
                       >
                         Website: {card.organizationWebsite}
                       </Text>
                     )}
-
                     {card.organizationPhone && (
                       <Text
                         style={{
                           fontSize: 6,
                           color: "#ffffff",
                           fontWeight: "bold",
-                          maxWidth: 180,
-                          wordBreak: "break-all",
                           marginLeft: 25,
                         }}
                       >
@@ -850,24 +675,6 @@ value: {
                   </View>
                 )}
 
-                {/* Signature
-    {card.signatureImage && (
-      <Image style={styles.signatureImage} src={card.signatureImage} />
-    )}
-
-    <Text
-      style={{
-        fontSize: 5,
-        textAlign: "center",
-        marginTop: 2,
-        color: labelColor,
-        alignSelf: "center",
-      }}
-    >
-      Authorized Signature
-    </Text> */}
-
-                {/* Signature + Issue/Expiry in same row */}
                 <View
                   style={{
                     flexDirection: "row",
@@ -878,7 +685,6 @@ value: {
                     paddingHorizontal: 10,
                   }}
                 >
-                  {/* Signature Left */}
                   <View style={{ alignItems: "center" }}>
                     {card.signatureImage && (
                       <Image
@@ -898,7 +704,6 @@ value: {
                     </Text>
                   </View>
 
-                  {/* Issue + Expiry Right */}
                   <View style={styles.backIssueExpiryContainer}>
                     <Text style={styles.backIssueExpiryText}>
                       Issue: {card.issue || "N/A"}
@@ -909,30 +714,11 @@ value: {
                   </View>
                 </View>
 
-                {/* Bottom Logo */}
-                <View
-                  style={{
-                    position: "absolute",
-                    bottom: -4,
-                    right: 0,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
+                <View style={{ position: "absolute", bottom: -4, right: 0 }}>
                   {card.logo && (
                     <Image src={card.logo} style={{ width: 35, height: 35 }} />
                   )}
                 </View>
-
-                {/* Issue – Expiry */}
-                {/* <View style={styles.backIssueExpiryContainer}>
-      <Text style={styles.backIssueExpiryText}>
-        Issue: {card.issue || "N/A"}
-      </Text>
-      <Text style={styles.backIssueExpiryText}>
-        Expiry: {card.expiry || "N/A"}
-      </Text>
-    </View> */}
               </View>
             </View>
           </View>
@@ -941,142 +727,111 @@ value: {
     </Document>
   );
 
-  // Direct download function
   const downloadPDF = async () => {
     const blob = await pdf(<MyDocument cards={cards} />).toBlob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "idcards.pdf";
+    a.download = "student-id-cards.pdf";
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="min-h-screen  md:p-4 lg:p-6 bg-gray-50">
-      <motion.div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl p- md:p-3 lg:p-4 space-y-6">
-        <h2 className="text-2xl font-bold text-center text-orange-600">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10">
+        {/* Header */}
+        <motion.h2
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-orange-600 dark:text-orange-400 text-center mb-12"
+        >
           Student ID Card Generator
-        </h2>
+        </motion.h2>
 
-        {/* Color Pickers */}
-
-        <div className="flex flex-col items-center mt-4">
-          {/* Animated Hand Icon */}
-          <motion.span
-            animate={{ y: [0, -5, 0] }}
-            transition={{ repeat: Infinity, duration: 0.6 }}
-            className="text-blue-500 mb-2"
-          >
-            <FaRegHandPointDown className="text-[30px]" />
-          </motion.span>
-
-          {/* Show/Hide Settings Button */}
-
-          <motion.button
-            onClick={() => setShowColorPickers((prev) => !prev)}
-            className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            animate={{ scale: [1, 1.05, 1] }} // pulse effect
-            transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {showColorPickers ? "Hide Settings" : "Show Settings"}
-            <motion.span
-              animate={{ rotate: showColorPickers ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+        {/* Color Customization */}
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 mb-10 border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col items-center">
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="text-blue-600 dark:text-blue-400 mb-4"
             >
-              <FaChevronDown />
-            </motion.span>
-          </motion.button>
+              <FaRegHandPointDown className="text-4xl sm:text-5xl" />
+            </motion.div>
 
-          {/* Animated Color Picker Panel */}
-          <ColorPickers
-            labelColor={labelColor}
-            setLabelColor={setLabelColor}
-            borderColor={borderColor}
-            setBorderColor={setBorderColor}
-            headerColor={headerColor}
-            setHeaderColor={setHeaderColor}
-            noteBgColor={noteBgColor}
-            setNoteBgColor={setNoteBgColor}
-            issueBgColor={issueBgColor}
-            setIssueBgColor={setIssueBgColor}
-            showColorPickers={showColorPickers}
-          />
+            <motion.button
+              onClick={() => setShowColorPickers(!showColorPickers)}
+              className=" cursor-pointer bg-gradient-to-r  from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 px-10 rounded-full text-lg sm:text-xl shadow-2xl flex items-center gap-4 transition-all"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {showColorPickers ? "Hide" : "Customize"} Card Colors
+              <motion.span animate={{ rotate: showColorPickers ? 180 : 0 }}>
+                <FaChevronDown className="text-2xl" />
+              </motion.span>
+            </motion.button>
+
+            <ColorPickers
+              labelColor={labelColor}
+              setLabelColor={setLabelColor}
+              borderColor={borderColor}
+              setBorderColor={setBorderColor}
+              headerColor={headerColor}
+              setHeaderColor={setHeaderColor}
+              noteBgColor={noteBgColor}
+              setNoteBgColor={setNoteBgColor}
+              issueBgColor={issueBgColor}
+              setIssueBgColor={setIssueBgColor}
+              showColorPickers={showColorPickers}
+            />
+          </div>
         </div>
 
         {/* Card Forms */}
-        {/* Card Forms */}
         {cards.map((card, idx) => (
-          <div
+          <motion.div
             key={idx}
-            className="
-      grid grid-cols-1 gap-4 
-      border border-gray-300 dark:border-gray-700 
-      p-4 rounded-lg shadow 
-      bg-white dark:bg-gray-900 
-      text-gray-900 dark:text-gray-100
-    "
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p- md:p-6 lg:p-8 mb-12 border border-gray-200 dark:border-gray-700"
           >
-            {/* ---------------- ORGANIZATION SECTION ---------------- */}
-            <div
-              className="
-        border border-blue-400 dark:border-blue-600 
-        bg-blue-50 dark:bg-blue-900/40 
-        p-3 rounded-lg shadow-sm
-      "
-            >
-              <h2 className="text-lg font-bold mb-2 text-blue-700 dark:text-blue-300">
+            {/* Organization Info */}
+            <div className="mb-10 p-3 pt-5 md:p-5 lg:p-6 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-800">
+              <h3 className="text-xl sm:text-2xl font-bold mb-6 text-blue-800 dark:text-blue-300">
                 Organization Information
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {/* INPUT STYLES */}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[
-                  { label: "Organization Name", key: "organizationName" },
-                  {
-                    label: "Organization Email",
-                    key: "organizationEmail",
-                    type: "email",
-                  },
-                  {
-                    label: "Organization Website",
-                    key: "organizationWebsite",
-                    type: "url",
-                  },
-                  {
-                    label: "Contact Number",
-                    key: "organizationPhone",
-                    type: "tel",
-                  },
-                ].map((item) => (
-                  <div key={item.key}>
-                    <label className="block text-sm font-semibold mb-1">
-                      {item.label}
+                  "organizationName",
+                  "organizationEmail",
+                  "organizationWebsite",
+                  "organizationPhone",
+                ].map((key) => (
+                  <div key={key}>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      {key.replace("organization", "")}
                     </label>
                     <input
-                      type={item.type || "text"}
-                      value={card[item.key] || ""}
-                      onChange={(e) =>
-                        updateCard(idx, item.key, e.target.value)
+                      type={
+                        key.includes("Email")
+                          ? "email"
+                          : key.includes("Website")
+                          ? "url"
+                          : key.includes("Phone")
+                          ? "tel"
+                          : "text"
                       }
-                      placeholder={`Enter ${item.label}`}
-                      className="
-                w-full p-2 rounded-md 
-                border-2 border-gray-400 dark:border-gray-600 
-                bg-white dark:bg-gray-800 
-                placeholder-gray-500 dark:placeholder-gray-300 
-                focus:border-blue-600 dark:focus:border-blue-400 
-                focus:ring-2 focus:ring-blue-300 
-                transition-all
-              "
+                      value={card[key] || ""}
+                      onChange={(e) => updateCard(idx, key, e.target.value)}
+                      placeholder={key.replace("organization", "")}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all"
                     />
                   </div>
                 ))}
-
-                {/* LOGO UPLOAD */}
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Logo
                   </label>
                   <input
@@ -1091,18 +846,12 @@ value: {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="
-              w-full p-2 rounded-md border-2 
-              border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800 cursor-pointer
-            "
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
                   />
                 </div>
-
-                {/* WATERMARK UPLOAD */}
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Watermark Image
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Watermark
                   </label>
                   <input
                     type="file"
@@ -1116,420 +865,294 @@ value: {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="
-              w-full p-2 rounded-md border-2 
-              border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800 cursor-pointer
-            "
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
                   />
                 </div>
               </div>
             </div>
 
-            {/* ---------------- USER SECTION ---------------- */}
-            <div
-              className="
-        border border-green-400 dark:border-green-600 
-        bg-green-50 dark:bg-green-900/40 
-        p-3 rounded-lg shadow-sm
-      "
-            >
-              <h2 className="text-lg font-bold mb-2 text-green-700 dark:text-green-300">
-                User Information
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {/* NORMAL INPUTS */}
+            {/* Student Info */}
+            <div className="p-3 md:p-5 lg:p-6 pt-5 rounded-2xl bg-green-50 dark:bg-green-950/40 border border-green-300 dark:border-green-800">
+              <h3 className="text-xl sm:text-2xl font-bold mb-6 text-green-800 dark:text-green-300">
+                Student Information
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[
                   { key: "name", label: "Name" },
                   { key: "roll", label: "Roll" },
                   { key: "regNo", label: "Reg No" },
-                ].map((item) => (
-                  <div key={item.key}>
-                    <label className="block text-sm font-semibold mb-1">
-                      {item.label}
-                    </label>
-                    <input
-                      value={card[item.key] || ""}
-                      onChange={(e) =>
-                        updateCard(idx, item.key, e.target.value)
-                      }
-                      placeholder={`Enter ${item.label}`}
-                      className="
-                w-full p-2 rounded-md 
-                border-2 border-gray-400 dark:border-gray-600 
-                bg-white dark:bg-gray-800
-                placeholder-gray-500 dark:placeholder-gray-300 
-                focus:border-green-600 dark:focus:border-green-400 
-                focus:ring-2 focus:ring-green-300 
-                transition-all
-              "
-                    />
-                  </div>
-                ))}
-
-                {/* DEPARTMENT */}
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Dept
-                  </label>
-                  <input
-                    list="departments"
-                    value={card.dept}
-                    onChange={(e) => updateCard(idx, "dept", e.target.value)}
-                    placeholder="Select Department"
-                    className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
-                  />
-
-                  <datalist id="departments">
-                    {" "}
-                    <option value="CSE" /> <option value="EEE" />{" "}
-                    <option value="ECE" /> <option value="ETE" />{" "}
-                    <option value="ME" /> <option value="Civil" />{" "}
-                    <option value="Architecture" />{" "}
-                    <option value="Software Engineering" />{" "}
-                    <option value="Information Technology" />{" "}
-                    <option value="BBA" /> <option value="MBA" />{" "}
-                    <option value="Accounting" /> <option value="Finance" />{" "}
-                    <option value="Marketing" /> <option value="Management" />{" "}
-                    <option value="English" /> <option value="Bangla" />{" "}
-                    <option value="Economics" />{" "}
-                    <option value="Political Science" />{" "}
-                    <option value="Sociology" />{" "}
-                    <option value="Islamic Studies" />{" "}
-                    <option value="History" /> <option value="Philosophy" />{" "}
-                    <option value="Law" /> <option value="Medicine" />{" "}
-                    <option value="Nursing" /> <option value="Pharmacy" />{" "}
-                    <option value="Dental" /> <option value="Public Health" />{" "}
-                    <option value="Medical Technology" />{" "}
-                    <option value="Agriculture" /> <option value="Fisheries" />{" "}
-                    <option value="Biotechnology" /> <option value="Genetics" />{" "}
-                    <option value="Environmental Science" />{" "}
-                    <option value="Textile Engineering" />{" "}
-                    <option value="Apparel Engineering" />{" "}
-                    <option value="Fashion Design" />{" "}
-                    <option value="Hotel Management" />{" "}
-                    <option value="Tourism" />{" "}
-                    <option value="Automobile Engineering" />{" "}
-                    <option value="Electrical Technology" />{" "}
-                    <option value="Mechanical Technology" />{" "}
-                    <option value="Civil Technology" />{" "}
-                    <option value="Computer Technology" />{" "}
-                    <option value="Telecommunication Technology" />{" "}
-                    <option value="HSC Science" />{" "}
-                    <option value="HSC Commerce" /> <option value="HSC Arts" />{" "}
-                    <option value="Diploma in Engineering" />{" "}
-                    <option value="Diploma in Computer" />{" "}
-                    <option value="Diploma in Civil" />{" "}
-                    <option value="Diploma in Electrical" />{" "}
-                    <option value="Physics" /> <option value="Chemistry" />{" "}
-                    <option value="Biology" /> <option value="Mathematics" />{" "}
-                    <option value="Statistics" /> <option value="Botany" />{" "}
-                    <option value="Zoology" /> <option value="Microbiology" />{" "}
-                    <option value="Biochemistry" />{" "}
-                    <option value="Genetic Engineering" />{" "}
-                    <option value="Geology" /> <option value="Marine Science" />{" "}
-                    <option value="Astronomy" />{" "}
-                    <option value="Physical Education" />{" "}
-                  </datalist>
-                </div>
-
-                {/* SESSION */}
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Session
-                  </label>
-                  <input
-                    list="sessions"
-                    value={card.session}
-                    onChange={(e) => updateCard(idx, "session", e.target.value)}
-                    placeholder="Select Session"
-                    className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
-                  />
-
-                  <datalist id="sessions">
-                    {" "}
-                    <option value="2000-2001" /> <option value="2001-2002" />{" "}
-                    <option value="2002-2003" /> <option value="2003-2004" />{" "}
-                    <option value="2004-2005" /> <option value="2005-2006" />{" "}
-                    <option value="2006-2007" /> <option value="2007-2008" />{" "}
-                    <option value="2008-2009" /> <option value="2009-2010" />{" "}
-                    <option value="2010-2011" /> <option value="2011-2012" />{" "}
-                    <option value="2012-2013" /> <option value="2013-2014" />{" "}
-                    <option value="2014-2015" /> <option value="2015-2016" />{" "}
-                    <option value="2016-2017" /> <option value="2017-2018" />{" "}
-                    <option value="2018-2019" /> <option value="2019-2020" />{" "}
-                    <option value="2020-2021" /> <option value="2021-2022" />{" "}
-                    <option value="2022-2023" /> <option value="2023-2024" />{" "}
-                    <option value="2024-2025" /> <option value="2025-2026" />{" "}
-                    <option value="2026-2027" /> <option value="2027-2028" />{" "}
-                    <option value="2028-2029" /> <option value="2029-2030" />{" "}
-                    <option value="2030-2031" /> <option value="2031-2032" />{" "}
-                    <option value="2032-2033" /> <option value="2033-2034" />{" "}
-                    <option value="2034-2035" /> <option value="2035-2036" />{" "}
-                    <option value="2036-2037" /> <option value="2037-2038" />{" "}
-                    <option value="2038-2039" /> <option value="2039-2040" />{" "}
-                    <option value="2040-2041" /> <option value="2041-2042" />{" "}
-                    <option value="2042-2043" /> <option value="2043-2044" />{" "}
-                    <option value="2044-2045" /> <option value="2045-2046" />{" "}
-                    <option value="2046-2047" /> <option value="2047-2048" />{" "}
-                    <option value="2048-2049" /> <option value="2049-2050" />{" "}
-                  </datalist>
-                </div>
-
-                {/* PHONE */}
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={card.phone}
-                    onChange={(e) => updateCard(idx, "phone", e.target.value)}
-                    placeholder="Enter Phone"
-                    className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
-                  />
-                </div>
-
-                {/* EMAIL */}
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Email
-                  </label>
-                  <input
-                    value={card.email}
-                    onChange={(e) => updateCard(idx, "email", e.target.value)}
-                    placeholder="Enter Email"
-                    className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
-                  />
-                </div>
-
-                {/* BLOOD GROUP */}
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    Blood Group
-                  </label>
-                  <input
-                    list="bloodGroups"
-                    value={card.bloodGroup}
-                    onChange={(e) =>
-                      updateCard(idx, "bloodGroup", e.target.value)
-                    }
-                    placeholder="Select Blood Group"
-                    className="
-              w-full p-2 rounded-md 
-              border-2 border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800
-              placeholder-gray-500 dark:placeholder-gray-300 
-              focus:border-green-600 dark:focus:border-green-400
-              focus:ring-2 focus:ring-green-300
-              transition-all
-            "
-                  />
-
-                  <datalist id="bloodGroups">
-                    {" "}
-                    <option value="A+" /> <option value="A-" />{" "}
-                    <option value="B+" /> <option value="B-" />{" "}
-                    <option value="AB+" /> <option value="AB-" />{" "}
-                    <option value="O+" /> <option value="O-" />{" "}
-                    <option value="A1+" /> <option value="A1-" />{" "}
-                    <option value="A2+" /> <option value="A2-" />{" "}
-                    <option value="A1B+" /> <option value="A1B-" />{" "}
-                    <option value="A2B+" /> <option value="A2B-" />{" "}
-                    <option value="Bombay Blood Group (Oh)" />{" "}
-                    <option value="Chido" /> <option value="Rhesus Negative" />{" "}
-                  </datalist>
-                </div>
-
-                {/* ADDRESS FIELDS */}
-                {[
-                  { key: "village", label: "Village" },
-                  { key: "post", label: "Post" },
-                  { key: "postCode", label: "Post Code" },
-                  { key: "thana", label: "Thana" },
-                  { key: "district", label: "District" },
-                ].map((item) => (
-                  <div key={item.key}>
-                    <label className="block text-sm font-semibold mb-1">
-                      {item.label}
-                    </label>
-                    <input
-                      value={card[item.key] || ""}
-                      onChange={(e) =>
-                        updateCard(idx, item.key, e.target.value)
-                      }
-                      placeholder={`Enter ${item.label}`}
-                      className="
-                w-full p-2 rounded-md 
-                border-2 border-gray-400 dark:border-gray-600 
-                bg-white dark:bg-gray-800
-                placeholder-gray-500 dark:placeholder-gray-300 
-                focus:border-green-600 dark:focus:border-green-400
-                focus:ring-2 focus:ring-green-300
-                transition-all
-              "
-                    />
-                  </div>
-                ))}
-
-                {/* DATES */}
-                {[
+                  { key: "dept", label: "Department", list: "departments" },
+                  { key: "session", label: "Session", list: "sessions" },
+                  { key: "phone", label: "Phone", type: "tel" },
+                  { key: "email", label: "Email", type: "email" },
+                  {
+                    key: "bloodGroup",
+                    label: "Blood Group",
+                    list: "bloodGroups",
+                  },
+                  "village",
+                  "post",
+                  "postCode",
+                  "thana",
+                  "district",
                   { key: "issue", label: "Issue Date", type: "date" },
                   { key: "expiry", label: "Expiry Date", type: "date" },
-                ].map((item) => (
-                  <div key={item.key}>
-                    <label className="block text-sm font-semibold mb-1">
-                      {item.label}
-                    </label>
-                    <input
-                      type={item.type}
-                      value={card[item.key] || ""}
-                      onChange={(e) =>
-                        updateCard(idx, item.key, e.target.value)
-                      }
-                      className="
-                w-full p-2 rounded-md 
-                border-2 border-gray-400 dark:border-gray-600 
-                bg-white dark:bg-gray-800
-                focus:border-green-600 dark:focus:border-green-400
-                focus:ring-2 focus:ring-green-300
-              "
-                    />
-                  </div>
-                ))}
+                ].map((item) => {
+                  if (typeof item === "string") {
+                    return (
+                      <div key={item}>
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                          {item.charAt(0).toUpperCase() +
+                            item.slice(1).replace("Code", " Code")}
+                        </label>
+                        <input
+                          value={card[item] || ""}
+                          onChange={(e) =>
+                            updateCard(idx, item, e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-green-500 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+                        />
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={item.key}>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        {item.label}
+                      </label>
+                      {item.list ? (
+                        <>
+                          <input
+                            list={item.list}
+                            value={card[item.key] || ""}
+                            onChange={(e) =>
+                              updateCard(idx, item.key, e.target.value)
+                            }
+                            placeholder={`Select or type ${item.label}`}
+                            className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-green-500 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+                          />
+                          <datalist id={item.list}>
+                            {item.list === "departments" && (
+                             <datalist id="departments">
+  <option value="Computer Science and Engineering (CSE)" />
+  <option value="Electrical and Electronic Engineering (EEE)" />
+  <option value="Civil Engineering" />
+  <option value="Mechanical Engineering" />
+  <option value="Textile Engineering" />
+  <option value="Architecture" />
+  <option value="Industrial and Production Engineering (IPE)" />
+  <option value="Chemical Engineering" />
+  <option value="Materials Science and Engineering" />
+  <option value="Electronics and Communication Engineering (ECE)" />
+  <option value="Information and Communication Technology (ICT)" />
+  <option value="Software Engineering" />
+  <option value="Biomedical Engineering" />
+  <option value="Environmental Engineering" />
+  <option value="Aeronautical Engineering" />
+  <option value="Automobile Engineering" />
+  <option value="Mechatronics Engineering" />
+  <option value="Naval Architecture and Marine Engineering" />
+  <option value="Food Engineering" />
+  <option value="Agricultural Engineering" />
+  <option value="Pharmacy" />
+  <option value="Business Administration (BBA)" />
+  <option value="Accounting" />
+  <option value="Finance" />
+  <option value="Marketing" />
+  <option value="Management" />
+  <option value="Economics" />
+  <option value="English" />
+  <option value="Law" />
+  <option value="Sociology" />
+  <option value="Psychology" />
+  <option value="Public Health" />
+  <option value="Nursing" />
+  <option value="Physics" />
+  <option value="Chemistry" />
+  <option value="Mathematics" />
+  <option value="Statistics" />
+  <option value="Biotechnology" />
+  <option value="Microbiology" />
+  <option value="Biochemistry" />
+  <option value="Genetics" />
+  <option value="Zoology" />
+  <option value="Botany" />
+  <option value="Geography and Environment" />
+  <option value="Geological Sciences" />
+  <option value="Oceanography" />
+  <option value="Fisheries" />
+  <option value="Forestry" />
+  <option value="Tourism and Hospitality Management" />
+  <option value="Journalism and Media Studies" />
+  <option value="Film and Television" />
+  <option value="Fine Arts" />
+  <option value="Music" />
+  <option value="Theater and Performance Studies" />
+</datalist>
+                            )}
+                            {item.list === "sessions" && (
+                              <datalist id="sessions">
+  <option value="2000-2001" />
+  <option value="2001-2002" />
+  <option value="2002-2003" />
+  <option value="2003-2004" />
+  <option value="2004-2005" />
+  <option value="2005-2006" />
+  <option value="2006-2007" />
+  <option value="2007-2008" />
+  <option value="2008-2009" />
+  <option value="2009-2010" />
+  <option value="2010-2011" />
+  <option value="2011-2012" />
+  <option value="2012-2013" />
+  <option value="2013-2014" />
+  <option value="2014-2015" />
+  <option value="2015-2016" />
+  <option value="2016-2017" />
+  <option value="2017-2018" />
+  <option value="2018-2019" />
+  <option value="2019-2020" />
+  <option value="2020-2021" />
+  <option value="2021-2022" />
+  <option value="2022-2023" />
+  <option value="2023-2024" />
+  <option value="2024-2025" />
+  <option value="2025-2026" />
+  <option value="2026-2027" />
+  <option value="2027-2028" />
+  <option value="2028-2029" />
+  <option value="2029-2030" />
+  <option value="2030-2031" />
+  <option value="2031-2032" />
+  <option value="2032-2033" />
+  <option value="2033-2034" />
+  <option value="2034-2035" />
+  <option value="2035-2036" />
+  <option value="2036-2037" />
+  <option value="2037-2038" />
+  <option value="2038-2039" />
+  <option value="2039-2040" />
+  <option value="2040-2041" />
+  <option value="2041-2042" />
+  <option value="2042-2043" />
+  <option value="2043-2044" />
+  <option value="2044-2045" />
+  <option value="2045-2046" />
+  <option value="2046-2047" />
+  <option value="2047-2048" />
+  <option value="2048-2049" />
+  <option value="2049-2050" />
+</datalist>
+                            )}
+                            {item.list === "bloodGroups" && (
+                              <>
+                                <option value="A+" />
+                                <option value="A-" />
+                                <option value="B+" />
+                                <option value="B-" />
+                                <option value="O+" />
+                                <option value="O-" />
+                                <option value="AB+" />
+                                <option value="AB-" />
+                              </>
+                            )}
+                          </datalist>
+                        </>
+                      ) : (
+                        <input
+                          type={item.type || "text"}
+                          value={card[item.key] || ""}
+                          onChange={(e) =>
+                            updateCard(idx, item.key, e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-green-500 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
 
-                {/* PROFILE IMAGE */}
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Profile Image
                   </label>
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) =>
-                      updateCard(
-                        idx,
-                        "profileImage",
-                        URL.createObjectURL(e.target.files[0])
-                      )
-                    }
-                    className="
-              w-full p-2 rounded-md border-2 
-              border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800 cursor-pointer
-            "
+                    onChange={(e) => {
+                      if (e.target.files[0])
+                        updateCard(
+                          idx,
+                          "profileImage",
+                          URL.createObjectURL(e.target.files[0])
+                        );
+                    }}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700"
                   />
                 </div>
 
-                {/* SIGNATURE IMAGE */}
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Signature Image
                   </label>
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) =>
-                      updateCard(
-                        idx,
-                        "signatureImage",
-                        URL.createObjectURL(e.target.files[0])
-                      )
-                    }
-                    className="
-              w-full p-2 rounded-md border-2 
-              border-gray-400 dark:border-gray-600 
-              bg-white dark:bg-gray-800 cursor-pointer
-            "
+                    onChange={(e) => {
+                      if (e.target.files[0])
+                        updateCard(
+                          idx,
+                          "signatureImage",
+                          URL.createObjectURL(e.target.files[0])
+                        );
+                    }}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
                   />
                 </div>
               </div>
 
-              {/* BUTTONS */}
-              <div className="flex gap-2 mt-3">
+              <div className="flex flex-wrap gap-4 mt-8 justify-center">
                 <button
-                  type="button"
                   onClick={() => resetCard(idx)}
-                  className="
-            bg-yellow-500 hover:bg-yellow-600 
-            text-white font-semibold py-2 px-4 rounded
-            transition-all
-          "
+                  className="bg-yellow-500 cursor-pointer hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-all"
                 >
-                  ↻ Reset
+                  ↻ Reset Card
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => removeCard(idx)}
-                  className="
-            bg-red-500 hover:bg-red-600 
-            text-white font-semibold py-2 px-4 rounded
-            transition-all
-          "
-                >
-                  ✖ Remove
-                </button>
+                {cards.length > 1 && (
+                  <button
+                    onClick={() => removeCard(idx)}
+                    className="bg-red-500 hover:bg-red-600 cursor-pointer text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-all"
+                  >
+                    ✖ Remove Card
+                  </button>
+                )}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </motion.div>
 
-      <div className="flex gap-2 justify-center mt-4">
-        <button
-          onClick={addCard}
-          className="bg-green-500 cursor-pointer text-white px-4 py-2 rounded-lg 
-             hover:bg-green-600 hover:scale-105 transition-transform transition-colors duration-300"
-        >
-          Add Card
-        </button>
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12 items-center ">
+          <button
+            onClick={addCard}
+            className="bg-gradient-to-r cursor-pointer from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold text-lg sm:text-xl py-5 px-12 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition-all flex-1 max-w-xs"
+          >
+            ➕ Add New Card
+          </button>
 
-        <button
-          onClick={downloadPDF}
-          className="bg-orange-500 cursor-pointer text-white px-4 py-2 rounded-lg 
-             hover:bg-orange-600 hover:scale-105 transition-transform transition-colors duration-300"
-        >
-          Download PDF
-        </button>
+          <PremiumDownloadButton
+            onDownload={downloadPDF}
+            className=" max-w-xs rounded-full"
+          >
+            📄 Download PDF
+          </PremiumDownloadButton>
+        </div>
+
+        <p className="text-center text-gray-600 dark:text-gray-400 mt-10 text-base sm:text-lg">
+          Generate professional, printable student ID cards instantly with full
+          customization.
+        </p>
       </div>
-      <p className="text-center text-gray-600 mt-4 text-sm">
-        Click "Download PDF Now" to generate and download your Student ID
-        cards instantly.
-      </p>
     </div>
   );
 }

@@ -22,7 +22,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import subjectsData from "../data/subjects.json";
 import Select from "react-select";
 import GradingNoteSection from "../project/GradingNoteSection";
-import { FaSkullCrossbones } from "react-icons/fa6";
+import { FaPlus, FaTrash } from "react-icons/fa6";
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const gradePointMap = {
@@ -52,8 +53,11 @@ const CgpaCalculator = () => {
   const [name, setName] = useState("");
   const [reg, setReg] = useState("");
   const [roll, setRoll] = useState("");
-  const [logo, setLogo] = useState(null);
-  const fileInputRef = useRef(null);
+
+  // Download states
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -63,54 +67,56 @@ const CgpaCalculator = () => {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const updateCourse = (semIndex, courseIndex, field, value) => {
-    const updated = [...semesters];
-    updated[semIndex].courses[courseIndex][field] = value;
-    setSemesters(updated);
-  };
-
   const selectStyle = (theme) => ({
-    container: (provided) => ({
+    container: (provided) => ({ ...provided, width: "100%" }),
+    control: (provided, state) => ({
       ...provided,
-      width: "100%",
-    }),
-    control: (provided) => ({
-      ...provided,
-      backgroundColor: theme === "dark" ? "#333" : "#fff",
-      borderColor: theme === "dark" ? "#666" : "#ccc",
-      minHeight: "38px",
-      boxShadow: "none",
-      "&:hover": { borderColor: "#007bff" },
+      backgroundColor: theme === "dark" ? "#1f2937" : "#ffffff",
+      borderColor: state.isFocused
+        ? "#6366f1"
+        : theme === "dark"
+        ? "#374151"
+        : "#d1d5db",
+      borderWidth: "2px",
+      boxShadow: state.isFocused ? "0 0 0 3px rgba(99, 102, 241, 0.3)" : "none",
+      minHeight: "48px",
+      borderRadius: "12px",
+      "&:hover": { borderColor: "#6366f1" },
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: theme === "dark" ? "#333" : "#fff",
-      color: theme === "dark" ? "#fff" : "#000",
-      maxHeight: "250px",
-      overflowY: "auto",
+      backgroundColor: theme === "dark" ? "#1f2937" : "#ffffff",
+      borderRadius: "12px",
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+      zIndex: 50,
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "#007bff"
+        ? "#6366f1"
         : state.isFocused
         ? theme === "dark"
-          ? "#444"
-          : "#f0f0f0"
+          ? "#374151"
+          : "#f3f4f6"
+        : "transparent",
+      color: state.isSelected
+        ? "#fff"
         : theme === "dark"
-        ? "#333"
-        : "#fff",
-      color: state.isSelected ? "#fff" : theme === "dark" ? "#fff" : "#000",
+        ? "#f3f4f6"
+        : "#111827",
+      borderRadius: "8px",
+      margin: "4px 8px",
       cursor: "pointer",
     }),
-    singleValue: (p) => ({ ...p, color: theme === "dark" ? "#fff" : "#000" }),
-    placeholder: (p) => ({ ...p, color: theme === "dark" ? "#bbb" : "#666" }),
+    singleValue: (p) => ({
+      ...p,
+      color: theme === "dark" ? "#f3f4f6" : "#111827",
+    }),
+    placeholder: (p) => ({
+      ...p,
+      color: theme === "dark" ? "#9ca3af" : "#6b7280",
+    }),
   });
-
-  const departmentOptions = Object.keys(subjectsData).map((dep) => ({
-    value: dep,
-    label: dep,
-  }));
 
   const addCourse = (semIndex) => {
     const updated = [...semesters];
@@ -141,27 +147,12 @@ const CgpaCalculator = () => {
     ]);
   };
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setLogo(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // --- Update semester department/year & load subjects ---
   const updateSemesterField = (semIndex, field, value) => {
     const updated = [...semesters];
     updated[semIndex][field] = value;
 
     const { department, year } = updated[semIndex];
-    if (
-      department &&
-      year &&
-      subjectsData[department] &&
-      subjectsData[department][year]
-    ) {
+    if (department && year && subjectsData[department]?.[year]) {
       updated[semIndex].courses = subjectsData[department][year].map((s) => ({
         name: `${s.code} - ${s.name}`,
         credit: s.credit,
@@ -170,7 +161,12 @@ const CgpaCalculator = () => {
     } else if (!department || !year) {
       updated[semIndex].courses = [{ name: "", credit: "", grade: "A+" }];
     }
+    setSemesters(updated);
+  };
 
+  const updateCourse = (semIndex, courseIndex, field, value) => {
+    const updated = [...semesters];
+    updated[semIndex].courses[courseIndex][field] = value;
     setSemesters(updated);
   };
 
@@ -212,13 +208,10 @@ const CgpaCalculator = () => {
 
   const downloadPdf = async () => {
     const date = new Date().toLocaleDateString();
-    const logoUrl = logo || "/logo-nu.png";
-
     const doc = (
       <Document>
         <Page size="A4" style={pdfStyles.page}>
           <View style={pdfStyles.header}>
-            <Image src={logoUrl} style={pdfStyles.logo} />
             <Text style={pdfStyles.title}>National University Bangladesh</Text>
             <Text style={pdfStyles.date}>{date}</Text>
           </View>
@@ -252,16 +245,16 @@ const CgpaCalculator = () => {
                     <Text style={pdfStyles.cell}>{c.grade}</Text>
                     <Text style={pdfStyles.cell}>{c.credit || "N/A"}</Text>
                     <Text style={pdfStyles.cell}>
-                      {(gradePointMap[c.grade] * parseFloat(c.credit)).toFixed(
-                        2
-                      )}
+                      {(
+                        gradePointMap[c.grade] * parseFloat(c.credit || 0)
+                      ).toFixed(2)}
                     </Text>
                   </View>
                 ))}
                 <View style={pdfStyles.resultSection}>
-                  <Text style={pdfStyles.resultLabel}>Semester Credits: </Text>
+                  <Text style={pdfStyles.resultLabel}>Credits: </Text>
                   <Text style={pdfStyles.resultValue}>{totalCredits}</Text>
-                  <Text style={pdfStyles.resultLabel}>Semester Points: </Text>
+                  <Text style={pdfStyles.resultLabel}>Points: </Text>
                   <Text style={pdfStyles.resultValue}>{totalPoints}</Text>
                   <Text style={pdfStyles.resultLabel}>GPA: </Text>
                   <Text style={pdfStyles.resultHighlight}>{gpa}</Text>
@@ -273,7 +266,7 @@ const CgpaCalculator = () => {
             <Text style={pdfStyles.finalResultTitle}>Final Result</Text>
             <Text style={pdfStyles.resultLabel}>Total Credits: </Text>
             <Text style={pdfStyles.resultValue}>{totalCredits}</Text>
-            <Text style={pdfStyles.resultLabel}>Total Grade Points: </Text>
+            <Text style={pdfStyles.resultLabel}>Total Points: </Text>
             <Text style={pdfStyles.resultValue}>{totalPoints}</Text>
             <Text style={pdfStyles.resultLabel}>CGPA: </Text>
             <Text style={pdfStyles.resultHighlight}>{cgpa}</Text>
@@ -286,47 +279,85 @@ const CgpaCalculator = () => {
     saveAs(blob, "National_University_Result_Sheet.pdf");
   };
 
+  const handleDownloadMorph = async () => {
+    if (isDownloading || isSuccess) return;
+
+    setIsDownloading(true);
+    setIsSuccess(false);
+    setProgress(0);
+
+    // Realistic progress simulation
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += 0.08;
+      setProgress(Math.min(currentProgress, 0.95)); // Hold at 95% until actual complete
+      if (currentProgress >= 0.95) clearInterval(interval);
+    }, 200);
+
+    try {
+      await downloadPdf();
+      setProgress(1);
+      setIsDownloading(false);
+      setIsSuccess(true);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+        setProgress(0);
+      }, 3000);
+    } catch (error) {
+      console.error("Download failed:", error);
+      setIsDownloading(false);
+      setProgress(0);
+    }
+  };
+
   return (
-    <div className="px-1 md:px-[4%] lg:px-[6%]">
-      <div style={theme === "dark" ? darkStyles.container : styles.container}>
-        <h1 style={theme === "dark" ? darkStyles.title : styles.title}>
-          Bangladesh Semester GPA / CGPA Calculator
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-10 text-gray-800 dark:text-white">
+          Bangladesh National University GPA/CGPA Calculator
         </h1>
 
-        {/* User Info */}
-        <div className=" w-full ml-auto md:ml-[0%] lg:ml-[20%]">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5  gap-3 my-5 ">
-            <div className="flex flex-col">
-              <label className="mb-1 font-semibold text-sm">Name</label>
+        {/* Student Info */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 md:p-6 lg:p-8 sm:p-8 mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+            Student Information
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Name
+              </label>
               <input
-                className="text-sm md:text-md lg:text-lg"
                 type="text"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={theme === "dark" ? darkStyles.input : styles.input}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
               />
             </div>
-            <div className="flex flex-col">
-              <label className="mb-1 font-semibold text-sm">Registration</label>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Registration No.
+              </label>
               <input
-                className="text-sm md:text-md lg:text-lg"
-                type="number"
+                type="text"
                 placeholder="Enter registration"
                 value={reg}
                 onChange={(e) => setReg(e.target.value)}
-                style={theme === "dark" ? darkStyles.input : styles.input}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
               />
             </div>
-            <div className="flex flex-col">
-              <label className="mb-1 font-semibold text-sm">Roll</label>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Roll No.
+              </label>
               <input
-                className="text-sm md:text-md lg:text-lg"
-                type="number"
+                type="text"
                 placeholder="Enter roll"
                 value={roll}
                 onChange={(e) => setRoll(e.target.value)}
-                style={theme === "dark" ? darkStyles.input : styles.input}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
               />
             </div>
           </div>
@@ -340,7 +371,8 @@ const CgpaCalculator = () => {
                 {
                   label: "Grade Point",
                   data: sem.courses.map((c) => gradePointMap[c.grade]),
-                  backgroundColor: theme === "dark" ? "#4bc0c0" : "#007bff",
+                  backgroundColor: "#6366f1",
+                  borderRadius: 6,
                 },
               ],
             };
@@ -348,12 +380,10 @@ const CgpaCalculator = () => {
             const chartOptions = {
               responsive: true,
               maintainAspectRatio: false,
-              scales: { y: { beginAtZero: true, max: 4 } },
-              plugins: {
-                legend: {
-                  labels: { color: theme === "dark" ? "#fff" : "#000" },
-                },
+              scales: {
+                y: { beginAtZero: true, max: 4, ticks: { stepSize: 0.5 } },
               },
+              plugins: { legend: { display: false } },
             };
 
             const {
@@ -365,300 +395,210 @@ const CgpaCalculator = () => {
             return (
               <motion.div
                 key={semIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                style={
-                  theme === "dark"
-                    ? responsiveStyles.semesterDark
-                    : responsiveStyles.semester
-                }
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden mb-12"
               >
-                {/* ---------------- CENTERED SEMESTER TITLE FIX ---------------- */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                    position: "relative",
-                    width: "100%",
-                    padding: "20px 0",
-                  }}
-                >
-                  {/* Center Title */}
-                  <h2
-                    style={{
-                      position: "absolute",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      margin: 4,
-                      marginBottom: 23,
-                      fontWeight: "700",
-                      textAlign: "center",
-                    }}
-                    className=" bg-blue-400 p-1 rounded text-sm md:text-md lg:text-lg"
-                  >
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-700 px-6 py-5 flex items-center justify-between">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white">
                     {sem.name}
                   </h2>
-
-                  {/* Right Remove Button */}
                   {semesters.length > 1 && (
                     <button
                       onClick={() => removeSemester(semIndex)}
-                      style={{
-                        ...responsiveStyles.removeBtn,
-                      }}
-                      className="text-sm md:text-md lg:text-lg -mt-6 -mr-1"
+                      className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full transition transform hover:scale-110"
                     >
-                      <FaSkullCrossbones />
+                      <FaTrash className="text-lg" />
                     </button>
                   )}
                 </div>
-                {/* -------------------------------------------------------------- */}
 
-                {/* Department & Year */}
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "15px",
-                    marginBottom: "15px",
-                  }}
-                >
-                  {/* Department */}
-                  <div className="flex flex-col" style={{ flex: "1 1 200px" }}>
-                    <label className="mb-1 font-semibold text-sm md:text-md lg:text-lg">
-                      Department
-                    </label>
-
-                    <Select
-                      className="text-sm md:text-md lg:text-lg"
-                      placeholder="Select Department"
-                      value={
-                        sem.department
-                          ? { value: sem.department, label: sem.department }
-                          : null
-                      }
-                      onChange={(selected) =>
-                        updateSemesterField(
-                          semIndex,
-                          "department",
-                          selected?.value || ""
-                        )
-                      }
-                      options={Object.keys(subjectsData).map((dep) => ({
-                        value: dep,
-                        label: dep,
-                      }))}
-                      styles={selectStyle(theme)}
-                    />
-                  </div>
-
-                  {/* Year */}
-                  <div className="flex flex-col" style={{ flex: "1 1 200px" }}>
-                    <label className="mb-1 font-semibold text-sm md:text-md lg:text-lg">
-                      Year
-                    </label>
-
-                    <Select
-                      className="text-sm md:text-md lg:text-lg"
-                      placeholder="Select Year"
-                      value={
-                        sem.year
-                          ? {
-                              value: sem.year,
-                              label:
-                                sem.year === "1"
-                                  ? "1st Year"
-                                  : sem.year === "2"
-                                  ? "2nd Year"
-                                  : sem.year === "3"
-                                  ? "3rd Year"
-                                  : "4th Year",
-                            }
-                          : null
-                      }
-                      onChange={(selected) =>
-                        updateSemesterField(
-                          semIndex,
-                          "year",
-                          selected?.value || ""
-                        )
-                      }
-                      options={[
-                        { value: "1", label: "1st Year" },
-                        { value: "2", label: "2nd Year" },
-                        { value: "3", label: "3rd Year" },
-                        { value: "4", label: "4th Year" },
-                      ]}
-                      styles={selectStyle(theme)}
-                    />
-                  </div>
-                </div>
-
-                {/* Course Input Instructions */}
-                <div
-                  style={{
-                    marginBottom: "15px",
-                    padding: "12px",
-                    background: theme === "dark" ? "#1f2937" : "#f3f4f6",
-                    borderRadius: "10px",
-                    border:
-                      theme === "dark"
-                        ? "1px solid #374151"
-                        : "1px solid #e5e7eb",
-                  }}
-                >
-                  <h3
-                    style={{
-                      marginBottom: "6px",
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      color: theme === "dark" ? "#f9fafb" : "#111827",
-                    }}
-                  >
-                    Subject,Grade,Credit Input Section.
-                  </h3>
-
-                  <p
-                    style={{
-                      marginBottom: "6px",
-                      fontSize: "14px",
-                      color: theme === "dark" ? "#d1d5db" : "#4b5563",
-                    }}
-                  >
-                    Please fill in each subject below. Select the correct grade
-                    based on the National University grading scale and enter the
-                    credit value.
-                  </p>
-                </div>
-
-                {sem.courses.map((c, courseIndex) => (
-                  <div key={courseIndex} className="course-row mb-3">
-                    {/* Subject */}
-                    <input
-                      type="text"
-                      placeholder="Subject Name"
-                      value={c.name}
-                      onChange={(e) =>
-                        updateCourse(
-                          semIndex,
-                          courseIndex,
-                          "name",
-                          e.target.value
-                        )
-                      }
-                      className="course-subject border border-blue-600 bg-white dark:bg-gray-800 dark:border-blue-400 rounded"
-                    />
-
-                    {/* Credit + GPA */}
-                    <div className="course-mid">
-                      <input
-                        className="border border-blue-600 bg-white dark:bg-gray-800 dark:border-blue-400 rounded"
-                        type="number"
-                        placeholder="Credit"
-                        value={c.credit}
-                        onChange={(e) =>
-                          updateCourse(
+                <div className="p-4 md:p-6 lg:p-8 sm:p-8 space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Department
+                      </label>
+                      <Select
+                        placeholder="Select Department"
+                        value={
+                          sem.department
+                            ? { value: sem.department, label: sem.department }
+                            : null
+                        }
+                        onChange={(selected) =>
+                          updateSemesterField(
                             semIndex,
-                            courseIndex,
-                            "credit",
-                            e.target.value
+                            "department",
+                            selected?.value || ""
                           )
                         }
-                        min="0"
-                        step="0.5"
+                        options={Object.keys(subjectsData).map((dep) => ({
+                          value: dep,
+                          label: dep,
+                        }))}
+                        styles={selectStyle(theme)}
+                        classNamePrefix="react-select"
                       />
-
-                      <select
-                        className="border border-blue-600 bg-white dark:bg-gray-800 dark:border-blue-400 rounded"
-                        value={c.grade}
-                        onChange={(e) =>
-                          updateCourse(
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Year
+                      </label>
+                      <Select
+                        placeholder="Select Year"
+                        value={
+                          sem.year
+                            ? {
+                                value: sem.year,
+                                label:
+                                  sem.year === "1"
+                                    ? "1st Year"
+                                    : sem.year === "2"
+                                    ? "2nd Year"
+                                    : sem.year === "3"
+                                    ? "3rd Year"
+                                    : "4th Year",
+                              }
+                            : null
+                        }
+                        onChange={(selected) =>
+                          updateSemesterField(
                             semIndex,
-                            courseIndex,
-                            "grade",
-                            e.target.value
+                            "year",
+                            selected?.value || ""
                           )
                         }
-                      >
-                        {gradeOptions.map((g) => (
-                          <option key={g} value={g}>
-                            {g}
-                          </option>
-                        ))}
-                      </select>
+                        options={[
+                          { value: "1", label: "1st Year" },
+                          { value: "2", label: "2nd Year" },
+                          { value: "3", label: "3rd Year" },
+                          { value: "4", label: "4th Year" },
+                        ]}
+                        styles={selectStyle(theme)}
+                        classNamePrefix="react-select"
+                      />
                     </div>
+                  </div>
 
-                    {/* Remove */}
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                      Courses
+                    </h3>
+                    {sem.courses.map((c, courseIndex) => (
+                      <div
+                        key={courseIndex}
+                        className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
+                      >
+                        <div className="md:col-span-6">
+                          <input
+                            type="text"
+                            placeholder="Subject Name (e.g., ENG-101 - English)"
+                            value={c.name}
+                            onChange={(e) =>
+                              updateCourse(
+                                semIndex,
+                                courseIndex,
+                                "name",
+                                e.target.value
+                              )
+                            }
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <input
+                            type="number"
+                            placeholder="Credit"
+                            value={c.credit}
+                            onChange={(e) =>
+                              updateCourse(
+                                semIndex,
+                                courseIndex,
+                                "credit",
+                                e.target.value
+                              )
+                            }
+                            min="0"
+                            step="0.5"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <select
+                            value={c.grade}
+                            onChange={(e) =>
+                              updateCourse(
+                                semIndex,
+                                courseIndex,
+                                "grade",
+                                e.target.value
+                              )
+                            }
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 transition"
+                          >
+                            {gradeOptions.map((g) => (
+                              <option key={g} value={g}>
+                                {g}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="md:col-span-2">
+                          <button
+                            onClick={() => removeCourse(semIndex, courseIndex)}
+                            className="w-full cursor-pointer bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition transform hover:scale-105 flex items-center justify-center gap-2 font-medium"
+                          >
+                            <FaTrash /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
                     <button
-                      onClick={() => removeCourse(semIndex, courseIndex)}
-                      className="course-remove cursor-pointer bg-red-500 rounded-md"
+                      onClick={() => addCourse(semIndex)}
+                      className="flex cursor-pointer items-center gap-3 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition transform hover:scale-105"
                     >
-                      Remove
+                      <FaPlus /> Add Course
                     </button>
                   </div>
-                ))}
 
-                {/* Add Course Button */}
-                <button
-                  onClick={() => addCourse(semIndex)}
-                  style={responsiveStyles.button}
-                  className="text-sm md:text-md lg:text-lg"
-                >
-                  Add Course
-                </button>
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-6">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                      Grade Distribution
+                    </h3>
+                    <div className="h-64 md:h-80">
+                      <Bar data={chartData} options={chartOptions} />
+                    </div>
+                  </div>
 
-                {/* Chart */}
-                <div
-                  style={{
-                    marginTop: "20px",
-                    width: "100%",
-                    minHeight: "250px",
-                  }}
-                >
-                  <Bar data={chartData} options={chartOptions} />
-                </div>
-
-                {/* SEMESTER RESULT - Updated with theme parameter */}
-                <div style={responsiveStyles.semesterResult}>
-                  <div
-                    style={
-                      theme === "dark"
-                        ? responsiveStyles.semResultCardDark
-                        : responsiveStyles.semResultCard
-                    }
-                  >
-                    <p style={responsiveStyles.resultText(theme)}>
-                      <strong>Semester Credits:</strong>{" "}
-                      <span style={responsiveStyles.resultValue(theme)}>
-                        {semCredits}
-                      </span>
-                    </p>
-                    <p style={responsiveStyles.resultText(theme)}>
-                      <strong>Semester Points:</strong>{" "}
-                      <span style={responsiveStyles.resultValue(theme)}>
-                        {semPoints}
-                      </span>
-                    </p>
-                    <p style={responsiveStyles.resultText(theme)}>
-                      <strong style={responsiveStyles.gpaLabel(theme)}>
-                        GPA:
-                      </strong>
-                      <span
-                        style={{
-                          ...responsiveStyles.gpaValue(theme),
-                          color:
-                            gpa >= 3.75
-                              ? "#28a745"
-                              : gpa >= 3.0
-                              ? "#ffc107"
-                              : "#dc3545",
-                        }}
-                      >
-                        {gpa}
-                      </span>
-                    </p>
+                  <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-2xl p-8 text-white">
+                    <div className="grid grid-cols-3 gap-6 text-center">
+                      <div>
+                        <p className="text-sm opacity-90 mb-1">Credits</p>
+                        <p className="text-3xl font-bold">{semCredits}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm opacity-90 mb-1">Points</p>
+                        <p className="text-3xl font-bold">{semPoints}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm opacity-90 mb-1">GPA</p>
+                        <p
+                          className={`text-4xl font-extrabold ${
+                            parseFloat(gpa) >= 3.75
+                              ? "text-green-300"
+                              : parseFloat(gpa) >= 3.0
+                              ? "text-yellow-300"
+                              : "text-red-300"
+                          }`}
+                        >
+                          {gpa}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -666,470 +606,257 @@ const CgpaCalculator = () => {
           })}
         </AnimatePresence>
 
-        <div style={styles.buttonRow}>
-          <button onClick={addSemester} style={styles.button}>
-            Add Semester
+        <div className="text-center mb-12">
+          <button
+            onClick={addSemester}
+            className="inline-flex cursor-pointer items-center gap-3 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-semibold rounded-xl shadow-xl transition transform hover:scale-105"
+          >
+            <FaPlus /> Add New Semester
           </button>
         </div>
 
-        {/* NEW STYLED OVERALL RESULT */}
-        <div
-          id="result-card"
-          style={{
-            ...(theme === "dark" ? darkStyles.resultCard : styles.resultCard),
-            background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
-            borderRadius: "20px",
-            padding: "25px",
-            boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
-            border: "3px solid transparent",
-            backgroundClip: "padding-box",
-            position: "relative",
-            overflow: "hidden",
-            marginTop: "30px",
-            "::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "4px",
-              background: "linear-gradient(90deg, #667eea, #764ba2, #f093fb)",
-            },
-          }}
-        >
-          {/* SHINY OVERALL RESULT CARD */}
-          <div
-            style={
-              theme === "dark"
-                ? responsiveStyles.overallResultCardDark
-                : responsiveStyles.overallResultCard
-            }
-          >
-            <h2 style={responsiveStyles.overallTitle}>🎓 FINAL RESULT</h2>
+        {/* Final Result + Download Button */}
+        <div className="bg-gradient-to-br from-purple-700 via-indigo-600 to-blue-700 rounded-3xl shadow-2xl p-8 sm:p-12 text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12">
+            🎓 Final CGPA Result
+          </h2>
 
-            {/* STATS ROW */}
-            <div style={responsiveStyles.statsRow}>
-              <div style={responsiveStyles.statItem(theme)}>
-                <span style={responsiveStyles.statLabel(theme)}>
-                  📊 Total Credits
-                </span>
-                <span style={responsiveStyles.statValue(theme)}>
-                  {totalCredits}
-                </span>
-              </div>
-              <div style={responsiveStyles.statItem(theme)}>
-                <span style={responsiveStyles.statLabel(theme)}>
-                  ⭐ Total Points
-                </span>
-                <span style={responsiveStyles.statValue(theme)}>
-                  {totalPoints}
-                </span>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 text-center">
+              <p className="text-lg opacity-90 mb-3">Total Credits</p>
+              <p className="text-5xl font-extrabold">{totalCredits}</p>
             </div>
-
-            {/* EPIC CGPA DISPLAY */}
-            <div style={responsiveStyles.cgpaContainer}>
-              <span style={responsiveStyles.cgpaLabel}>FINAL CGPA:</span>
-              <div
-                style={{
-                  ...responsiveStyles.cgpaBadge,
-                  background:
-                    cgpa >= 3.75
-                      ? "linear-gradient(135deg, #28a745, #20c997)"
-                      : cgpa >= 3.0
-                      ? "linear-gradient(135deg, #ffc107, #ff8c00)"
-                      : "linear-gradient(135deg, #dc3545, #c82333)",
-                  boxShadow:
-                    cgpa >= 3.75
-                      ? "0 0 30px rgba(40,167,69,0.5)"
-                      : cgpa >= 3.0
-                      ? "0 0 30px rgba(255,193,7,0.5)"
-                      : "0 0 30px rgba(220,53,69,0.5)",
-                  animation: "pulse 2s infinite",
-                }}
-              >
-                <span style={responsiveStyles.cgpaValue}>{cgpa}</span>
-              </div>
+            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 text-center">
+              <p className="text-lg opacity-90 mb-3">Total Points</p>
+              <p className="text-5xl font-extrabold">{totalPoints}</p>
             </div>
           </div>
 
-          {/* UPGRADED DOWNLOAD SECTION */}
-          <div style={responsiveStyles.downloadSection}>
-            <button
-              onClick={downloadPdf}
-              style={{
-                ...styles.button,
-                ...responsiveStyles.downloadBtn,
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                boxShadow: "0 8px 25px rgba(102,126,234,0.4)",
-                position: "relative",
-                overflow: "hidden",
-                "::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  left: "-100%",
-                  width: "100%",
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-                  transition: "left 0.5s",
-                },
-                ":hover::before": {
-                  left: "100%",
-                },
-              }}
+          <div className="text-center mb-16">
+            <p className="text-2xl mb-6 opacity-90">Your Final CGPA</p>
+            <div
+              className={`inline-block px-16 py-10 rounded-3xl font-black text-6xl sm:text-7xl md:text-8xl shadow-2xl ${
+                parseFloat(cgpa) >= 3.75
+                  ? "bg-gradient-to-r from-green-400 to-teal-500"
+                  : parseFloat(cgpa) >= 3.0
+                  ? "bg-gradient-to-r from-yellow-400 to-orange-500"
+                  : "bg-gradient-to-r from-red-500 to-pink-600"
+              }`}
             >
-              📄 Download PDF Result Sheet
+              {cgpa}
+            </div>
+          </div>
+
+          {/* Premium 3D Download Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleDownloadMorph}
+              disabled={isDownloading || isSuccess}
+              className={`
+                relative cursor-pointer  flex items-center justify-center
+                ${isDownloading || isSuccess ? "w-32 h-32" : "px-12 py-6"}
+                rounded-full font-bold text-xl
+                overflow-hidden transition-all duration-700
+                shadow-2xl
+                ${
+                  isDownloading || isSuccess
+                    ? "cursor-wait"
+                    : "bg-white text-indigo-700 hover:bg-indigo-50 hover:scale-110 hover:shadow-indigo-500/50"
+                }
+              `}
+            >
+              {/* Inline CSS + Premium 3D SVG */}
+              {(isDownloading || isSuccess) && (
+                <>
+                  <style jsx>{`
+                    @keyframes pulseGlow {
+                      0%,
+                      100% {
+                        filter: drop-shadow(0 0 20px rgba(99, 78, 235, 0.8));
+                      }
+                      50% {
+                        filter: drop-shadow(0 0 40px rgba(129, 140, 248, 1));
+                      }
+                    }
+                    .premium-progress {
+                      animation: pulseGlow 2s ease-in-out infinite;
+                    }
+                  `}</style>
+
+                  <svg
+                    className="absolute inset-0 w-full h-full -rotate-90"
+                    viewBox="0 0 100 100"
+                  >
+                    <defs>
+                      <filter
+                        id="glow"
+                        x="-50%"
+                        y="-50%"
+                        width="200%"
+                        height="200%"
+                      >
+                        <feGaussianBlur stdDeviation="6" result="blur" />
+                        <feOffset dx="0" dy="4" result="offsetBlur" />
+                        <feFlood floodColor="#6366f1" floodOpacity="0.6" />
+                        <feComposite in2="offsetBlur" operator="in" />
+                        <feMerge>
+                          <feMergeNode />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                      <linearGradient id="premiumGradient">
+                        <stop offset="0%" stopColor="#c4b5fd" />
+                        <stop offset="40%" stopColor="#818cf8" />
+                        <stop offset="70%" stopColor="#60a5fa" />
+                        <stop offset="100%" stopColor="#a78bfa" />
+                      </linearGradient>
+                    </defs>
+
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="44"
+                      fill="none"
+                      stroke="#1e293b"
+                      strokeWidth="8"
+                      opacity="0.4"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="44"
+                      fill="none"
+                      stroke="#e2e8f0"
+                      strokeWidth="10"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="44"
+                      fill="none"
+                      stroke="url(#premiumGradient)"
+                      strokeWidth="12"
+                      strokeDasharray="276.46"
+                      strokeDashoffset={276.46 * (1 - progress)}
+                      strokeLinecap="round"
+                      filter="url(#glow)"
+                      className="premium-progress"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="34"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.3)"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="18"
+                      fill="rgba(129, 140, 248, 0.15)"
+                    />
+                  </svg>
+                </>
+              )}
+
+              <span
+                className={`relative z-10 flex flex-col items-center gap-2 ${
+                  isDownloading || isSuccess ? "text-white" : ""
+                }`}
+              >
+                {!isDownloading && !isSuccess && (
+                  <>
+                    <span className="text-3xl">📄</span>
+                    <span className="text-lg font-bold">Download PDF</span>
+                  </>
+                )}
+                {isDownloading && !isSuccess && (
+                  <span className="text-base">
+                    Generating...
+                    <br />
+                    {Math.round(progress * 100)}%
+                  </span>
+                )}
+                {isSuccess && (
+                  <span className="text-5xl animate-bounce">✔</span>
+                )}
+              </span>
+
+              {isDownloading && (
+                <span className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-30" />
+              )}
             </button>
           </div>
         </div>
 
-        <GradingNoteSection></GradingNoteSection>
+        <div className="mt-16">
+          <GradingNoteSection />
+        </div>
       </div>
     </div>
   );
 };
 
-// --- PDF Styles ---
 const pdfStyles = StyleSheet.create({
-  page: { padding: 20, fontSize: 11, fontFamily: "Helvetica" },
+  page: { padding: 30, fontSize: 11, fontFamily: "Helvetica" },
   header: {
-    flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
-    borderBottom: "2px solid #007bff",
-    paddingBottom: 25,
+    marginBottom: 30,
+    paddingBottom: 20,
+    borderBottom: "2 solid #6366f1",
   },
-  logo: { width: 80, height: 80 },
-  title: { fontSize: 18, fontWeight: "bold", textAlign: "center", flex: 1 },
-  date: { fontSize: 9, position: "absolute", right: 10, top: 90 },
+  title: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
+  date: { fontSize: 10, color: "#666", marginTop: 5 },
   userInfoRow: {
     flexDirection: "row",
-    gap: 5, // tighter spacing
-    marginBottom: 10,
     flexWrap: "wrap",
+    gap: 20,
+    marginBottom: 30,
+    fontSize: 12,
   },
-  label: { fontSize: 11, fontWeight: "bold", width: "18%" },
-  value: { fontSize: 11, width: "25%" },
-  section: { marginBottom: 20 },
-  semesterTitle: { fontSize: 14, fontWeight: "bold", marginBottom: 10 },
-
-  // Table styles
+  label: { fontWeight: "bold" },
+  value: { marginLeft: 5 },
+  section: { marginBottom: 25 },
+  semesterTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#1e40af",
+  },
   tableHeaderRow: {
     flexDirection: "row",
-    borderBottom: "1px solid #000",
-    borderTop: "1px solid #000",
-  },
-  tableHeader: {
-    flex: 1,
+    backgroundColor: "#f3f4f6",
+    padding: 8,
     fontWeight: "bold",
-    fontSize: 10,
-    borderRight: "1px solid #000",
-    borderLeft: "1px solid #000",
-    padding: 4,
-    textAlign: "center",
   },
+  tableHeader: { flex: 1, textAlign: "center", fontSize: 10 },
   row: {
     flexDirection: "row",
-    borderBottom: "1px solid #000",
+    paddingVertical: 6,
+    borderBottom: "1 solid #e5e7eb",
   },
-  cell: {
-    flex: 1,
-    fontSize: 10,
-    borderRight: "1px solid #000",
-    borderLeft: "1px solid #000",
-    padding: 4,
-    textAlign: "center",
-  },
-
+  cell: { flex: 1, textAlign: "center", fontSize: 10 },
   resultSection: {
     flexDirection: "row",
-    marginTop: 5,
-    gap: 10,
     flexWrap: "wrap",
-  },
-  resultLabel: { fontSize: 10, fontWeight: "bold" },
-  resultValue: { fontSize: 10 },
-  resultHighlight: { fontSize: 12, fontWeight: "bold" },
-  finalResultSection: {
-    borderTop: "2px solid #007bff",
+    gap: 15,
     marginTop: 10,
-    paddingTop: 10,
   },
-  finalResultTitle: { fontSize: 14, fontWeight: "bold", marginBottom: 5 },
+  resultLabel: { fontWeight: "bold" },
+  resultValue: { marginLeft: 5 },
+  resultHighlight: { fontSize: 14, fontWeight: "bold", color: "#1e40af" },
+  finalResultSection: {
+    marginTop: 30,
+    paddingTop: 20,
+    borderTop: "3 solid #6366f1",
+  },
+  finalResultTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 15,
+  },
 });
-
-// --- Updated Styles with Darker Borders ---
-const styles = {
-  container: { padding: "20px", fontFamily: "Arial, sans-serif" },
-  title: { textAlign: "center", marginBottom: "20px", fontSize: "1.8em" },
-  input: {
-    padding: "10px",
-    marginBottom: "10px",
-    width: "100%",
-    border: "2px solid #555", // darker border
-    borderRadius: "6px",
-    outline: "none",
-    transition: "0.3s",
-  },
-  select: {
-    padding: "10px",
-    marginBottom: "10px",
-    border: "2px solid #555", // darker border
-    borderRadius: "6px",
-    outline: "none",
-    transition: "0.3s",
-    backgroundColor: "#fff",
-  },
-  buttonRow: { display: "flex", justifyContent: "center", marginTop: "20px" },
-  button: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "0.3s",
-  },
-  resultCard: {
-    padding: "20px",
-    marginTop: "20px",
-    border: "2px solid #555", // darker border
-    borderRadius: "8px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-  },
-};
-
-const darkStyles = {
-  ...styles,
-  container: { ...styles.container, backgroundColor: "#121212", color: "#fff" },
-  input: {
-    ...styles.input,
-    backgroundColor: "#1e1e1e",
-    color: "#fff",
-    border: "2px solid #888", // darker for dark mode
-  },
-  select: {
-    ...styles.select,
-    backgroundColor: "#1e1e1e",
-    color: "#fff",
-    border: "2px solid #888", // darker for dark mode
-  },
-  resultCard: {
-    ...styles.resultCard,
-    backgroundColor: "#1e1e1e",
-    borderColor: "#888",
-  },
-};
-
-const responsiveStyles = {
-  semester: {
-    marginBottom: "40px",
-    padding: "15px",
-    border: "2px solid #555",
-    borderRadius: "10px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-  },
-  semesterDark: {
-    marginBottom: "40px",
-    padding: "15px",
-    border: "2px solid #888",
-    borderRadius: "10px",
-    boxShadow: "0 2px 6px rgba(255,255,255,0.05)",
-  },
-  courseRow: {
-    display: "flex",
-    gap: "10px",
-    flexWrap: "wrap",
-    marginBottom: "10px",
-  },
-  input: {
-    padding: "8px 10px",
-    borderRadius: 5,
-    border: "1.5px solid #555",
-    flex: "1 1 120px",
-    minWidth: "100px",
-  },
-  select: {
-    padding: "8px",
-    flex: "1 1 50px",
-    border: "2px solid #555",
-    borderRadius: "6px",
-  },
-  button: {
-    padding: "8px 12px",
-    marginTop: "5px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-  removeBtn: {
-    padding: "6px 10px",
-    backgroundColor: "#dc3545",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-  semesterResult: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-  },
-  // NEW STYLES FOR RESULTS
-  semResultCard: {
-    background: "linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%)",
-    padding: "20px",
-    borderRadius: "12px",
-    border: "2px solid #e3f2fd",
-    boxShadow: "0 8px 25px rgba(0,123,255,0.15)",
-    marginTop: "15px",
-    width: "100%",
-  },
-  semResultCardDark: {
-    background: "linear-gradient(135deg, #2a2a4a 0%, #1e1e3f 100%)",
-    padding: "20px",
-    borderRadius: "12px",
-    border: "2px solid #4a5a8c",
-    boxShadow: "0 8px 25px rgba(0,0,0,0.4)",
-    marginTop: "15px",
-    width: "100%",
-  },
-  overallResultCard: {
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    padding: "25px",
-    borderRadius: "16px",
-    boxShadow: "0 12px 35px rgba(102,126,234,0.3)",
-    marginBottom: "20px",
-  },
-  overallResultCardDark: {
-    background: "linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)",
-    padding: "25px",
-    borderRadius: "16px",
-    boxShadow: "0 12px 35px rgba(0,0,0,0.6)",
-    marginBottom: "20px",
-  },
-  overallTitle: {
-    color: "#fff",
-    fontSize: "1.4em",
-    fontWeight: "700",
-    marginBottom: "15px",
-    textAlign: "center",
-    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-  },
-  // FIXED: All text colors now responsive for light/dark mode
-  resultText: (theme) => ({
-    color: theme === "dark" ? "#e2e8f0" : "#1e293b",
-    fontSize: "1.1em",
-    marginBottom: "12px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  }),
-  resultValue: (theme) => ({
-    fontWeight: "600",
-    fontSize: "1.15em",
-    color: theme === "dark" ? "#f1f5f9" : "#1e40af",
-  }),
-  gpaLabel: (theme) => ({
-    fontSize: "1.2em",
-    fontWeight: "700",
-    color: theme === "dark" ? "#cbd5e1" : "#1e293b",
-  }),
-  gpaValue: (theme) => ({
-    fontSize: "1.6em",
-    fontWeight: "800",
-    marginLeft: "8px",
-    textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-  }),
-  cgpaLabel: {
-    fontSize: "1.3em",
-    fontWeight: "800",
-    color: "#fff",
-  },
-  cgpaValue: {
-    fontSize: "2em",
-    fontWeight: "900",
-    marginLeft: "12px",
-    textShadow: "0 3px 6px rgba(0,0,0,0.4)",
-  },
-  downloadBtnContainer: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px",
-  },
-  // UPGRADED RESULT STYLES - ADD THESE
-  statsRow: {
-    display: "flex",
-    gap: "20px",
-    marginBottom: "25px",
-    justifyContent: "space-around",
-    flexWrap: "wrap",
-  },
-  statItem: (theme) => ({
-    background:
-      theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.8)",
-    padding: "15px 20px",
-    borderRadius: "12px",
-    backdropFilter: "blur(10px)",
-    border:
-      theme === "dark"
-        ? "1px solid rgba(255,255,255,0.2)"
-        : "1px solid rgba(0,0,0,0.1)",
-    flex: "1",
-    minWidth: "140px",
-    textAlign: "center",
-  }),
-  statLabel: (theme) => ({
-    display: "block",
-    fontSize: "0.9em",
-    color: theme === "dark" ? "#cbd5e1" : "#64748b",
-    marginBottom: "5px",
-    fontWeight: "500",
-  }),
-  statValue: (theme) => ({
-    fontSize: "1.4em",
-    fontWeight: "800",
-    color: theme === "dark" ? "#f8fafc" : "#1e293b",
-  }),
-  cgpaContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "15px",
-    marginTop: "20px",
-    flexWrap: "wrap",
-  },
-  cgpaBadge: {
-    padding: "20px 30px",
-    borderRadius: "25px",
-    boxShadow: "0 15px 35px rgba(0,0,0,0.3)",
-    position: "relative",
-    overflow: "hidden",
-  },
-  downloadSection: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "30px",
-    paddingTop: "20px",
-    borderTop: "2px solid rgba(255,255,255,0.2)",
-  },
-  downloadBtn: {
-    fontSize: "1.1em",
-    fontWeight: "700",
-    padding: "14px 30px",
-    borderRadius: "50px",
-    border: "none",
-    color: "#fff",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    textTransform: "uppercase",
-    letterSpacing: "1px",
-  },
-};
 
 export default CgpaCalculator;

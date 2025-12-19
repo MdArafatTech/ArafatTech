@@ -1,173 +1,238 @@
-// IDCardPage.jsx with adjusted layout and dark/light mode
-import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+// IDCardPage.jsx - Professional Navigation Hub
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-import IDCardGenerator from "./StudentIdCard";
-import IDCardGenerator2 from "./PersonalIdCard";
 import idCardGif from "../assets/idcardgif.gif";
-
-const MotionLink = motion(Link);
-
+import { motion } from "framer-motion";
 export default function IDCardPage() {
-  const [showCustom, setShowCustom] = useState(false);
-  const [showCustom2, setShowCustom2] = useState(false);
-  const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const [mounted, setMounted] = useState(false);
 
-  // Auto-change when system theme changes
-  React.useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = e => setDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+  // Automatically follow system theme (light/dark)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => {
+      document.documentElement.classList.toggle("dark", mediaQuery.matches);
+    };
+
+    handleChange(); // Initial check
+    mediaQuery.addEventListener("change", handleChange);
+    setMounted(true);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <p className="text-xl font-medium text-gray-700 dark:text-gray-300">
+          Loading...
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className={
-      `min-h-screen p-6 flex flex-col items-center transition-all duration-300 ${
-        dark ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
-      }`
-    }>
-
-      {/* Dark/Light Toggle */}
-      {/* <div className="w-full flex justify-end max-w-5xl mb-4">
-        <button
-          onClick={() => setDark(!dark)}
-          className="px-4 py-2 rounded-xl shadow bg-blue-600 text-white hover:bg-blue-700"
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 transition-all duration-700">
+      <div className="max-w-7xl mx-auto">
+        {/* Professional Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16 lg:mb-20"
         >
-          {dark ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div> */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-4">
+            ID Card Generator
+          </h1>
+          <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Create professional, customizable identification cards for students,
+            employees, and personal use with modern design and instant PDF
+            export.
+          </p>
+        </motion.div>
 
-      {/* Landing Section */}
-      <AnimatePresence>
-        {!showCustom && !showCustom2 && (
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Preview & Features Section */}
           <motion.div
-            key="landing"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.4 }}
-            className={`rounded-2xl shadow-2xl p-6 gap-6 w-full max-w-5xl grid lg:grid-cols-2 sm:grid-cols-1 items-center transition-all duration-300 ${
-              dark ? "bg-gray-800" : "bg-white"
-            }`}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="order-2 lg:order-1"
           >
-            {/* GIF */}
-            <motion.div className="flex items-center justify-center w-full h-full">
-              <motion.img
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 dark:from-purple-600 dark:to-indigo-600 blur-3xl opacity-30 -z-10"></div>
+              <img
                 src={idCardGif}
-                alt="ID Card GIF"
-                className="w-[80%] rounded-xl shadow-lg"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 120 }}
+                alt="ID Card Preview Animation"
+                className="w-full max-w-lg mx-auto rounded-3xl shadow-2xl border-8 border-white dark:border-gray-700"
               />
-            </motion.div>
-
-            {/* Text + Buttons */}
-            <motion.div
-              className="flex flex-col items-center gap-4 px-4"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl font-bold text-blue-500 text-center">
-                Welcome to ID Card Generator
-              </h2>
-              <p className="opacity-80 text-center">
-                Create professional ID cards with QR codes & details.
-              </p>
-
-              <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-3 w-full mt-4">
-                <motion.button
-                  onClick={() => setShowCustom(true)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-green-500 text-white py-3 rounded-xl shadow-lg hover:bg-green-600"
-                >
-                  Student ID Card
-                </motion.button>
-
-                <motion.button
-                  onClick={() => setShowCustom2(true)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-purple-500 text-white py-3 rounded-xl shadow-lg hover:bg-purple-600"
-                >
-                  Personal ID Card
-                </motion.button>
-
-                <MotionLink
-                  to="/smartid"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-red-500 text-white py-3 rounded-xl shadow-lg hover:bg-red-600 text-center"
-                >
-                 Smart Id Card
-                </MotionLink>
-
-                <MotionLink
-                  to="/employee"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-blue-500 text-white py-3 rounded-xl shadow-lg hover:bg-blue-600 text-center"
-                >
-                  Employee ID Card
-                </MotionLink>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Student Card */}
-      <AnimatePresence>
-        {showCustom && (
-          <motion.div
-            key="custom1"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className={`w-full max-w-5xl mt-6 rounded-2xl shadow-2xl p-6 relative ${
-              dark ? "bg-gray-800" : "bg-white"
-            }`}
-          >
-            <div className="flex justify-end">
-              <button onClick={() => setShowCustom(false)} className="text-red-500 text-3xl">
-                <FaTimes />
-              </button>
             </div>
 
-            <IDCardGenerator />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Personal Card */}
-      <AnimatePresence>
-        {showCustom2 && (
-          <motion.div
-            key="custom2"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className={`w-full max-w-5xl mt-6 rounded-2xl shadow-2xl p-6 relative ${
-              dark ? "bg-gray-800" : "bg-white"
-            }`}
-          >
-            <div className="flex justify-end">
-              <button onClick={() => setShowCustom2(false)} className="text-red-500 text-3xl">
-                <FaTimes />
-              </button>
+            <div className="mt-10 p-8 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                Powerful Features
+              </h3>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300">
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">✅</span>
+                  <span className="font-medium">QR Code Integration</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">🎨</span>
+                  <span className="font-medium">Full Color Customization</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">📄</span>
+                  <span className="font-medium">Instant PDF Export</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">🖼️</span>
+                  <span className="font-medium">Logo & Watermark Support</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">📱</span>
+                  <span className="font-medium">Fully Responsive Design</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-2xl">🔒</span>
+                  <span className="font-medium">Barcode & Secure Data</span>
+                </li>
+              </ul>
             </div>
-
-            <IDCardGenerator2 />
           </motion.div>
-        )}
-      </AnimatePresence>
+
+          {/* Navigation Cards */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="order-1 lg:order-2"
+          >
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-10 text-center lg:text-left">
+              Choose Your ID Type
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+
+
+
+
+
+
+ {/* Student ID */}
+              <Link
+                to="/studentidcard"
+                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                <div className="p-10 text-center relative z-10">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-emerald-100 dark:bg-emerald-900/50 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <span className="text-5xl">🎓</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    Student ID
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Official academic identification cards
+                  </p>
+                </div>
+              </Link>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+              {/* Smart ID */}
+              <Link
+                to="/smartid"
+                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-pink-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                <div className="p-10 text-center relative z-10">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-red-100 dark:bg-red-900/50 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <span className="text-5xl">🧠</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                    Smart ID
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Advanced digital identity with smart features
+                  </p>
+                </div>
+              </Link>
+
+             
+
+              {/* Employee ID */}
+              <Link
+                to="/employee"
+                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                <div className="p-10 text-center relative z-10">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-amber-100 dark:bg-amber-900/50 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <span className="text-5xl">💼</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    Employee ID
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Professional corporate employee badges
+                  </p>
+                </div>
+              </Link>
+
+
+ {/* Personal ID */}
+              <Link
+                to="/personalidcard"
+                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-200 dark:border-gray-700"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                <div className="p-10 text-center relative z-10">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-purple-100 dark:bg-purple-900/50 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <span className="text-5xl">🆔</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    Personal ID
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Custom identification for personal and freelance use
+                  </p>
+                </div>
+              </Link>
+
+
+
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Footer Note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="text-center text-gray-600 dark:text-gray-400 mt-20 text-lg"
+        >
+          Select an ID type above to begin creating your professional
+          identification card
+        </motion.p>
+      </div>
     </div>
   );
 }

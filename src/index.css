@@ -170,7 +170,7 @@
 }
 
 /* ===== Mobile ===== */
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   .course-row {
     flex-direction: column;
     align-items: stretch;
