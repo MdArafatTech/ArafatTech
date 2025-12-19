@@ -29,7 +29,7 @@
 
 import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-import companyLogo from "../assets/arafattech.png";
+import companyLogo from "../assets/arafatimage.png";
 
 const Billing = () => {
   const [darkMode, setDarkMode] = useState(false);

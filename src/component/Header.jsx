@@ -43,6 +43,7 @@ const Header = () => {
           <ul className="flex gap-5 font-medium items-center relative">
             {[
               { name: "Home", path: "/" },
+                { name: "About", path: "/about" },
               { name: "Billing", path: "/billing" },
               { name: "Identity", path: "/identity" },
               { name: "Portal", path: "/studentportal" },
@@ -173,6 +174,7 @@ const Header = () => {
         <ul className="flex flex-col gap-6 p-6 text-lg font-medium text-center">
           {[
             { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
             { name: "Billing", path: "/billing" },
             { name: "Identity", path: "/identity" },
             { name: "Portal", path: "/studentportal" },

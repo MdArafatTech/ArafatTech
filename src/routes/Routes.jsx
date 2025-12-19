@@ -35,6 +35,7 @@ import GradingNoteSection from "../project/GradingNoteSection";
 import Services from "../pages/Services";
 import StudentPortal from "../pages/Studentportal";
 import PremiumDownloadButton from "../component/PremiumDownloadButton";
+import About from "../pages/About";
 
 
 const Routes = createBrowserRouter([
@@ -50,6 +51,10 @@ const Routes = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "about",
+        element: <About></About>,
       },
       {
         path: "register",
