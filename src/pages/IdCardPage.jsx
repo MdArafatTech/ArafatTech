@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import idCardGif from "../assets/idcardgif.gif";
 import { motion } from "framer-motion";
+
 export default function IDCardPage() {
   const [mounted, setMounted] = useState(false);
 
@@ -31,6 +32,9 @@ export default function IDCardPage() {
   }
 
   return (
+
+
+
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 transition-all duration-700">
       <div className="max-w-7xl mx-auto">
         {/* Professional Header */}
@@ -234,5 +238,7 @@ export default function IDCardPage() {
         </motion.p>
       </div>
     </div>
+
+
   );
 }

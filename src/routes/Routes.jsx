@@ -38,6 +38,7 @@ import PremiumDownloadButton from "../component/PremiumDownloadButton";
 import About from "../pages/About";
 
 
+
 const Routes = createBrowserRouter([
   {
     path: "/",
@@ -165,6 +166,8 @@ const Routes = createBrowserRouter([
        path:"premiumdownloadbutton",
        element:<PremiumDownloadButton></PremiumDownloadButton>
       },
+      
+  
       
     ],
   },

@@ -227,3 +227,64 @@ html, body {
 
 
 
+
+
+@keyframes border-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(147, 51, 234, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 60px rgba(147, 51, 234, 0.4), 0 0 80px rgba(236, 72, 153, 0.3); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.8; }
+  50% { transform: rotate(180deg) scale(1.05); opacity: 1; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.8; }
+}
+
+.animate-border-glow {
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 4s linear infinite;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0; }
+  50% { transform: rotate(180deg) scale(1.05); opacity: 1; }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s linear infinite;
+}
+
+.bg-arrow {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m9.813 15.19 3.375-3.375A1.87 1.87 0 0 1 14 10.625a1.875 1.875 0 0 1-1.688-2.812l-3.374-3.375'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+}
