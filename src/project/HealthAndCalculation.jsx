@@ -554,7 +554,7 @@ const HealthAndCalculation = () => {
       }`}
     >
       <div
-        className="p-4 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl 
+        className="p-3 md:p-6 lg:p-8 mt-5 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl 
                 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl 
                 transition-all duration-300 max-w-7xl mx-auto"
       >

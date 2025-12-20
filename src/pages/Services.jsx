@@ -130,17 +130,18 @@ const Services = () => {
               <Link to={service.link} className="block h-full w-full">
                 <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col items-center text-center h-full border border-white/50 dark:border-slate-700/50 shadow-xl hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 group-hover:bg-white/95 dark:group-hover:bg-slate-800/95 min-h-[340px] sm:min-h-[380px] w-full max-w-full">
                   
-                  {/* Icon with glow effect */}
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="relative  sm:w-24 sm:h-24 lg:w-28 lg:h-28 mb-6 sm:mb-8 p-3 sm:p-4 bg-gradient-to-br from-orange-500 to-pink-600 dark:from-orange-400 dark:to-pink-500 rounded-2xl shadow-2xl shadow-orange-500/40 group-hover:shadow-orange-500/60 flex-shrink-0 w-full max-w-max mx-auto"
-                  >
-                    <img
-                      src={service.img}
-                      alt={service.title}
-                      className="w-full h-full object-contain filter  invert group-hover:brightness-100 transition-all duration-300"
-                    />
-                  </motion.div>
+            {/* Icon with glow effect - Fixed mobile sizing */}
+<motion.div
+  whileHover={{ scale: 1.05 }}
+  className="relative w-24 h-24 sm:w-30 sm:h-30 lg:w-36 lg:h-36 mb-6 sm:mb-8 p-2 sm:p-4 bg-gradient-to-br from-orange-500 to-pink-600 dark:from-orange-400 dark:to-pink-500 rounded-2xl shadow-2xl shadow-orange-500/40 group-hover:shadow-orange-500/60 flex-shrink-0 mx-auto"
+>
+  <img
+    src={service.img}
+    alt={service.title}
+    className="w-full h-full object-contain filter invert group-hover:brightness-100 transition-all duration-300"
+  />
+</motion.div>
+
 
                   {/* Title */}
                   <h3 className="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-slate-900 to-slate-700 dark:from-orange-400 dark:to-pink-400 bg-clip-text text-transparent mb-4 sm:mb-6 group-hover:scale-105 transition-transform duration-300 line-clamp-2 px-2 w-full text-center">

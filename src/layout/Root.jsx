@@ -11,8 +11,10 @@ const Root = () => {
             <PageMeta></PageMeta>
             <ScrollTopButton></ScrollTopButton>
             <ScrollToTop></ScrollToTop>
-            <Header></Header>
-            <Outlet></Outlet>
+           <div className="pt-25">
+             <Header></Header>
+           </div>
+            <Outlet ></Outlet>
             <Footer></Footer>
             
         </div>

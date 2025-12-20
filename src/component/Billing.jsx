@@ -244,12 +244,12 @@ const Billing = () => {
 
   return (
     <div
-      className={`min-h-screen flex justify-center items-center p-1 md:p-2 lg:p-4 transition-colors duration-300 ${
+      className={`min-h-screen  flex justify-center items-center p-1 md:p-2 lg:p-4 transition-colors duration-300 ${
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
       }`}
     >
       <div
-        className={`rounded-2xl shadow-xl p-3 md:p-5 lg:p-7 max-w-4xl w-full border ${
+        className={`rounded-2xl mt-10 shadow-xl p-3 md:p-5 lg:p-7 max-w-4xl w-full border ${
           darkMode ? "bg-gray-800/90 backdrop-blur-sm border-gray-700" : "bg-white/90 backdrop-blur-sm border-gray-200"
         }`}
       >
@@ -331,92 +331,104 @@ const Billing = () => {
         </div>
 
         {/* Items Input */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-6 text-gray-800 dark:text-white tracking-wide">Items List</h3>
-          {items.map((item, index) => (
-            <div key={index} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 p-6 bg-gradient-to-br from-orange-50/70 to-yellow-50/50 dark:from-gray-800/70 dark:to-gray-900/50 rounded-3xl shadow-xl hover:shadow-2xl border border-orange-200/50 dark:border-orange-800/30 backdrop-blur-sm">
-              <div className="flex-1 min-w-[160px]">
-                <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
-                  Item Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Product/Service name"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleItemChange(index, "name", e.target.value)
-                  }
-                  className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
-                    darkMode
-                      ? "text-white placeholder-gray-400"
-                      : "text-gray-900 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-              <div className="flex-1 min-w-[100px]">
-                <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
-                  Qty
-                </label>
-                <input
-                  type="number"
-                  placeholder="1"
-                  value={item.qty === 0 ? "" : item.qty}
-                  onChange={(e) => handleItemChange(index, "qty", e.target.value)}
-                  className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
-                    darkMode
-                      ? "text-white placeholder-gray-400"
-                      : "text-gray-900 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-              <div className="flex-1 min-w-[100px]">
-                <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
-                  Price (Tk)
-                </label>
-                <input
-                  type="number"
-                  placeholder="0.00"
-                  value={item.price === 0 ? "" : item.price}
-                  onChange={(e) =>
-                    handleItemChange(index, "price", e.target.value)
-                  }
-                  className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
-                    darkMode
-                      ? "text-white placeholder-gray-400"
-                      : "text-gray-900 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-              <div className="flex-1 min-w-[110px]">
-                <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
-                  Discount %
-                </label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={item.discount === 0 ? "" : item.discount}
-                  onChange={(e) =>
-                    handleItemChange(index, "discount", e.target.value)
-                  }
-                  className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
-                    darkMode
-                      ? "text-white placeholder-gray-400"
-                      : "text-gray-900 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-              <div className="col-span-1 md:col-span-4 lg:col-span-1">
-                <button
-                  onClick={() => removeItem(index)}
-                  disabled={items.length === 1}
-                  className="w-full text-sm h-14 flex items-center justify-center rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold shadow-xl hover:shadow-2xl transition-all duration-200 disabled:cursor-not-allowed disabled:shadow-none"
-                >
-                  {items.length === 1 ? "Required" : "Remove Item"}
-                </button>
-              </div>
-            </div>
-          ))}
+     <div className="mb-8">
+  <h3 className="text-xl font-bold mb-6 text-gray-800 dark:text-white tracking-wide">Items List</h3>
+  {items.map((item, index) => (
+    <div key={index} className="space-y-4 mb-6 p-4 sm:p-6 bg-gradient-to-br from-orange-50/70 to-yellow-50/50 dark:from-gray-800/70 dark:to-gray-900/50 rounded-3xl shadow-xl hover:shadow-2xl border border-orange-200/50 dark:border-orange-800/30 backdrop-blur-sm">
+      
+      {/* Product Name - Always on top, full width */}
+      <div className="w-full">
+        <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
+          Item Name
+        </label>
+        <input
+          type="text"
+          placeholder="Product name"
+          value={item.name}
+          onChange={(e) =>
+            handleItemChange(index, "name", e.target.value)
+          }
+          className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
+            darkMode
+              ? "text-white placeholder-gray-400"
+              : "text-gray-900 placeholder-gray-500"
+          }`}
+        />
+      </div>
+
+      {/* Fields Row - Stacked on mobile, grid on larger screens */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+        <div>
+          <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
+            Qty
+          </label>
+          <input
+            type="number"
+            placeholder="1"
+            value={item.qty === 0 ? "" : item.qty}
+            onChange={(e) => handleItemChange(index, "qty", e.target.value)}
+            className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
+              darkMode
+                ? "text-white placeholder-gray-400"
+                : "text-gray-900 placeholder-gray-500"
+            }`}
+          />
         </div>
+        
+        <div>
+          <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
+            Price (Tk)
+          </label>
+          <input
+            type="number"
+            placeholder="0.00"
+            value={item.price === 0 ? "" : item.price}
+            onChange={(e) =>
+              handleItemChange(index, "price", e.target.value)
+            }
+            className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
+              darkMode
+                ? "text-white placeholder-gray-400"
+                : "text-gray-900 placeholder-gray-500"
+            }`}
+          />
+        </div>
+        
+        <div>
+          <label className="block font-bold text-sm mb-3 text-gray-700 dark:text-gray-200 tracking-wide">
+            Discount %
+          </label>
+          <input
+            type="number"
+            placeholder="0"
+            value={item.discount === 0 ? "" : item.discount}
+            onChange={(e) =>
+              handleItemChange(index, "discount", e.target.value)
+            }
+            className={`w-full px-5 py-3 rounded-xl border-2 border-gray-200/50 dark:border-gray-600/50 bg-white/70 dark:bg-gray-800/70 text-base font-medium shadow-md hover:shadow-lg focus:shadow-xl focus:border-orange-400 focus:ring-4 focus:ring-orange-400/30 transition-all duration-200 backdrop-blur-sm ${
+              darkMode
+                ? "text-white placeholder-gray-400"
+                : "text-gray-900 placeholder-gray-500"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Remove Button - Full width on mobile, smaller on larger screens */}
+      <div className="pt-2">
+        <button
+          onClick={() => removeItem(index)}
+          disabled={items.length === 1}
+          className="w-full sm:w-[30%] h-14 flex items-center justify-center rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold shadow-xl hover:shadow-2xl transition-all duration-200 disabled:cursor-not-allowed disabled:shadow-none mx-auto sm:ml-auto"
+        >
+          {items.length === 1 ? "Required" : "Remove Item"}
+        </button>
+      </div>
+      
+    </div>
+  ))}
+</div>
+
 
         <button
           onClick={addItem}
