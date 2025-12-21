@@ -103,6 +103,14 @@ const Header = () => {
                       QR Generator
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/usefulltools"
+                      className="block px-4 py-2 hover:bg-orange-100 dark:hover:bg-orange-600 rounded-md transition"
+                    >
+                    Useful Tools
+                    </Link>
+                  </li>
                 </ul>
               </li>
 
@@ -253,6 +261,15 @@ const Header = () => {
                       onClick={() => setOpen(false)}
                     >
                       QR Generator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/usefulltools"
+                     className="hover-spark hover:text-amber-500"
+                      onClick={() => setOpen(false)}
+                    >
+                    Useful Tools
                     </Link>
                   </li>
                 </ul>

@@ -27,12 +27,12 @@ const HomePage = () => {
       img: service3,
       link: "/billing",
     },
-   {
-  title: "QR Code Generator",
-  desc: "Create custom QR codes instantly for links, text, WiFi, contacts, and more. Add logos, colors, and download in high quality.",
-  img: service1,  // Replace with your QR code icon/image import if needed
-  link: "/qrandimage",  // Suggested route; change as per your app
-},
+    {
+      title: "QR Code Generator",
+      desc: "Create custom QR codes instantly for links, text, WiFi, contacts, and more. Add logos, colors, and download in high quality.",
+      img: service1,
+      link: "/qrandimage",
+    },
     {
       title: "Health & Calculation",
       desc: "Digital BMI, unit converters, scientific calculators, and email-enabled health tracking.",
@@ -115,16 +115,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Features & Clock */}
+      {/* Features & Clock - Entrance animation removed */}
       <section className="py-20 px-3 md:p-5 lg:p-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="order-2 lg:order-1"
-          >
+          {/* Hero Image - No motion */}
+          <div className="order-2 lg:order-1">
             <div className="relative">
               <img
                 src={heroImg}
@@ -133,166 +128,149 @@ const HomePage = () => {
               />
               <div className="absolute -inset-4 bg-gradient-to-r from-orange-400/30 to-purple-600/30 rounded-3xl blur-3xl -z-10 animate-pulse" />
             </div>
-          </motion.div>
+          </div>
 
-
-
-
-
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="order-1 lg:order-2 text-center lg:text-left"
-          >
+          {/* Clock - No motion */}
+          <div className="order-1 lg:order-2 text-center lg:text-left">
             <h2 className="text-2xl sm:text-5xl lg:text-5xl font-extrabold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-8">
               Real-Time World Clock
             </h2>
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl">
               <Clock />
             </div>
-          </motion.div>
-
-
-
-
+          </div>
         </div>
       </section>
 
-  
+      {/* Services Section */}
+      <section className="py-32 px-6">
+        <div className="max-w-7xl mx-auto text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-8"
+          >
+            Our Premium Services
+          </motion.h2>
+          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+            Innovative tools designed to streamline operations and elevate experiences
+          </p>
+        </div>
 
-    {/* Services Section */}
-<section className="py-32 px-6">
-  <div className="max-w-7xl mx-auto text-center mb-20">
-    <motion.h2
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-8"
-    >
-      Our Premium Services
-    </motion.h2>
-    <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-      Innovative tools designed to streamline operations and elevate experiences
-    </p>
-  </div>
-
-  <motion.div
-    variants={containerVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto"
-  >
-    {services.map((service, i) => (
-      <Link key={i} to={service.link}>
         <motion.div
-          variants={itemVariants}
-          whileHover={{ y: -16, scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl hover:shadow-purple-500/30 transition-all duration-700 h-full flex flex-col"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="p-10 flex flex-col items-center text-center flex-1">
-            <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-purple-600 rounded-3xl p-4 mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500">
-              <img src={service.img} alt={service.title} className="w-full h-full object-contain rounded-2xl" />
-            </div>
-            <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-4 group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
-              {service.title}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-8 flex-1">{service.desc}</p>
-            <span className="text-purple-600 font-bold text-lg group-hover:text-purple-500 flex items-center gap-2">
-              Explore → 
-            </span>
-          </div>
+          {services.map((service, i) => (
+            <Link key={i} to={service.link}>
+              <motion.div
+                variants={itemVariants}
+                whileHover={{ y: -16, scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl hover:shadow-purple-500/30 transition-all duration-700 h-full flex flex-col"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="p-10 flex flex-col items-center text-center flex-1">
+                  <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-purple-600 rounded-3xl p-4 mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                    <img src={service.img} alt={service.title} className="w-full h-full object-contain rounded-2xl" />
+                  </div>
+                  <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-4 group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-8 flex-1">{service.desc}</p>
+                  <span className="text-purple-600 font-bold text-lg group-hover:text-purple-500 flex items-center gap-2">
+                    Explore → 
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
         </motion.div>
-      </Link>
-    ))}
-  </motion.div>
 
-  {/* SHOW MORE BUTTON - Navigate to Services Page */}
-  <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay: 0.5, duration: 0.6 }}
-    className="text-center mt-20"
-  >
-    <Link to="/services">
-      <motion.button
-        whileHover={{ 
-          scale: 1.05, 
-          y: -4,
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-        }}
-        whileTap={{ scale: 0.98, y: 0 }}
-        className="group relative bg-gradient-to-r from-orange-500 via-purple-600 to-pink-600 hover:from-orange-600 hover:to-purple-700 text-white px-12 sm:px-16 py-6 sm:py-8 rounded-3xl font-black text-xl sm:text-2xl shadow-2xl hover:shadow-3xl border-2 border-transparent hover:border-white/30 backdrop-blur-xl transition-all duration-500 overflow-hidden"
-      >
-        {/* Shine effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/40 to-white/20 -skew-x-12 transform translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-700" />
-        
-        {/* Icon + Text */}
-        <span className="relative z-10 cursor-pointer flex items-center justify-center gap-3">
-          🚀 Show More Services
-          <div className="w-2 h-2 bg-white/60 rounded-full group-hover:animate-ping" />
-        </span>
-        
-        {/* Bottom glow */}
-        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-white/50 rounded-full group-hover:w-24 group-hover:animate-pulse transition-all duration-500" />
-      </motion.button>
-    </Link>
-  </motion.div>
-</section>
-
+        {/* SHOW MORE BUTTON */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-center mt-20"
+        >
+          <Link to="/services">
+            <motion.button
+              whileHover={{ 
+                scale: 1.05, 
+                y: -4,
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+              }}
+              whileTap={{ scale: 0.98, y: 0 }}
+              className="group relative bg-gradient-to-r from-orange-500 via-purple-600 to-pink-600 hover:from-orange-600 hover:to-purple-700 text-white px-12 sm:px-16 py-6 sm:py-8 rounded-3xl font-black text-xl sm:text-2xl shadow-2xl hover:shadow-3xl border-2 border-transparent hover:border-white/30 backdrop-blur-xl transition-all duration-500 overflow-hidden"
+            >
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/40 to-white/20 -skew-x-12 transform translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-700" />
+              
+              {/* Icon + Text */}
+              <span className="relative z-10 cursor-pointer flex items-center justify-center gap-3">
+                🚀 Show More Services
+                <div className="w-2 h-2 bg-white/60 rounded-full group-hover:animate-ping" />
+              </span>
+              
+              {/* Bottom glow */}
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-white/50 rounded-full group-hover:w-24 group-hover:animate-pulse transition-all duration-500" />
+            </motion.button>
+          </Link>
+        </motion.div>
+      </section>
 
       {/* Testimonials */}
-<section className="py-32 px-6 bg-gradient-to-br from-purple-50/50 via-transparent to-orange-50/50 dark:from-gray-900/50">
-  <div className="max-w-7xl mx-auto text-center mb-20">
-    <motion.h2
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-8"
-    >
-      Client Testimonials
-    </motion.h2>
-  </div>
-
-  <motion.div
-    variants={containerVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto"
-  >
-    {testimonials.map((t, i) => (
-      <motion.div
-        key={i}
-        variants={itemVariants}
-        whileHover={{ y: -12, scale: 1.03 }}
-        className="relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl rounded-3xl p-10 shadow-2xl border border-white/30 dark:border-gray-700/50 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-400/5 to-purple-600/5" />
-        <div className="relative z-10">
-          {/* Default Avatar Image */}
-          <div className="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-orange-400 via-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl border-4 border-white/50 dark:border-gray-200/50">
-            <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-            </svg>
-          </div>
-          
-          <p className="text-lg italic text-gray-700 dark:text-gray-300 mb-8">"{t.text}"</p>
-          <div>
-            <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{t.name}</h4>
-            <p className="text-purple-600 dark:text-purple-400 font-medium">{t.position}</p>
-          </div>
+      <section className="py-32 px-6 bg-gradient-to-br from-purple-50/50 via-transparent to-orange-50/50 dark:from-gray-900/50">
+        <div className="max-w-7xl mx-auto text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-8"
+          >
+            Client Testimonials
+          </motion.h2>
         </div>
-      </motion.div>
-    ))}
-  </motion.div>
-</section>
 
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto"
+        >
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ y: -12, scale: 1.03 }}
+              className="relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl rounded-3xl p-10 shadow-2xl border border-white/30 dark:border-gray-700/50 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/5 to-purple-600/5" />
+              <div className="relative z-10">
+                {/* Default Avatar Image */}
+                <div className="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-orange-400 via-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl border-4 border-white/50 dark:border-gray-200/50">
+                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                
+                <p className="text-lg italic text-gray-700 dark:text-gray-300 mb-8">"{t.text}"</p>
+                <div>
+                  <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{t.name}</h4>
+                  <p className="text-purple-600 dark:text-purple-400 font-medium">{t.position}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
 
       {/* CTA */}
       <section className="py-32 px-6 relative overflow-hidden">

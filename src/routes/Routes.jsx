@@ -36,6 +36,7 @@ import Services from "../pages/Services";
 import StudentPortal from "../pages/Studentportal";
 import PremiumDownloadButton from "../component/PremiumDownloadButton";
 import About from "../pages/About";
+import UsefulTools from "../project/UsefullToos";
 
 
 
@@ -143,6 +144,10 @@ const Routes = createBrowserRouter([
       {
        path:"tools",
        element:<Tools></Tools>,
+      },
+      {
+       path:"usefulltools",
+       element:<UsefulTools></UsefulTools>,
       },
     
      

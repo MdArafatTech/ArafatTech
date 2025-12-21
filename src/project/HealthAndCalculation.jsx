@@ -548,8 +548,10 @@ const HealthAndCalculation = () => {
   );
 
   return (
+
+    
     <div
-      className={`min-h-screen p-4 sm:p-6 ${
+      className={`min-h-screen p-2 md:p-4 lg:p-8 ${
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
@@ -1151,8 +1153,7 @@ const HealthAndCalculation = () => {
         </div>
       </div>
 
-      {/* Tools Section - Full Width Mobile */}
-      <div className="mt-8 mx-1 md:mx-[4%] lg:mx-[6%] sm:p-6 lg:p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-2xl backdrop-blur-xl">
+      {/* <div className="mt-8 mx-1 md:mx-[4%] lg:mx-[6%] sm:p-6 lg:p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-2xl backdrop-blur-xl">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent text-center">
           🛠️ Useful Tools & Utilities
         </h2>
@@ -1183,8 +1184,12 @@ const HealthAndCalculation = () => {
         <div className="mt-8">
           <Tools />
         </div>
-      </div>
+      </div> */}
     </div>
+
+
+
+
   );
 };
 

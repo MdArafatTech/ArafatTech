@@ -158,7 +158,7 @@ const ERROR_CORRECTION_OPTIONS = [
   { label: "Quartile (Q) – ~25% damage tolerance", value: "Q" },
   { label: "High (H) – ~30% damage tolerance", value: "H" },
   // New: Ultra high reliability (great for printed posters, outdoor signs, etc.)
-  { label: "Ultra (U) – ~35%+ damage tolerance", value: "U" },
+
 ];
 
 const QR_TYPES = [
@@ -181,24 +181,23 @@ const presets = [
   // Default / Reset style
   {
     name: "Default",
-    fg: "#000000",
+    fg: "#000000",  // Dark on light
     bg: "#FFFFFF",
-    style: "square", // or whatever your default pixel style is
+    style: "square",
     corner: "square",
   },
   // Modern & Popular Styles
-
   {
     name: "Dark Mode",
-    fg: "#FFFFFF",
-    bg: "#1F2937",
+    bg: "#b5b8bd",  
+    fg: "#1F2937",
     style: "square",
     corner: "square",
   },
   {
-    name: "Neon Pink",
-    fg: "#FF00AA",
-    bg: "#000000",
+    name: "Neon Red",
+    fg: "#d60505",
+    bg: "#ffffff",  // Pure black BG → light pink FG works
     style: "rounded",
     corner: "rounded",
   },
@@ -211,8 +210,8 @@ const presets = [
   },
   {
     name: "Cyber",
-    fg: "#00FF9D",
-    bg: "#0D1117",
+    fg: "#0bcb25",  // Changed to white for pure black BG (scannable)
+    bg: "#f2ffeb",
     style: "rounded",
     corner: "rounded",
   },
@@ -223,36 +222,36 @@ const presets = [
     style: "square",
     corner: "square",
   },
-
   {
     name: "Classic",
-    fg: "#FFFFFF",
-    bg: "#000000",
+    fg: "#0909d1",  // Dark on black BG? No—swap in generator
+    bg: "#fff2f3",  // Fixed: light BG for dark FG
     style: "square",
     corner: "square",
   },
   {
-    name: "Gold Luxury",
-    fg: "#FFD700",
-    bg: "#1A1A1A",
+    name: "Purple Luxury",
+    fg: "#840297",  // White for dark BG (scannable alternative to gold)
+    bg: "#fffeff",
     style: "dot",
     corner: "rounded",
   },
   {
     name: "Pastel Dream",
-    fg: "#6B7280",
-    bg: "#F3E8FF",
+    fg: "#045776",
+    bg: "#F3F8FF",
     style: "rounded",
     corner: "rounded",
   },
   {
     name: "Matrix",
-    fg: "#00FF41",
-    bg: "#000000",
+    fg: "#065d40",  // Bright green on black works well
+    bg: "#ffffff",
     style: "square",
     corner: "square",
   },
 ];
+
 
 function useSystemTheme() {
   const [darkMode, setDarkMode] = useState(false);
@@ -308,6 +307,14 @@ export default function ProfessionalQRGenerator() {
 
   const qrRef = useRef(null);
   const qrInstance = useRef(null);
+
+const [isOpen, setIsOpen] = useState(false);
+const cornerRef = useRef(null);
+
+
+
+
+
 
   const darkMode = useSystemTheme();
 
@@ -940,28 +947,54 @@ export default function ProfessionalQRGenerator() {
       Corner Style
     </label>
 
-    <div className="relative">
-      <select
-        value={cornerStyle}
-        onChange={(e) => setCornerStyle(e.target.value)}
-        className={`w-full cursor-pointer px-5 py-4 rounded-2xl border-2 bg-transparent appearance-none transition-all duration-300
-          focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 outline-none text-base
-          ${darkMode 
-            ? "border-slate-600 text-white hover:border-slate-500" 
-            : "border-gray-300 text-gray-900 hover:border-gray-400"}
-        `}
-      >
-        <option value="square">Square</option>
-  <option value="rounded">Rounded</option>
-  <option value="extra-rounded">Extra Rounded</option>
-  <option value="dot">Dots</option>
-  <option value="circle">Circle</option>
-  <option value="diamond">Diamond</option>
-  <option value="square-rounded">Square + Rounded</option>
-  <option value="classy">Classy</option>
-      </select>
-      <span className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xl">▼</span>
-    </div>
+
+
+
+   <div className="relative">
+  <select
+    value={cornerStyle}
+    onChange={(e) => setCornerStyle(e.target.value)}
+    className={`w-full cursor-pointer px-5 py-4 rounded-2xl border-2 bg-transparent appearance-none transition-all duration-300
+      focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 focus:ring-offset-2 outline-none text-base font-medium
+      ${darkMode 
+        ? "bg-slate-800/70 border-slate-700/60 text-slate-100 hover:bg-slate-700/80 hover:border-slate-500/80 hover:shadow-lg hover:shadow-slate-400/30"
+        : "bg-white/90 border-gray-200/70 text-gray-900 hover:bg-white/100 hover:border-gray-300/80 hover:shadow-lg hover:shadow-gray-300/40"
+      }
+    `}
+  >
+    <option value="square" className="bg-white text-gray-900">Square</option>
+    <option value="rounded" className="bg-white text-gray-900">Rounded</option>
+    <option value="extra-rounded" className="bg-white text-gray-900">Extra Rounded</option>
+    <option value="dot" className="bg-white text-gray-900">Dots</option>
+    <option value="circle" className="bg-white text-gray-900">Circle</option>
+    <option value="diamond" className="bg-white text-gray-900">Diamond</option>
+    <option value="square-rounded" className="bg-white text-gray-900">Square + Rounded</option>
+    <option value="classy" className="bg-white text-gray-900">Classy</option>
+  </select>
+  
+  {/* Dynamic Arrow Icon */}
+  <svg 
+    className={`absolute right-4 top-1/2 -translate-y-1/2 transition-transform duration-300 pointer-events-none text-xl transform ${
+      darkMode 
+        ? "text-slate-400 group-hover:text-slate-200" 
+        : "text-gray-400 group-hover:text-gray-600"
+    } ${cornerStyle ? 'rotate-0' : 'rotate-180'}`}
+    fill="none" 
+    stroke="currentColor" 
+    viewBox="0 0 24 24"
+    width="20" 
+    height="20"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  </svg>
+</div>
+
+
+
+
+
+
+
   </div>
 </div>
 
