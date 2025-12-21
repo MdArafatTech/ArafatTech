@@ -10,20 +10,107 @@ import { FiVolume2 } from 'react-icons/fi';
 import Tools from './Tools';
 // Currency data
 const currencyData = {
+  // Major world currencies
   USD: { flag: '🇺🇸', name: 'US Dollar', symbol: '$' },
   EUR: { flag: '🇪🇺', name: 'Euro', symbol: '€' },
   GBP: { flag: '🇬🇧', name: 'British Pound', symbol: '£' },
-  INR: { flag: '🇮🇳', name: 'Indian Rupee', symbol: '₹' },
+  JPY: { flag: '🇯🇵', name: 'Japanese Yen', symbol: '¥' },
+  CNY: { flag: '🇨🇳', name: 'Chinese Yuan', symbol: '¥' },
+  CHF: { flag: '🇨🇭', name: 'Swiss Franc', symbol: 'CHF' },
   CAD: { flag: '🇨🇦', name: 'Canadian Dollar', symbol: 'CA$' },
   AUD: { flag: '🇦🇺', name: 'Australian Dollar', symbol: 'A$' },
-  JPY: { flag: '🇯🇵', name: 'Japanese Yen', symbol: '¥' },
-  CNY: { flag: '🇨🇳', name: 'Chinese Yuan', symbol: 'CN¥' },
-  CHF: { flag: '🇨🇭', name: 'Swiss Franc', symbol: 'CHF' },
-  SEK: { flag: '🇸🇪', name: 'Swedish Krona', symbol: 'kr' },
   NZD: { flag: '🇳🇿', name: 'New Zealand Dollar', symbol: 'NZ$' },
+  SEK: { flag: '🇸🇪', name: 'Swedish Krona', symbol: 'kr' },
+  NOK: { flag: '🇳🇴', name: 'Norwegian Krone', symbol: 'kr' },
+  DKK: { flag: '🇩🇰', name: 'Danish Krone', symbol: 'kr' },
+
+  // Asia
+  INR: { flag: '🇮🇳', name: 'Indian Rupee', symbol: '₹' },
+  KRW: { flag: '🇰🇷', name: 'South Korean Won', symbol: '₩' },
+  SGD: { flag: '🇸🇬', name: 'Singapore Dollar', symbol: 'S$' },
+  HKD: { flag: '🇭🇰', name: 'Hong Kong Dollar', symbol: 'HK$' },
+  TWD: { flag: '🇹🇼', name: 'New Taiwan Dollar', symbol: 'NT$' },
+  THB: { flag: '🇹🇭', name: 'Thai Baht', symbol: '฿' },
+  MYR: { flag: '🇲🇾', name: 'Malaysian Ringgit', symbol: 'RM' },
+  IDR: { flag: '🇮🇩', name: 'Indonesian Rupiah', symbol: 'Rp' },
+  PHP: { flag: '🇵🇭', name: 'Philippine Peso', symbol: '₱' },
+  VND: { flag: '🇻🇳', name: 'Vietnamese Dong', symbol: '₫' },
   BDT: { flag: '🇧🇩', name: 'Bangladeshi Taka', symbol: '৳' },
   PKR: { flag: '🇵🇰', name: 'Pakistani Rupee', symbol: '₨' },
+  LKR: { flag: '🇱🇰', name: 'Sri Lankan Rupee', symbol: 'Rs' },
+  NPR: { flag: '🇳🇵', name: 'Nepalese Rupee', symbol: 'Rs' },
+  KHR: { flag: '🇰🇭', name: 'Cambodian Riel', symbol: '៛' },
+  LAK: { flag: '🇱🇦', name: 'Lao Kip', symbol: '₭' },
+  MMK: { flag: '🇲🇲', name: 'Myanmar Kyat', symbol: 'K' },
+  MVR: { flag: '🇲🇻', name: 'Maldivian Rufiyaa', symbol: 'MVR' },
+
+  // Middle East & Africa
+  AED: { flag: '🇦🇪', name: 'United Arab Emirates Dirham', symbol: 'د.إ' },
+  SAR: { flag: '🇸🇦', name: 'Saudi Riyal', symbol: 'ر.س' },
+  QAR: { flag: '🇶🇦', name: 'Qatari Riyal', symbol: 'ر.ق' },
+  KWD: { flag: '🇰🇼', name: 'Kuwaiti Dinar', symbol: 'د.ك' },
+  BHD: { flag: '🇧🇭', name: 'Bahraini Dinar', symbol: 'ب.د' },
+  OMR: { flag: '🇴🇲', name: 'Omani Rial', symbol: 'ر.ع' },
+  ILS: { flag: '🇮🇱', name: 'Israeli New Shekel', symbol: '₪' },
+  TRY: { flag: '🇹🇷', name: 'Turkish Lira', symbol: '₺' },
+  ZAR: { flag: '🇿🇦', name: 'South African Rand', symbol: 'R' },
+  NGN: { flag: '🇳🇬', name: 'Nigerian Naira', symbol: '₦' },
+  KES: { flag: '🇰🇪', name: 'Kenyan Shilling', symbol: 'KSh' },
+  UGX: { flag: '🇺🇬', name: 'Ugandan Shilling', symbol: 'USh' },
+  TZS: { flag: '🇹🇿', name: 'Tanzanian Shilling', symbol: 'TSh' },
+  GHS: { flag: '🇬🇭', name: 'Ghanaian Cedi', symbol: '₵' },
+  EGP: { flag: '🇪🇬', name: 'Egyptian Pound', symbol: 'ج.م' },
+  MAD: { flag: '🇲🇦', name: 'Moroccan Dirham', symbol: 'د.م' },
+  DZD: { flag: '🇩🇿', name: 'Algerian Dinar', symbol: 'د.ج' },
+  TND: { flag: '🇹🇳', name: 'Tunisian Dinar', symbol: 'د.ت' },
+  ETB: { flag: '🇪🇹', name: 'Ethiopian Birr', symbol: 'Br' },
+  XOF: { flag: '🇸🇳', name: 'West African CFA Franc', symbol: 'CFA' },
+  XAF: { flag: '🇨🇲', name: 'Central African CFA Franc', symbol: 'CFA' },
+
+  // Americas
+  MXN: { flag: '🇲🇽', name: 'Mexican Peso', symbol: 'MX$' },
+  BRL: { flag: '🇧🇷', name: 'Brazilian Real', symbol: 'R$' },
+  ARS: { flag: '🇦🇷', name: 'Argentine Peso', symbol: 'ARS' },
+  CLP: { flag: '🇨🇱', name: 'Chilean Peso', symbol: 'CLP' },
+  COP: { flag: '🇨🇴', name: 'Colombian Peso', symbol: 'COP' },
+  PEN: { flag: '🇵🇪', name: 'Peruvian Sol', symbol: 'S/' },
+  UYU: { flag: '🇺🇾', name: 'Uruguayan Peso', symbol: 'UYU' },
+  PYG: { flag: '🇵🇾', name: 'Paraguayan Guarani', symbol: '₲' },
+  BOB: { flag: '🇧🇴', name: 'Bolivian Boliviano', symbol: 'Bs' },
+  CRC: { flag: '🇨🇷', name: 'Costa Rican Colón', symbol: '₡' },
+  GTQ: { flag: '🇬🇹', name: 'Guatemalan Quetzal', symbol: 'Q' },
+  HNL: { flag: '🇭🇳', name: 'Honduran Lempira', symbol: 'L' },
+  DOP: { flag: '🇩🇴', name: 'Dominican Peso', symbol: 'RD$' },
+  CUP: { flag: '🇨🇺', name: 'Cuban Peso', symbol: '₱' },
+  JMD: { flag: '🇯🇲', name: 'Jamaican Dollar', symbol: 'J$' },
+
+  // Europe & others
+  PLN: { flag: '🇵🇱', name: 'Polish Złoty', symbol: 'zł' },
+  CZK: { flag: '🇨🇿', name: 'Czech Koruna', symbol: 'Kč' },
+  HUF: { flag: '🇭🇺', name: 'Hungarian Forint', symbol: 'Ft' },
+  RON: { flag: '🇷🇴', name: 'Romanian Leu', symbol: 'lei' },
+  BGN: { flag: '🇧🇬', name: 'Bulgarian Lev', symbol: 'лв' },
+  HRK: { flag: '🇭🇷', name: 'Croatian Kuna', symbol: 'kn' }, // Note: replaced by EUR in 2023
+  ISK: { flag: '🇮🇸', name: 'Icelandic Króna', symbol: 'kr' },
+  RSD: { flag: '🇷🇸', name: 'Serbian Dinar', symbol: 'RSD' },
+  RUB: { flag: '🇷🇺', name: 'Russian Ruble', symbol: '₽' },
+  UAH: { flag: '🇺🇦', name: 'Ukrainian Hryvnia', symbol: '₴' },
+
+  // Oceania & Pacific
+  FJD: { flag: '🇫🇯', name: 'Fijian Dollar', symbol: 'FJ$' },
+  PGK: { flag: '🇵🇬', name: 'Papua New Guinean Kina', symbol: 'K' },
+  XPF: { flag: '🇵🇫', name: 'CFP Franc', symbol: '₣' },
+
+  // Special / Territories
+  TTD: { flag: '🇹🇹', name: 'Trinidad & Tobago Dollar', symbol: 'TT$' },
+  BSD: { flag: '🇧🇸', name: 'Bahamian Dollar', symbol: 'B$' },
+  BMD: { flag: '🇧🇲', name: 'Bermudian Dollar', symbol: 'BD$' },
+  KYD: { flag: '🇰🇾', name: 'Cayman Islands Dollar', symbol: 'CI$' },
+  ANG: { flag: '🇨🇼', name: 'Netherlands Antillean Guilder', symbol: 'ƒ' },
+  AWG: { flag: '🇦🇼', name: 'Aruban Florin', symbol: 'ƒ' },
 };
+
+
 
 // Word lists for passphrases
 const wordLists = {
@@ -158,20 +245,20 @@ const [showResults, setShowResults] = useState(true); // Default: show results
 
         {/* Generate Count */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Generate</label>
+          <label className="text-sm  font-medium text-slate-700 dark:text-slate-300">Generate</label>
           <input
             type="number"
             min="1"
             max="10"
             value={numPasswords}
             onChange={(e) => setNumPasswords(Number(e.target.value))}
-            className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 text-center"
+            className="w-full mt-2 p-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 text-center"
           />
         </div>
       </div>
 
 {/* Premium Checkboxes - Responsive */}
-<div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8 p-6 bg-gradient-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-900/50 dark:to-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300">
+<div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8 pl-1 pr-5 bg-gradient-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-900/50 dark:to-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300">
   {[
     { label: 'Uppercase', state: includeUppercase, set: setIncludeUppercase, icon: 'Aa' },
     { label: 'Lowercase', state: includeLowercase, set: setIncludeLowercase, icon: 'ab' },
@@ -380,6 +467,19 @@ const [showResults, setShowResults] = useState(true); // Default: show results
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // === ULTRA CURRENCY CONVERTER ===
 const UltraCurrencyConverter = () => {
   const [amount, setAmount] = useState(1000);
@@ -389,52 +489,62 @@ const UltraCurrencyConverter = () => {
   const [currencies, setCurrencies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [isSpeaking, setIsSpeaking] = useState(false); // Track if speaking
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
+  // Fetch all supported currencies once on mount
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCurrencies = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
+        const res = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
         const rates = Object.keys(res.data.rates).filter(code => currencyData[code]);
         setCurrencies(rates);
-        setConversionRate(res.data.rates[toCurrency] || null);
       } catch (error) {
         console.error('API error:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchData();
+    fetchCurrencies();
   }, []);
 
+  // Fetch latest conversion rate when currencies change
   useEffect(() => {
     if (currencies.length === 0) return;
-    const fetchConversion = async () => {
+
+    const fetchRate = async () => {
+      setIsLoading(true);
       try {
         const res = await axios.get(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
         setConversionRate(res.data.rates[toCurrency] || null);
       } catch (error) {
-        console.error('Conversion failed:', error);
+        console.error('Rate fetch failed:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchConversion();
+    fetchRate();
   }, [fromCurrency, toCurrency, currencies]);
 
-  useEffect(() => {
-    if (conversionRate !== null && amount > 0) {
-      setResult((amount * conversionRate).toLocaleString('en-US', { maximumFractionDigits: 2 }));
-    } else {
+  // Manual convert function (only runs on button click)
+  const convert = () => {
+    if (!amount || amount <= 0 || conversionRate === null) {
       setResult(null);
+      return;
     }
-  }, [amount, conversionRate]);
+
+    const converted = (amount * conversionRate).toLocaleString('en-US', {
+      maximumFractionDigits: 2,
+    });
+
+    setResult(converted);
+  };
 
   const swapCurrencies = () => {
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
   };
 
-  // Speak the conversion result
   const speakResult = () => {
     if (!result || isSpeaking) return;
 
@@ -454,8 +564,23 @@ const UltraCurrencyConverter = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  return (
-    <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 dark:border-slate-700">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return (
+    <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 dark:border-slate-700 relative">
+      {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <div className="p-3 bg-emerald-600 rounded-2xl text-white">
           <MdCurrencyExchange size={28} />
@@ -465,6 +590,8 @@ const UltraCurrencyConverter = () => {
           <p className="text-sm text-slate-500 dark:text-slate-400">Real-time exchange rates</p>
         </div>
       </div>
+
+  
 
       {/* Amount */}
       <div className="mb-6">
@@ -491,7 +618,7 @@ const UltraCurrencyConverter = () => {
             onChange={(e) => setFromCurrency(e.target.value)}
             className="w-full p-4 border cursor-pointer border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700"
           >
-            {currencies.map(cur => (
+            {currencies.map((cur) => (
               <option key={cur} value={cur}>
                 {currencyData[cur]?.flag} {cur}
               </option>
@@ -502,7 +629,7 @@ const UltraCurrencyConverter = () => {
         <div className="flex items-end justify-center">
           <button
             onClick={swapCurrencies}
-            className="p-4 bg-slate-200 dark:bg-slate-600 rounded-full hover:bg-slate-300 dark:hover:bg-slate-500 transition"
+            className="p-4 bg-slate-200 cursor-pointer dark:bg-slate-600 rounded-full hover:bg-slate-300 dark:hover:bg-slate-500 transition"
           >
             <MdSwapHoriz size={24} />
           </button>
@@ -515,7 +642,7 @@ const UltraCurrencyConverter = () => {
             onChange={(e) => setToCurrency(e.target.value)}
             className="w-full cursor-pointer p-4 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700"
           >
-            {currencies.map(cur => (
+            {currencies.map((cur) => (
               <option key={cur} value={cur}>
                 {currencyData[cur]?.flag} {cur}
               </option>
@@ -524,35 +651,67 @@ const UltraCurrencyConverter = () => {
         </div>
       </div>
 
-      {/* Result with Speaker Button */}
-      <div className="bg-slate-50 dark:bg-slate-700 p-6 rounded-2xl text-center relative">
+      {/* Convert & Reset Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <button
+          onClick={convert}
+          disabled={isLoading || !amount}
+          className="flex-1 bg-emerald-600 cursor-pointer text-white font-semibold py-4 px-6 rounded-xl hover:bg-emerald-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? 'Converting...' : 'Convert'}
+        </button>
+        <button
+          onClick={() => {
+            setAmount(0);
+            setResult(null);
+            setFromCurrency('USD');
+            setToCurrency('EUR');
+          }}
+          className="flex-1 cursor-pointer bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold py-4 px-6 rounded-xl hover:bg-slate-300 dark:hover:bg-slate-500 transition"
+        >
+          Reset
+        </button>
+      </div>
+
+
+          {/* Speaker button ABOVE the result card */}
+      <div className="flex cursor-pointer justify-end mb-4">
+        <button
+          onClick={speakResult}
+          disabled={isSpeaking || !result}
+          aria-label="Speak conversion result"
+          title="Speak result"
+          className={`p-3 rounded-full cursor-pointer transition-all ${
+            isSpeaking
+              ? 'bg-emerald-300 animate-pulse text-emerald-600'
+              : result
+              ? 'bg-emerald-300 hover:bg-emerald-100 text-emerald-600'
+              : 'opacity-50 cursor-not-allowed text-slate-400'
+          }`}
+        >
+          {isSpeaking ? '🔊' : '🔈'}
+        </button>
+      </div>
+
+      {/* Result Display */}
+      <div className="bg-slate-200 dark:bg-slate-700 p-6 rounded-2xl text-center relative overflow-hidden min-h-[140px] flex items-center justify-center">
         {isLoading ? (
           <div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto"></div>
         ) : result ? (
-          <div className="flex flex-col items-center gap-4">
-            <div className="text-4xl font-bold text-emerald-400">
-              {result} {currencyData[toCurrency]?.symbol || toCurrency}
+          <div className="w-full relative flex flex-col items-center justify-center">
+            <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-emerald-400 break-words leading-tight max-w-full px-2">
+              {result} <span className="text-3xl">{currencyData[toCurrency]?.symbol || toCurrency}</span>
             </div>
-            {/* Speaker Button */}
-            <button
-              onClick={speakResult}
-              disabled={isSpeaking}
-              className={`absolute text-xl cursor-pointer top-1 right-2 p-3 rounded-full transition ${
-                isSpeaking 
-                  ? 'bg-emerald-100 animate-pulse' 
-                  : 'hover:bg-emerald-100 dark:hover:bg-emerald-800'
-              }`}
-              title="Speak result"
-            >🔊
-            
-            </button>
+           
           </div>
         ) : (
-          <div className="text-slate-500">Enter amount and select currencies</div>
+          <div className="text-slate-500 text-center">Enter amount and select currencies</div>
         )}
       </div>
     </div>
   );
+
+
 };
 
 // === MAIN COMPONENT ===
