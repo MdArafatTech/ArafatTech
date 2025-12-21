@@ -326,7 +326,7 @@ const scientificButtons = [
           
               <button
                 onClick={() => setIsScientific(!isScientific)}
-                className="px-6 py-3 text-base font-semibold bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-2xl shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200"
+                className="px-6 py-3 cursor-pointer text-base font-semibold bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-2xl shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-200"
               >
                 {isScientific ? "Simple" : "Scientific"}
               </button>
@@ -468,7 +468,7 @@ const scientificButtons = [
 
             <button
               onClick={convertUnit}
-              className="w-full py-5 px-8 rounded-3xl text-xl font-bold shadow-2xl hover:shadow-3xl active:scale-95 transition-all duration-200 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white"
+              className="w-full py-5 px-8 rounded-3xl text-xl font-bold shadow-2xl hover:shadow-3xl active:scale-95 transition-all cursor-pointer duration-200 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white"
             >
               🔄 Convert
             </button>
