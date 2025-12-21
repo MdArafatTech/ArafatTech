@@ -333,10 +333,10 @@ export default function Clock() {
    <div className="h-auto flex items-center justify-center sm:p-4 ">
   <div className="w-full max-w-4xl mx-auto">
     {/* Main Card - No extra padding/margin */}
-    <div className="relative bg-gradient-to-br backdrop-blur-md border border-white/20 dark:border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden">
+    <div >
       {/* Dynamic Background Overlay */}
       <div
-        className={`absolute inset-0 transition-all duration-1000 ${
+        className={`absolute inset-0  transition-all rounded-3xl duration-1000 ${
           isDaytime
             ? "bg-gradient-to-br from-amber-50/95 via-yellow-50/95 to-orange-50/95"
             : "bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-blue-900/95"
