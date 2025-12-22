@@ -322,70 +322,98 @@ const [showResults, setShowResults] = useState(true); // Default: show results
 </div>
 
 
-      {/* Passphrase Mode */}
-      <label className="flex items-center gap-3 mb-6">
-        <input
-          type="checkbox"
-          checked={passphraseMode}
-          onChange={(e) => setPassphraseMode(e.target.checked)}
-          className="w-5 h-5 cursor-pointer accent-purple-600"
-        />
-        <span className="font-medium cursor-pointer text-slate-700 dark:text-slate-300">Use Passphrase</span>
+<label className="flex items-center gap-4 mb-6 cursor-pointer select-none">
+  {/* Hidden checkbox for accessibility & native behavior */}
+  <input
+    type="checkbox"
+    checked={passphraseMode}
+    onChange={(e) => setPassphraseMode(e.target.checked)}
+    className="sr-only"
+  />
+
+  {/* Custom premium toggle */}
+  <div className="relative" aria-hidden="true">
+    {/* Track background - changes color based on state */}
+    <div
+      className={`block w-14 h-8 rounded-full shadow-inner transition-all duration-300 ${
+        passphraseMode
+          ? 'bg-gradient-to-r from-purple-600 to-amber-500'
+          : 'bg-slate-300 dark:bg-slate-700'
+      }`}
+    />
+
+    {/* Sliding knob - moves based on state */}
+    <div
+      className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-lg transition-all duration-300 ease-in-out ${
+        passphraseMode
+          ? 'translate-x-6 shadow-xl '
+          : 'left-1'
+      }`}
+    />
+
+    {/* Premium glow effect when ON */}
+    {passphraseMode && (
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r blur-lg opacity-70 scale-125 pointer-events-none transition-opacity duration-300" />
+    )}
+  </div>
+
+  {/* Label text */}
+  <span className="text-lg font-semibold text-slate-800 dark:text-slate-200 tracking-wide">
+    Use Passphrase
+  </span>
+</label>
+
+{/* Conditional Passphrase Options */}
+{passphraseMode && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 mt-8 animate-fadeIn">
+    <div>
+      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">
+        Word Count
       </label>
+      <input
+        type="range"
+        min="3"
+        max="40"
+        value={numWords}
+        onChange={(e) => setNumWords(Number(e.target.value))}
+        className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-600"
+      />
+      <div className="text-sm mt-2 text-slate-600 dark:text-slate-400">{numWords} words</div>
+    </div>
 
-      {passphraseMode && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Word Count</label>
-            <input
-              type="range"
-              min="3"
-              max="40"
-              value={numWords}
-              onChange={(e) => setNumWords(Number(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
-            />
-            <div className="text-sm mt-1">{numWords} words</div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Separator</label>
-            <select
-              value={separator}
-              onChange={(e) => setSeparator(e.target.value)}
-              className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700"
-            >
-      <option value="-">-</option>
-<option value="_">_</option>
-<option value=".">.</option>
-<option value=" ">Space</option>
-<option value="/">/</option>
-<option value=":">:</option>
-<option value=";">;</option>
-<option value=",">,</option>
-<option value="'">'</option>
-<option value="&">&amp;</option>
-<option value="|">|</option>
-<option value="~">~</option>
-<option value="(">(</option>
-<option value=")">)</option>
-<option value="[">[</option>
-<option value="]">]</option>
-
-<option value="@">@</option>
-<option value="#">#</option>
-<option value="$">$</option>
-<option value="%">%</option>
-<option value="+">+</option>
-<option value="*">*</option>
-<option value="=">=</option>
-<option value="?">?</option>
-<option value="!">!</option>
-
-            </select>
-          </div>
-        </div>
-      )}
-
+    <div>
+      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">
+        Separator
+      </label>
+      <select
+        value={separator}
+        onChange={(e) => setSeparator(e.target.value)}
+        className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+      >
+        <option value="-">-</option>
+        <option value="_">_</option>
+        <option value=".">.</option>
+        <option value=" ">Space</option>
+        <option value="/">/</option>
+        <option value=":">:</option>
+        <option value=",">,</option>
+        <option value=" ">'</option>
+        <option value="&">&amp;</option>
+        <option value="|">|</option>
+        <option value="~">~</option>
+        <option value="@">@</option>
+        <option value="#">#</option>
+        <option value="$">$</option>
+        <option value="%">%</option>
+        <option value="+">+</option>
+        <option value="*">*</option>
+        <option value="=">=</option>
+        <option value="?">?</option>
+        <option value="!">!</option>
+      </select>
+    </div>
+  </div>
+)}
       {/* Generate Button */}
       <button
         onClick={generatePasswords}
@@ -436,14 +464,14 @@ const [showResults, setShowResults] = useState(true); // Default: show results
         {/* Toggle visibility for this specific password */}
         <button
           onClick={() => setShowPassword(!showPassword)}
-          className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+          className="p-2 cursor-pointer rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"
           title={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
         </button>
         <button
           onClick={() => copyToClipboard(index, pw)}
-          className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+          className="p-2 cursor-pointer rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"
           title="Copy to clipboard"
         >
           {copiedIndex === index ? (
@@ -592,22 +620,28 @@ return (
       </div>
 
   
+<div className="mb-6">
+  <label htmlFor="amount" className="block text-sm font-medium mb-2">
+    Amount
+  </label>
+  <div className="relative">
+    <input
+      id="amount"
+      type="number"
+      step="1"
+      min="0"
+      value={amount}
+      onChange={(e) => setAmount(Number(e.target.value) || 0)}
+      onWheel={(e) => e.target.blur()}
+      aria-label={`Enter amount in ${fromCurrency}`}
+      className="w-full  cursor-pointer p-4 pr-12 text-2xl font-mono border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-bold text-slate-600 dark:text-slate-300">
+      {currencyData[fromCurrency]?.symbol || fromCurrency}
+    </div>
+  </div>
+</div>
 
-      {/* Amount */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">Amount</label>
-        <div className="relative">
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value) || 0)}
-            className="w-full p-4 text-2xl font-mono border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700"
-          />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-bold">
-            {currencyData[fromCurrency]?.symbol || fromCurrency}
-          </div>
-        </div>
-      </div>
 
       {/* Currencies */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">

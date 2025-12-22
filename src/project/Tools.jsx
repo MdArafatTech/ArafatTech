@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from "react";
+
+
+
+
+
+
+
+
+
 import { evaluate } from "mathjs";
 
 const Tools = () => {
@@ -60,30 +69,36 @@ const Tools = () => {
     }
   };
 
+
+
+  
 const simpleButtons = [
-  "C", "DEL", "7", "8", "9",
-  "4", "5", "6", "/", "*",
-  "1", "2", "3", "+", "-",
-  "0", ".", "=",
+  // Left side (numerics + clear + sign)
+  "🧮","C",  "DEL",  "7",  "8",  "9",
+  "4",  "5",  "6",  "1",  "2",
+  "3",  "0",  ".", 
+
+  // Right side (operators + equals)
+  "/",  "*",  "-",  "+",  "=",
 ];
 
 const scientificButtons = [
   // Row 1: Top controls and constants/factorial
-  "C", "DEL", "DEG/RAD", "π", "e", "!",
+ , "C", "DEL", "DEG/RAD", "π", "e", "!",
   // Row 2: Powers, roots, reciprocal, general power
   "²", "³", "√", "∛", "1/", "^",
   // Row 3: Trigonometric functions
   "sin(", "cos(", "tan(", "sinh(", "cosh(", "tanh(",
   // Row 4: Inverse trig / logs / exponents
-  "asin(", "acos(", "atan(", "log(", "ln(", "e^",
+  "asin(", "acos(", "atan(", "log(", "ln(", "e^", "10^",
   // Row 5: Parentheses and base-10 power + start of numbers
-  "(", ")", "10^", "7", "8", "9",
+  "(", ")", "9", "8", "7",
   // Row 6: Division and multiplication on right
   "/","*", "6", "5", "4",  "-",
   // Row 7: Addition, equals, decimal, and bottom numbers
-  "+", ".", "1", "2",  "=","3",
+  "+", "3", "2", "1", "=",".","0" , "🧮",
   // Row 8: Zero (often spans multiple columns in UI)
-  "0"  // Place this spanning 2-3 columns in your grid layout if needed
+  // Place this spanning 2-3 columns in your grid layout if needed
 ];
 
   const getRealistic3DButtonClasses = (btn) => {
@@ -109,7 +124,7 @@ const scientificButtons = [
       "²", "³", "^", "10^", "e^", "1/", "π", "e"
     ].includes(btn);
 
-    let style = btn === "0" ? " col-span-2 rounded-3xl " : "";
+    let style = btn === "=" ? " col-span-2 rounded-3xl " : "";
 
     if (isEquals) {
       style += darkMode
@@ -370,6 +385,9 @@ const scientificButtons = [
               </button>
             ))}
           </div>
+
+
+
         </div>
 
         {/* Unit Converter */}
@@ -394,7 +412,7 @@ const scientificButtons = [
                     setFromUnit("");
                     setToUnit("");
                   }}
-                  className={`w-full p-4 rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all ${
+                  className={`w-full p-4 cursor-pointer rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all ${
                     darkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white text-gray-900 border-gray-300"
                   } border`}
                 >
@@ -412,7 +430,7 @@ const scientificButtons = [
                     setFromUnit("");
                     setToUnit("");
                   }}
-                  className={`w-full p-4 rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all ${
+                  className={`w-full p-4 cursor-pointer rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all ${
                     darkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white text-gray-900 border-gray-300"
                   } border`}
                 >
@@ -431,7 +449,7 @@ const scientificButtons = [
                   value={unitValue}
                   onChange={(e) => setUnitValue(e.target.value)}
                   placeholder="0"
-                  className={`w-full p-4 rounded-2xl font-mono text-right shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all ${
+                  className={`w-full cursor-pointer p-4 rounded-2xl font-mono text-right shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all ${
                     darkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white text-gray-900 border-gray-300"
                   } border`}
                 />
@@ -442,7 +460,7 @@ const scientificButtons = [
               <select
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className={`p-4 rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all ${
+                className={`p-4 cursor-pointer rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all ${
                   darkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white text-gray-900 border-gray-300"
                 } border`}
               >
@@ -455,7 +473,7 @@ const scientificButtons = [
               <select
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
-                className={`p-4 rounded-2xl font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all ${
+                className={`p-4 rounded-2xl cursor-pointer font-mono shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all ${
                   darkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white text-gray-900 border-gray-300"
                 } border`}
               >
@@ -532,3 +550,12 @@ const scientificButtons = [
 };
 
 export default Tools;
+
+
+
+
+
+
+
+
+
