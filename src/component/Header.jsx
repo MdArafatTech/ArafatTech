@@ -292,7 +292,9 @@ const Header = () => {
 
             {currentUser && (
               <li>
-                <Link to="/account">
+                <Link
+                  onClick={() => setOpen(false)}
+                to="/account">
                   <motion.button
                     whileHover={{ 
                       scale: 1.05, 

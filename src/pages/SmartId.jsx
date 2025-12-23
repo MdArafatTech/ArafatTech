@@ -164,10 +164,10 @@ export default function LiveIDCardSideBySidePDF() {
     profileImage: {
       width: 56,
       height: 58,
-      borderRadius: 2,
+    borderRadius:1,
       marginTop: -15,
       marginLeft: 47,
-      marginRight: 38,
+      marginRight: 37,
     },
     nameText: {
       fontSize: 15,

@@ -846,7 +846,7 @@ export default function StudentIdCard() {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                    className="w-full px-4 py-3 cursor-pointer rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
                   />
                 </div>
                 <div>
@@ -865,7 +865,7 @@ export default function StudentIdCard() {
                         reader.readAsDataURL(file);
                       }
                     }}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                    className="w-full px-4 py-3 cursor-pointer rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
                   />
                 </div>
               </div>
@@ -878,7 +878,7 @@ export default function StudentIdCard() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[
-                  { key: "name", label: "Name" },
+                  { key: "name", label: "Name",placeholder:'Enter Name' },
                   { key: "roll", label: "Roll" },
                   { key: "regNo", label: "Reg No" },
                   { key: "dept", label: "Department", list: "departments" },
@@ -929,7 +929,7 @@ export default function StudentIdCard() {
                               updateCard(idx, item.key, e.target.value)
                             }
                             placeholder={`Select or type ${item.label}`}
-                            className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-green-500 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+                            className="w-full cursor-pointer px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 focus:border-green-500 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
                           />
                           <datalist id={item.list}>
                             {item.list === "departments" && (
@@ -1045,16 +1045,16 @@ export default function StudentIdCard() {
 </datalist>
                             )}
                             {item.list === "bloodGroups" && (
-                              <>
-                                <option value="A+" />
-                                <option value="A-" />
-                                <option value="B+" />
-                                <option value="B-" />
-                                <option value="O+" />
-                                <option value="O-" />
-                                <option value="AB+" />
-                                <option value="AB-" />
-                              </>
+                             <datalist id="bloodGroups">
+    <option value="A+" />
+    <option value="A-" />
+    <option value="B+" />
+    <option value="B-" />
+    <option value="O+" />
+    <option value="O-" />
+    <option value="AB+" />
+    <option value="AB-" />
+  </datalist>
                             )}
                           </datalist>
                         </>
@@ -1087,12 +1087,12 @@ export default function StudentIdCard() {
                           URL.createObjectURL(e.target.files[0])
                         );
                     }}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700"
+                    className="w-full cursor-pointer px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Signature Image
                   </label>
                   <input
@@ -1106,7 +1106,7 @@ export default function StudentIdCard() {
                           URL.createObjectURL(e.target.files[0])
                         );
                     }}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                    className="w-full px-4 py-3 cursor-pointer rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
                   />
                 </div>
               </div>

@@ -97,7 +97,7 @@ const Register = () => {
         </p>
         <button
           onClick={() => navigate("/login")}
-          className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-xl shadow-lg transform hover:scale-105 transition"
+          className="w-full py-4 cursor-pointer bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-xl shadow-lg transform hover:scale-105 transition"
         >
           OK Go to Login
         </button>

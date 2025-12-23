@@ -10,7 +10,7 @@ const ForgotPass = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  const auth = getAuth(); // Firebase Auth instance
+  const auth = getAuth();
 
   // Auto detect system dark mode
   useEffect(() => {
@@ -38,21 +38,25 @@ const ForgotPass = () => {
     setShowNote(false);
 
     try {
-      // Firebase sends secure password reset email automatically
+      // FIXED: Uses current app domain (localhost:5173, etc.) - works immediately
       await sendPasswordResetEmail(auth, email, {
-        url: "https://your-app.com/login", // Optional: redirect after reset
+        url: `${window.location.origin}/login`, // Dynamic: http://localhost:5173/login
       });
 
-      setMessage(
-        "Password reset email sent! Check your inbox (or spam folder)."
-      );
+      setMessage("Password reset email sent! Check your inbox (or spam folder).");
       setShowNote(true);
       setEmail(""); // Clear input
     } catch (error) {
       console.error("Firebase error:", error);
-      setMessage(
-        "Failed to send reset email. Make sure the email is registered."
-      );
+      
+      // Better error handling for common cases
+      if (error.code === 'auth/user-not-found') {
+        setMessage("No account found with this email address.");
+      } else if (error.code === 'auth/invalid-email') {
+        setMessage("Please enter a valid email address.");
+      } else {
+        setMessage("Failed to send reset email. Please try again.");
+      }
       setShowNote(false);
     } finally {
       setIsLoading(false);
@@ -101,7 +105,7 @@ const ForgotPass = () => {
             {message && (
               <p
                 className={`mt-4 text-center font-medium ${
-                  message.startsWith("Password reset")
+                  message.includes("sent") || message.includes("success")
                     ? "text-green-500"
                     : "text-red-500"
                 }`}
@@ -119,8 +123,7 @@ const ForgotPass = () => {
                 }`}
               >
                 <p className="text-sm text-center">
-                  If you don't see the reset email, please check your spam
-                  folder.
+                  If you don't see the reset email, please check your spam folder.
                 </p>
               </div>
             )}
@@ -128,7 +131,7 @@ const ForgotPass = () => {
             <div className="mt-4 text-center text-gray-600 dark:text-gray-300">
               Remember your password?{" "}
               <span className="inline-block transform transition-transform duration-300 hover:scale-110">
-                <Link to="/login" className="text-blue-600">
+                <Link to="/login" className="text-blue-600 hover:underline">
                   Login
                 </Link>
               </span>

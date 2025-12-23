@@ -453,14 +453,14 @@ const CgpaCalculator = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden mb-12"
               >
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-700 px-6 py-5 flex items-center justify-between">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                <div className="bg-gradient-to-r  from-indigo-600 to-purple-700 px-6 py-5 flex items-center justify-between">
+                  <h2 className="text-2xl  sm:text-3xl font-bold text-white">
                     {sem.name}
                   </h2>
                   {semesters.length > 1 && (
                     <button
                       onClick={() => removeSemester(semIndex)}
-                      className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full transition transform hover:scale-110"
+                      className="bg-red-600 cursor-pointer hover:bg-red-700 text-white p-3 rounded-full transition transform hover:scale-110 "
                     >
                       <FaTrash className="text-lg" />
                     </button>
