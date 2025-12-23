@@ -54,6 +54,25 @@ const CgpaCalculator = () => {
   const [reg, setReg] = useState("");
   const [roll, setRoll] = useState("");
 
+
+
+
+
+
+
+const [language, setLanguage] = useState('bn'); // 'en' for English, 'bn' for Bangla
+
+
+
+
+
+
+
+
+
+
+
+
   // Download states
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -536,33 +555,159 @@ const CgpaCalculator = () => {
                   </div>
 
                   <div className="space-y-6">
-                    {/* Conditional Note Section */}
-                    {(!sem.department || !sem.year) && (
-                      <div className="mb-6 animate-fade-in">
-                        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                          Courses
-                        </h3>
 
-                        <div>
-                          <div className="flex items-start gap-4">
-                            <div
-                              className="px-4 py-3.5 
-           bg-purple-50/90 dark:bg-cyan-950/90 
-           border-l-5 border-purple-600 dark:border-cyan-400 
-           rounded-xl backdrop-blur-md"
-                            >
-                              <p className="text-sm md:text-md lg:text-xl  text-gray-700 dark:text-gray-200">
-                                <span className="font-semibold text-purple-600 dark:text-purple-400">
-                                  Note:
-                                </span>{" "}
-                                If you don't select dept. & year -Enter subject
-                                name , credit & grade.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* Conditional Note Section */}
+{(!sem.department || !sem.year) ? (
+  <div className="mb-6 animate-fade-in">
+    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
+      Courses
+    </h3>
+
+    <div>
+      <div className="flex items-start gap-4">
+        <div
+          className="relative px-7 py-5 
+            rounded-3xl 
+            bg-gradient-to-br from-purple-50/60 to-indigo-50/60 dark:from-cyan-950/40 dark:to-blue-950/30
+            shadow-xl
+            border-4 border-transparent
+            animate-border-glow-bounce"
+        >
+          <p className="text-sm md:text-base lg:text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+            <span className="font-semibold text-purple-600 dark:text-purple-400">
+              {language === 'en' ? 'Note:' : 'নোট:'}
+            </span>{" "}
+            {language === 'en'
+              ? "If you don't select dept. & year - Enter subject name, credit & grade."
+              : 'যদি ডিপার্টমেন্ট ও বর্ষ নির্বাচন না করেন - তাহলে বিষয়ের নাম, ক্রেডিট এবং গ্রেড লিখুন।'}
+          </p>
+        </div>
+      </div>
+
+      {/* Language Toggle Buttons */}
+      <div className="flex gap-3 justify-start mt-5">
+        <button
+          onClick={() => setLanguage('en')}
+          className={`px-5 py-2.5 cursor-pointer rounded-lg font-medium transition-all duration-300 ${
+            language === 'en'
+              ? 'bg-purple-600 text-white dark:bg-cyan-400 dark:text-gray-900 shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+          }`}
+        >
+          EN
+        </button>
+        <button
+          onClick={() => setLanguage('bn')}
+          className={`px-5 py-2.5 cursor-pointer rounded-lg font-medium transition-all duration-300 ${
+            language === 'bn'
+              ? 'bg-purple-600 text-white dark:bg-cyan-400 dark:text-gray-900 shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+          }`}
+        >
+          বাংলা
+        </button>
+      </div>
+    </div>
+  </div>
+) : (
+  <div className="mb-6 animate-fade-in">
+    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
+      Courses
+    </h3>
+
+    <div className="flex flex-col gap-7">
+      {/* Note - Extra Optional Subject */}
+      <div
+        className="relative px-4 py-5 
+          rounded-3xl 
+          bg-gradient-to-br from-purple-50/60 to-indigo-50/60 dark:from-cyan-950/40 dark:to-blue-950/30
+          shadow-xl
+          border-4 border-transparent
+          animate-border-glow-bounce"
+      >
+        <p className="text-sm md:text-base lg:text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+          <span className="font-semibold text-purple-600 dark:text-purple-400">
+            {language === 'en' ? 'Note:' : 'নোট:'}
+          </span>{" "}
+          {language === 'en'
+            ? 'Remove your extra optional subject before calculating CGPA.'
+            : 'সিজিপিএ (CGPA) ক্যালকুলেট করার আগে আপনার অতিরিক্ত ঐচ্ছিক বিষয়টি সরিয়ে নিন।'}
+        </p>
+      </div>
+
+      {/* Language Toggle Buttons */}
+      <div className="flex gap-3 justify-start">
+        <button
+          onClick={() => setLanguage('en')}
+          className={`px-5 py-2.5 cursor-pointer rounded-lg font-medium transition-all duration-300 ${
+            language === 'en'
+              ? 'bg-purple-600 text-white dark:bg-cyan-400 dark:text-gray-900 shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+          }`}
+        >
+          EN
+        </button>
+        <button
+          onClick={() => setLanguage('bn')}
+          className={`px-5 py-2.5 cursor-pointer rounded-lg font-medium transition-all duration-300 ${
+            language === 'bn'
+              ? 'bg-purple-600 text-white dark:bg-cyan-400 dark:text-gray-900 shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+          }`}
+        >
+          বাংলা
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     {/* Courses List */}
                     {sem.courses.map((c, courseIndex) => (
@@ -926,19 +1071,19 @@ const pdfStyles = StyleSheet.create({
     alignSelf: "flex-end", // Places date to the right
   },
 
-userInfoRow: {
-  flexDirection: "row",
-  flexWrap: "wrap",
-  gap:2,                  // space between different info pairs (e.g., Name → Roll No)
-  marginBottom: 20,
-  fontSize: 12,
-},
-label: {
-  fontWeight: "bold",
-},
-value: {
-  marginRight:15,           // ← Reduced from 5 → tight gap between label and value
-},
+  userInfoRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 2, // space between different info pairs (e.g., Name → Roll No)
+    marginBottom: 20,
+    fontSize: 12,
+  },
+  label: {
+    fontWeight: "bold",
+  },
+  value: {
+    marginRight: 15, // ← Reduced from 5 → tight gap between label and value
+  },
 
   section: { marginBottom: 20 },
 
@@ -976,10 +1121,8 @@ value: {
   resultValue: { marginLeft: 5 },
   resultHighlight: { fontSize: 14, fontWeight: "bold", color: "#1e40af" },
 
-
-  
   pageCenterContainer: {
-   marginTop:-35,
+    marginTop: -35,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center", // Vertical center
