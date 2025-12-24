@@ -62,7 +62,7 @@ const ForgotPass = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 lg:p-12 bg-gradient-to-br transition-all duration-1000">
+    <div className="min-h-screen flex items-center justify-center p-2 lg:p-12 bg-gradient-to-br transition-all duration-1000">
       {/* Animated Background Pattern */}
       <div className={`absolute inset-0 bg-gradient-to-r ${
         darkMode 
@@ -126,13 +126,13 @@ const ForgotPass = () => {
                   darkMode 
                     ? "bg-white/5 border border-white/20" 
                     : "bg-white/50 border border-gray-200/50"
-                } rounded-2xl p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10`}>
+                } rounded-2xl p-3 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10`}>
                   <input
                     type="email"
                     placeholder="your.email@company.com"
-                    className={`w-full bg-transparent text-lg placeholder-gray-400 ${
+                    className={`w-full bg-transparent text-sm md:text-md lg:text-lg placeholder-gray-400 ${
                       darkMode ? "text-white" : "text-gray-900"
-                    } border-none outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 pr-12`}
+                    } border-none outline-none  transition-all duration-300 pr-5`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -171,33 +171,54 @@ const ForgotPass = () => {
               </button>
             </form>
 
-            {/* Success/Error Messages */}
-            {message && (
-              <div className={`mt-8 p-6 rounded-2xl backdrop-blur-sm border transition-all duration-500 ${
-                message.includes("sent") 
-                  ? "bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-300/40 shadow-xl shadow-emerald-500/20" 
-                  : "bg-gradient-to-r from-rose-500/10 to-red-500/10 border-rose-300/40 shadow-xl shadow-rose-500/20"
-              }`}>
-                <div className="flex items-center justify-center">
-                  <svg className={`w-8 h-8 mr-3 flex-shrink-0 ${
-                    message.includes("sent") 
-                      ? "text-emerald-400" 
-                      : "text-rose-400"
-                  }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {message.includes("sent") ? (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    ) : (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    )}
-                  </svg>
-                  <p className={`text-lg font-semibold leading-relaxed text-center ${
-                    message.includes("sent") ? "text-emerald-100" : "text-rose-100"
-                  }`}>
-                    {message}
-                  </p>
-                </div>
-              </div>
-            )}
+          {/* Success/Error Messages */}
+{message && (
+  <div
+    className={`mt-8 p-6 rounded-2xl backdrop-blur-md border transition-all duration-500 shadow-2xl
+      ${message.includes("sent")
+        ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-400/30 dark:border-emerald-600/50"
+        : "bg-rose-500/10 dark:bg-rose-500/20 border-rose-400/30 dark:border-rose-600/50"
+      }`}
+  >
+    <div className="flex items-center justify-center gap-4">
+      {/* Icon */}
+      <div className={`flex-shrink-0 p-3 rounded-full ${
+        message.includes("sent")
+          ? "bg-emerald-500/20 dark:bg-emerald-500/30"
+          : "bg-rose-500/20 dark:bg-rose-500/30"
+      }`}>
+        <svg
+          className={`w-4 h-4 lg:w-7 lg:h-7 ${
+            message.includes("sent")
+              ? "text-emerald-500 dark:text-emerald-400"
+              : "text-rose-500 dark:text-rose-400"
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+        >
+          {message.includes("sent") ? (
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          ) : (
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          )}
+        </svg>
+      </div>
+
+      {/* Message Text */}
+      <p
+        className={`text-sm  md:text-md lg:text-lg font-semibold leading-relaxed text-center
+          ${message.includes("sent")
+            ? "text-emerald-800 dark:text-emerald-200"
+            : "text-rose-800 dark:text-rose-200"
+          }`}
+      >
+        {message}
+      </p>
+    </div>
+  </div>
+)}
 
             {showNote && (
               <div className={`mt-6 p-5 rounded-2xl backdrop-blur-sm ${

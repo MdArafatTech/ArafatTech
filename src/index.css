@@ -576,7 +576,7 @@ html, body {
 .animate-border-glow-bounce {
   animation: smooth-clockwise-cyan 1.5s linear infinite;
   border-style: solid;
-  border-width: 4px;
+  border-width: 2px;
   border-radius: 24px;
 }
 
