@@ -1,7 +1,16 @@
 // HealthAndCalculation.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import emailjs from "emailjs-com";
-import Tools from "./Tools";
+
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../provider/AuthProvider";
+import LoginModal from "../component/LoginModal";
+
+
+
+
+
+
 import {
   Document,
   Page,
@@ -294,7 +303,26 @@ const PDFReport = ({
 
 const HealthAndCalculation = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
+  // BLOCK ACCESS - Unauthenticated users cannot proceed
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 p-4">
+        <LoginModal 
+          onClose={() => {
+            navigate("/", { replace: true }); // Redirect to home
+          }}
+          onSignIn={() => {
+            navigate("/login", { replace: true }); // Redirect to login
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Your existing dark mode logic - PERFECT as is
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     setDarkMode(mediaQuery.matches);
@@ -305,6 +333,9 @@ const HealthAndCalculation = () => {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
+
+
+  
   // ------------------ BMI & Health Inputs ------------------
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -548,8 +579,6 @@ const HealthAndCalculation = () => {
   );
 
   return (
-
-    
     <div
       className={`min-h-screen p-2 md:p-4 lg:p-8 ${
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
@@ -1152,44 +1181,7 @@ const HealthAndCalculation = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-8 mx-1 md:mx-[4%] lg:mx-[6%] sm:p-6 lg:p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-2xl backdrop-blur-xl">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent text-center">
-          🛠️ Useful Tools & Utilities
-        </h2>
-
-        <div className="max-w-4xl mx-auto space-y-4 text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-          <p className="text-center">
-            Explore our comprehensive suite of tools designed to simplify
-            calculations, conversions, and professional tasks. Perfect for
-            students, professionals, and enthusiasts.
-          </p>
-
-          <p className="text-center">
-            Includes unit converters, advanced calculators, physics & chemistry
-            utilities. Fully optimized for mobile and desktop with instant local
-            computation.
-          </p>
-
-          <div className="text-center p-4 bg-blue-50/50 dark:bg-blue-900/30 rounded-2xl border border-blue-200/50 dark:border-blue-500/50">
-            <span className="font-bold text-blue-700 dark:text-blue-300 text-lg">
-              💡
-            </span>
-            <p className="mt-2 font-semibold">
-              All calculations run locally - your privacy is protected!
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <Tools />
-        </div>
-      </div> */}
     </div>
-
-
-
-
   );
 };
 

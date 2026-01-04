@@ -600,7 +600,7 @@ export default function StudentPortal() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowPreview(false)}
-          className="self-end mb-4 px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-black rounded-2xl shadow-xl hover:shadow-2xl border-2 border-red-400 transition-all duration-300 text-lg tracking-wide backdrop-blur-md"
+          className="self-end mb-4 cursor-pointer px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-black rounded-2xl shadow-xl hover:shadow-2xl border-2 border-red-400 transition-all duration-300 text-lg tracking-wide backdrop-blur-md"
         >
           ✕ Close Preview
         </motion.button>

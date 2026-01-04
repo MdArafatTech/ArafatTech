@@ -66,7 +66,7 @@ import {
   sendPasswordResetEmail,
   signOut,
   onAuthStateChanged,
-  RecaptchaVerifier,
+ 
   signInWithPhoneNumber,
   updatePassword
 } from "firebase/auth";

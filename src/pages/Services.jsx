@@ -5,7 +5,58 @@ import service1 from "../assets/iconpng.gif";
 import service2 from "../assets/iconpng.gif";
 import service3 from "../assets/iconpng.gif";
 
+
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../provider/AuthProvider";
+import LoginModal from "../component/LoginModal";
+
 const Services = () => {
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+
+  // BLOCK ACCESS - Unauthenticated users cannot proceed
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 p-4">
+        <LoginModal 
+          onClose={() => {
+            navigate("/", { replace: true }); // Redirect to home
+          }}
+          onSignIn={() => {
+            navigate("/login", { replace: true }); // Redirect to login
+          }}
+        />
+      </div>
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const services = [
     {
       title: "Identity Management",

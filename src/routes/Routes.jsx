@@ -13,7 +13,6 @@ import Identity from "../component/Identity";
 import ContactForm from "../component/ContactFrom";
 import Contact from "../pages/Contact";
 
-
 import IDCardPage from "../pages/IdCardPage";
 import CustomizeCard from "../component/CustomizeCard";
 import SmartId from "../pages/SmartId";
@@ -21,7 +20,6 @@ import Employee from "../pages/Employee";
 import LoginButton from "../component/LoginButton";
 import Clock from "../component/Clock";
 import LogoutButton from "../component/LogoutButton";
-
 
 import Tools from "../project/Tools";
 
@@ -38,16 +36,10 @@ import PremiumDownloadButton from "../component/PremiumDownloadButton";
 import About from "../pages/About";
 import UsefulTools from "../project/UsefullToos";
 
-
-
 const Routes = createBrowserRouter([
   {
     path: "/",
-    element: (
-     
-        <Root />
-    
-    ),
+    element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -104,10 +96,9 @@ const Routes = createBrowserRouter([
       },
       {
         path: "employee",
-        element:<Employee></Employee>
+        element: <Employee></Employee>,
       },
 
-    
       {
         path: "idcardpage",
         element: <IDCardPage></IDCardPage>,
@@ -119,61 +110,57 @@ const Routes = createBrowserRouter([
       },
       {
         path: "smartid",
-        element:<SmartId></SmartId>,
+        element: <SmartId></SmartId>,
       },
       {
-       path:"loginbutton",
-       element:<LoginButton></LoginButton>,
+        path: "loginbutton",
+        element: <LoginButton></LoginButton>,
       },
       {
-       path:"logout",
-       element:<LogoutButton></LogoutButton>,
+        path: "logout",
+        element: <LogoutButton></LogoutButton>,
       },
       {
-       path:"clock",
-       element:<Clock></Clock>,
+        path: "clock",
+        element: <Clock></Clock>,
       },
       {
-       path:"healthandcalculation",
-       element:<HealthAndCalculation></HealthAndCalculation>
+        path: "healthandcalculation",
+        element: <HealthAndCalculation></HealthAndCalculation>,
       },
       {
-       path:"cgpacalculator",
-       element:<CgpaCalculator></CgpaCalculator>,
+        path: "cgpacalculator",
+        element: <CgpaCalculator></CgpaCalculator>,
       },
       {
-       path:"tools",
-       element:<Tools></Tools>,
+        path: "tools",
+        element: <Tools></Tools>,
       },
       {
-       path:"usefulltools",
-       element:<UsefulTools></UsefulTools>,
+        path: "usefulltools",
+        element: <UsefulTools></UsefulTools>,
       },
-    
-     
+
       {
-       path:"qrgenarator",
-       element:<QrGenerator></QrGenerator>,
-      },
-      {
-       path:"qrandimage",
-       element:<QrAndImage></QrAndImage>,
+        path: "qrgenarator",
+        element: <QrGenerator></QrGenerator>,
       },
       {
-       path:"gradingnotesection",
-       element:<GradingNoteSection></GradingNoteSection>,
+        path: "qrandimage",
+        element: <QrAndImage></QrAndImage>,
       },
       {
-       path:"services",
-       element:<Services></Services>
+        path: "gradingnotesection",
+        element: <GradingNoteSection></GradingNoteSection>,
       },
-    {
-       path:"premiumdownloadbutton",
-       element:<PremiumDownloadButton></PremiumDownloadButton>
+      {
+        path: "services",
+        element: <Services></Services>,
       },
-      
-  
-      
+      {
+        path: "premiumdownloadbutton",
+        element: <PremiumDownloadButton></PremiumDownloadButton>,
+      },
     ],
   },
 ]);
