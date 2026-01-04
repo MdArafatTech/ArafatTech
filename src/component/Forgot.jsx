@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import loginGif from "../assets/forgot.gif";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
-const ForgotPass = () => {
+const Forgot = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -223,4 +223,4 @@ const ForgotPass = () => {
   );
 };
 
-export default ForgotPass;
+export default Forgot;

@@ -5,7 +5,7 @@ import ErrorPage from "../pages/ErrorPage";
 import HomePage from "../pages/HomePage";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import ForgotPass from "../component/ForgotPass";
+
 import Account from "../component/Account";
 
 import Billing from "../component/Billing";
@@ -35,6 +35,7 @@ import StudentPortal from "../pages/Studentportal";
 import PremiumDownloadButton from "../component/PremiumDownloadButton";
 import About from "../pages/About";
 import UsefulTools from "../project/UsefullToos";
+import Forgot from "../component/Forgot";
 
 const Routes = createBrowserRouter([
   {
@@ -59,8 +60,8 @@ const Routes = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "forgotpass",
-        element: <ForgotPass></ForgotPass>,
+        path: "forgot",
+        element: <Forgot></Forgot>,
       },
       {
         path: "account",

@@ -150,9 +150,9 @@ const Login = () => {
                       </div>
                     )}
                     {errorMsg.includes("Incorrect password") && (
-                      <Link to="/forgotpass" className="inline-block mt-3 cursor-pointer text-blue-600 dark:text-yellow-400 font-medium hover:underline">
+                      <a href="/login" className="inline-block mt-3 cursor-pointer text-blue-600 dark:text-yellow-400 font-medium hover:underline">
                         Forgot your password?
-                      </Link>
+                      </a>
                     )}
                   </div>
                 )}
